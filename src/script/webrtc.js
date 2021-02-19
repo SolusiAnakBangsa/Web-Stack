@@ -14,7 +14,6 @@ function createPeer(roomID){
     })
     peer.on('connection',function(conn){
         console.log("Connected")
-        debug.innerHTML += "Connected"
         setConnectionListener(conn)
     })
     peer.on('error', function(err){
@@ -35,7 +34,7 @@ function connectToOther(destinationID){
 function sendData(data){
     try{
         connection.send(data)
-        box.innerHTML += "Local : " + data
+        console.log("Local : " + data)
     }
     catch(err){
     }
@@ -45,6 +44,5 @@ function sendData(data){
 function setConnectionListener(connection){
     connection.on('data',function(data){
         console.log("Remote : " + data)
-        box.innerHTML += "Remote : " + data
     });
 }
