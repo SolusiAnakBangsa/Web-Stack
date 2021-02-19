@@ -33,7 +33,7 @@ function createFloor() {
 
     // Loads the texture of the road
     const road = new PIXI.projection.TilingSprite2d(
-        PIXI.Texture.from('road.png'),
+        PIXI.Texture.from("road.jpg"),
         160,
         app.screen.height/2,
     );
@@ -52,7 +52,7 @@ function createFloor() {
     // Correction so that the displacement sprite is situated above a little bit
     const DISPLACE_Y_CORRECTION = -150;
 
-    const displacementSprite = PIXI.Sprite.from('dudu.png');
+    const displacementSprite = PIXI.Sprite.from("dudu.png");
     displacementSprite.anchor.set(0.5, 0);
     displacementSprite.width = app.screen.width;
     displacementSprite.height = app.screen.height/2 - DISPLACE_Y_CORRECTION;

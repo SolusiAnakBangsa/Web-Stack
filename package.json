@@ -3,19 +3,27 @@
   "version": "0.1.0",
   "description": "Full web stack for gameyourfit",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "game-dev": "rimraf development && parcel public/game.html --out-dir development -p 8000",
+    "game-build": "npm run clean && parcel build public/game.html --no-content-hash --out-dir dist --public-url ./",
+    "clean": "rimraf .cache && rimraf dist",
+    "clean-dev": "rimraf .cache && rimraf development"
+  },
+  "staticFiles": {
+    "staticPath": ["assets"]
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/SolusiAnakBangsa/GYF-Web-Stack.git"
+    "url": "git+https://github.com/SolusiAnakBangsa/Web-Stack.git"
   },
   "author": "solusianakbangsa",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/SolusiAnakBangsa/GYF-Web-Stack/issues"
+    "url": "https://github.com/SolusiAnakBangsa/Web-Stack/issues"
   },
-  "homepage": "https://github.com/SolusiAnakBangsa/GYF-Web-Stack#readme",
+  "homepage": "https://github.com/SolusiAnakBangsa/Web-Stack#readme",
   "devDependencies": {
-    "parcel-bundler": "^1.12.4"
+    "parcel-bundler": "^1.12.4",
+    "parcel-plugin-static-files-copy": "^2.5.1",
+    "rimraf": "^3.0.2"
   }
 }
