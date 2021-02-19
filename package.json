@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "description": "Full web stack for gameyourfit",
   "scripts": {
+	"test": "npm run game-build",
+	"build": "npm run game-build",
     "game-dev": "rimraf development && parcel public/game.html --out-dir development -p 8000",
     "game-build": "npm run clean && parcel build public/game.html --no-content-hash --out-dir dist --public-url ./",
     "clean": "rimraf .cache && rimraf dist",
