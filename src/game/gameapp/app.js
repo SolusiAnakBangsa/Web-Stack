@@ -1,5 +1,6 @@
 import { assets } from "./assets";
 import { Floor } from "./objects/floor";
+import { Resizer } from "./resizer";
 
 export class GameApp {
 
@@ -7,6 +8,7 @@ export class GameApp {
         // Creates the app according to the options
         this.app = new PIXI.Application(options);
         this.loader = new PIXI.Loader();
+        this.resizer = new Resizer();
         
         // Initializes the program
         this.initialize();
@@ -32,8 +34,20 @@ export class GameApp {
             app: this.app,
             loader: loader,
             resources: resources,
+            resizer: this.resizer,
         };
 
+        // Make the floor object.
         this.floor = new Floor(pixiRef, this.app.stage);
+
+        // Setup the loop
+        this.app.ticker.add(this.loop.bind(this));
+    }
+
+    loop(delta) {
+        // Everything here will loop every frame
+
+        // Do resizer event handler
+        this.resizer.loop(this.app.ticker.deltaMS);
     }
 }

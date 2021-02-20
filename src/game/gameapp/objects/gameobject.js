@@ -5,4 +5,6 @@ export class GameObject {
     }
 
     setup() {}
+
+    loop() {}
 }
