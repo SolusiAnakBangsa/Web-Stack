@@ -1,5 +1,5 @@
 export const assets = {
-    landsurface: "https://pixijs.io/examples/examples/assets/p2.jpeg",
-    landroad: "road.jpg",
-    landdisplacement: "dudu.png"
+    landsurface: "grass.png",
+    landroad: "road.png",
+    landdisplacement: "horizon_map.png"
 };

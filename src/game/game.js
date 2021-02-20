@@ -3,6 +3,7 @@ import { GameApp } from "./gameapp/app";
 
 const game = new GameApp({
     resolution: 1,
+    backgroundColor: 0x8febda,
     resizeTo: window, // Resize to the size of the browser window once.
 });
 

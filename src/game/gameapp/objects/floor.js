@@ -6,7 +6,7 @@ export class Floor extends GameObject {
         // Object to render the floor in the game.
         super(pixiRef, drawTo);
 
-        this.floorSpeed = 5;
+        this.floorSpeed = 1;
         this.projPoint = new PIXI.Point(0, -pixiRef.app.screen.height/2);
         this.factor = 0.875;
 
@@ -14,9 +14,15 @@ export class Floor extends GameObject {
     }
 
     setup(pixiRef) {
+
         this.floorContainer = new PIXI.projection.Container2d();
 
+        // Pixel scale.
+        const scale = 4;
+
         // Loads the floor texture and positions it in the bottom center of the screen.
+        // Rotate texture 180 degrees
+        pixiRef.resources.landsurface.texture.rotate = 4;
         this.floor = new PIXI.projection.TilingSprite2d(
                 pixiRef.resources.landsurface.texture,
                 pixiRef.app.screen.width,
@@ -24,16 +30,20 @@ export class Floor extends GameObject {
             );
         this.floor.anchor.set(0.5, 1.0);
         this.floor.position.set(pixiRef.app.screen.width/2, pixiRef.app.screen.height);
+        this.floor.tileScale.set(scale, scale);
 
         // Loads the texture of the road, and positions it in the bottom center of the screen too.
+        // Rotate texture 180 degrees
+        pixiRef.resources.landroad.texture.rotate = 4;
         this.road = new PIXI.projection.TilingSprite2d(
             pixiRef.resources.landroad.texture,
-            pixiRef.resources.landroad.texture.width, // Road width is the same as the sprite
+            pixiRef.resources.landroad.texture.width*scale, // Road width is the same as the sprite
             pixiRef.app.screen.height/2,
         );
-        this.road.tilePosition.x += pixiRef.resources.landroad.texture.width/2; // Offset by half
+        this.road.tilePosition.x += pixiRef.resources.landroad.texture.width/2*scale; // Offset by half
         this.road.anchor.set(0.5, 1.0);
         this.road.position.set(pixiRef.app.screen.width/2, pixiRef.app.screen.height);
+        this.road.tileScale.set(scale, scale);
         
         // We need to create a mask so that the road tiling does not mess up.
         // The road mask shall be created inside a new container, and placed bottom middle.
@@ -41,7 +51,7 @@ export class Floor extends GameObject {
         this.bruhContainer.position.set(pixiRef.app.screen.width / 2, pixiRef.app.screen.height);
 
         this.bruh = new PIXI.projection.Sprite2d(PIXI.Texture.WHITE);
-        this.bruh.width = pixiRef.resources.landroad.texture.width;
+        this.bruh.width = pixiRef.resources.landroad.texture.width*scale;
         this.bruh.height = pixiRef.app.screen.height*4 + 1; // Times by 4 and added by 1 to make it long enough to reach the horizon.
         this.bruh.anchor.set(0.5, 1.0);
         
@@ -62,7 +72,7 @@ export class Floor extends GameObject {
         // Create the filter from the displacement sprite. Then, apply the filter to the floor
         this.displacementFilter = new PIXI.filters.DisplacementFilter(this.displacementSprite);
         this.displacementFilter.padding = 150; // Giving extra space for the filter to work.
-        this.displacementFilter.scale.set(0, 120);
+        this.displacementFilter.scale.set(0, 75); // This represents how much the maximum horizon distortion map in pixels.
 
         this.floorContainer.filters = [this.displacementFilter]; // Apply here.
 
