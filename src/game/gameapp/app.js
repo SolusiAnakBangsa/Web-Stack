@@ -49,5 +49,6 @@ export class GameApp {
 
         // Do resizer event handler
         this.resizer.loop(this.app.ticker.deltaMS);
+        this.floor.loop(this.app.ticker.deltaMS);
     }
 }

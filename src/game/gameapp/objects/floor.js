@@ -7,14 +7,21 @@ export class Floor extends GameObject {
         super(pixiRef, drawTo);
 
         this.floorSpeed = 1;
+
+        // Projection properties
         this.projPoint = new PIXI.Point(0, -pixiRef.app.screen.height/2);
         this.factor = 0.875;
+
+        // Displace correction useful so that the displacement map is offset above the horizon line.
+        this.displace_y_correction = -150;
 
         this.setup(pixiRef);
     }
 
     setup(pixiRef) {
+        super.setup(pixiRef);
 
+        // Floor container
         this.floorContainer = new PIXI.projection.Container2d();
 
         // Pixel scale.
@@ -58,16 +65,14 @@ export class Floor extends GameObject {
         this.road.mask = this.bruh; // Set the mask here
         
         // Here, lets create a displacement map, to distort the horizon, as if we are walking on a sphere.
-        // Displace correction useful so that the displacement map is offset above the horizon line.
-        const DISPLACE_Y_CORRECTION = -150;
 
         this.displacementSprite = PIXI.Sprite.from(pixiRef.resources.landdisplacement.texture);
         this.displacementSprite.anchor.set(0.5, 0);
         this.displacementSprite.width = pixiRef.app.screen.width;
-        this.displacementSprite.height = pixiRef.app.screen.height/2 - DISPLACE_Y_CORRECTION;
+        this.displacementSprite.height = pixiRef.app.screen.height/2 - this.displace_y_correction;
 
         this.displacementSprite.x = pixiRef.app.screen.width/2;
-        this.displacementSprite.y = pixiRef.app.screen.height/2 + DISPLACE_Y_CORRECTION;
+        this.displacementSprite.y = pixiRef.app.screen.height/2 + this.displace_y_correction;
         
         // Create the filter from the displacement sprite. Then, apply the filter to the floor
         this.displacementFilter = new PIXI.filters.DisplacementFilter(this.displacementSprite);
@@ -83,43 +88,39 @@ export class Floor extends GameObject {
         this.floorContainer.addChild(this.bruhContainer); // Add maskcontainer to main container
         this.floorContainer.addChild(this.displacementSprite); // Add displacement to the main container
         this.drawTo.addChild(this.floorContainer); // Add main container to canvas.
-        
-        // Add ticker to update the projection in real time.
-        pixiRef.app.ticker.add(() => {
+    }
 
-            this.floor.tileProj.setAxisY(this.projPoint, this.factor);
-            this.road.tileProj.setAxisY(this.projPoint, this.factor);
+    loop(delta) {
+        this.floor.tileProj.setAxisY(this.projPoint, this.factor);
+        this.road.tileProj.setAxisY(this.projPoint, this.factor);
 
-            // Reverse the projPoint
-            this.bruhContainer.proj.setAxisY({x: -this.projPoint.x, y: -this.projPoint.y}, -this.factor);
+        // Reverse the projPoint
+        this.bruhContainer.proj.setAxisY({x: -this.projPoint.x, y: -this.projPoint.y}, -this.factor);
 
-            // Make the floor move
-            this.road.tilePosition.y -= this.floorSpeed;
-            this.floor.tilePosition.y -= this.floorSpeed;
-        });
+        // Make the floor move
+        this.road.tilePosition.y -= this.floorSpeed;
+        this.floor.tilePosition.y -= this.floorSpeed;
+    }
 
-        // Add to the resizer events
-        pixiRef.resizer.add(() => {
+    onResize() {
+        this.floor.position.set(this.app.screen.width/2, this.app.screen.height);
+        this.road.position.set(this.app.screen.width/2, this.app.screen.height);
 
-            this.floor.position.set(pixiRef.app.screen.width/2, pixiRef.app.screen.height);
-            this.road.position.set(pixiRef.app.screen.width/2, pixiRef.app.screen.height);
+        this.projPoint.y = -this.app.screen.height/2;
 
-            this.projPoint.y = -pixiRef.app.screen.height/2;
+        this.bruhContainer.position.set(this.app.screen.width / 2, this.app.screen.height);
+        this.bruh.height = this.app.screen.height*4 + 1; // Times by 4 and added by 1 to make it long enough to reach the horizon.
 
-            this.bruhContainer.position.set(pixiRef.app.screen.width / 2, pixiRef.app.screen.height);
-            this.bruh.height = pixiRef.app.screen.height*4 + 1; // Times by 4 and added by 1 to make it long enough to reach the horizon.
+        this.displacementSprite.width = this.app.screen.width;
+        this.displacementSprite.height = this.app.screen.height/2 - this.displace_y_correction;
 
-            this.displacementSprite.width = pixiRef.app.screen.width;
-            this.displacementSprite.height = pixiRef.app.screen.height/2 - DISPLACE_Y_CORRECTION;
-    
-            this.displacementSprite.x = pixiRef.app.screen.width/2;
-            this.displacementSprite.y = pixiRef.app.screen.height/2 + DISPLACE_Y_CORRECTION;
+        this.displacementSprite.x = this.app.screen.width/2;
+        this.displacementSprite.y = this.app.screen.height/2 + this.displace_y_correction;
 
-            this.floor.width = pixiRef.app.screen.width;
-            this.floor.height = pixiRef.app.screen.height/2;
+        this.floor.width = this.app.screen.width;
+        this.floor.height = this.app.screen.height/2;
 
-            this.road.width = pixiRef.app.screen.width;
-            this.road.height = pixiRef.app.screen.height/2;
-        });
+        this.road.width = this.app.screen.width;
+        this.road.height = this.app.screen.height/2;
     }
 }
