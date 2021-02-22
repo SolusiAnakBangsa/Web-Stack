@@ -17,3 +17,9 @@ export function getHeight() {
     document.documentElement.clientHeight
   );
 }
+
+export function randomRange(min, max, rounded=true) {
+  if (rounded)
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  return (Math.random() * (max - min + 1)) + min
+}

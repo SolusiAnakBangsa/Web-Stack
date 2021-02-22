@@ -1,5 +1,6 @@
 import { assets } from "./assets";
 import { Floor } from "./objects/floor";
+import { Sky } from "./objects/sky";
 import { Resizer } from "./resizer";
 
 export class GameApp {
@@ -39,6 +40,7 @@ export class GameApp {
 
         // Make the floor object.
         this.floor = new Floor(pixiRef, this.app.stage);
+        this.sky = new Sky(pixiRef, this.app.stage);
 
         // Setup the loop
         this.app.ticker.add(this.loop.bind(this));
@@ -50,5 +52,6 @@ export class GameApp {
         // Do resizer event handler
         this.resizer.loop(this.app.ticker.deltaMS);
         this.floor.loop(this.app.ticker.deltaMS);
+        this.sky.loop(this.app.ticker.deltaMS);
     }
 }

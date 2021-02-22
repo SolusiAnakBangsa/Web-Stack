@@ -3,6 +3,10 @@ Full web stack for Game Your Fit website, made for DSC's Solution Challenge 2021
 
 ![CI Badge](https://github.com/SolusiAnakBangsa/Web-Stack/workflows/NPM%20CI/badge.svg)
 
+<p align="center">
+  <img width="300" height="300" src="./src/gamefiles/logo.png">
+</p>
+
 Includes:
 
 - Game resources for android and web client
@@ -11,7 +15,7 @@ Includes:
 
 # Usage
 Have Node and NPM (Node Package Manager) installed.
-This uses NPM to manage all the dependencies needed for development and deployment,
+This uses NPM to manage all the dependencies needed for development and deploymen.
 
 Clone repository and go to the directory
 ```bash
