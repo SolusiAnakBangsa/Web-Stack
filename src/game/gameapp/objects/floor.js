@@ -79,7 +79,7 @@ export class Floor extends GameObject {
         // Create the filter from the displacement sprite. Then, apply the filter to the floor
         this.displacementFilter = new PIXI.filters.DisplacementFilter(this.displacementSprite);
         this.displacementFilter.padding = 150; // Giving extra space for the filter to work.
-        this.displacementFilter.scale.set(0, 75); // This represents how much the maximum horizon distortion map in pixels.
+        this.displacementFilter.scale.set(0, 100); // This represents how much the maximum horizon distortion map in pixels.
 
         this.floorContainer.filters = [this.displacementFilter]; // Apply here.
 

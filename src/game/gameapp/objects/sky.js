@@ -15,7 +15,7 @@ export class Sky extends GameObject {
         this.projPoint = new PIXI.Point(0, this.app.screen.height/3);
         this.factor = 0.875;
 
-        this.speedRange = [0.5, 4];
+        this.speedRange = [0.5, 2.5];
 
         // This is to store all the cloud sprite textures.
         this.cloudsTex = pixiRef.resources.cloud.spritesheet;
@@ -27,7 +27,7 @@ export class Sky extends GameObject {
         this.counterBound = randomRange(...this.cloudSpawnRange);
         this.counter = 0;
 
-        this.initialClouds = 8;
+        this.initialClouds = 14;
 
         this.setup(pixiRef);
     }
@@ -85,6 +85,7 @@ export class Sky extends GameObject {
 
         // If the counter finally comes to the bound, spawn the clouds
         if (this.counter > this.counterBound) {
+            console.log(this.skyProj.children.length);
             // Spawn a cloud
             let cloud = this.makeCloud();
             this.skyProj.addChild(cloud);
