@@ -23,3 +23,8 @@ export function randomRange(min, max, rounded=true) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   return (Math.random() * (max - min + 1)) + min
 }
+
+export function randomProperty (obj) {
+  var keys = Object.keys(obj);
+  return obj[keys[ keys.length * Math.random() << 0]];
+};
