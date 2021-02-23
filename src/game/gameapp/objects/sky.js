@@ -44,7 +44,7 @@ export class Sky extends GameObject {
         this.skyProj.anchor.set(0.5, 0);
 
         this.skyContainer.addChild(this.skyProj);
-        this.app.stage.addChild(this.skyContainer);
+        this.drawTo.addChild(this.skyContainer);
 
         // Here, we can spawn some clouds to fill the sky initially.
         for (var i = 0; i < this.initialClouds; i++) {
@@ -85,7 +85,6 @@ export class Sky extends GameObject {
 
         // If the counter finally comes to the bound, spawn the clouds
         if (this.counter > this.counterBound) {
-            console.log(this.skyProj.children.length);
             // Spawn a cloud
             let cloud = this.makeCloud();
             this.skyProj.addChild(cloud);

@@ -1,4 +1,5 @@
 import { GameObject } from "./gameobject";
+import { randomRange, randomProperty } from "./../../../script/util";
 
 export class Floor extends GameObject {
 
@@ -6,7 +7,7 @@ export class Floor extends GameObject {
         // Object to render the floor in the game.
         super(pixiRef, drawTo);
 
-        this.floorSpeed = 1;
+        this.floorSpeed = 10;
 
         this.horizonY = () => pixiRef.app.screen.height/2.3;
 
@@ -16,6 +17,17 @@ export class Floor extends GameObject {
 
         // Displace correction useful so that the displacement map is offset above the horizon line.
         this.displace_y_correction = -150;
+        this.yScale = 1.1; // YScale is used to scale the height of the floor projection tile.
+        this.yOffset = 50; // Offsets the floor.
+
+        // Textures from a spritesheet for the floor decorations
+        this.floorDecorTex = pixiRef.resources.floorDecor.spritesheet;
+        this.floorDecorYSpawn = this.app.screen.height + this.yOffset - this.horizonY() * this.yScale;
+
+        // Counter to check
+        this.counterRange = [400, 1000]; // Range to spawn the floor decorations
+        this.counter = 0;
+        this.counterBound = randomRange(...this.counterRange); // Check every 500ms
 
         this.setup(pixiRef);
     }
@@ -25,7 +37,7 @@ export class Floor extends GameObject {
 
         // Floor container
         this.floorContainer = new PIXI.projection.Container2d();
-        this.floorContainer.y += 50;
+        this.floorContainer.y += this.yOffset;
 
         // Pixel scale.
         const scale = 4;
@@ -36,7 +48,7 @@ export class Floor extends GameObject {
         this.floor = new PIXI.projection.TilingSprite2d(
                 pixiRef.resources.landsurface.texture,
                 pixiRef.app.screen.width,
-                this.horizonY()*1.1,
+                this.horizonY() * this.yScale,
             );
         this.floor.anchor.set(0.5, 1.0);
         this.floor.position.set(pixiRef.app.screen.width/2, pixiRef.app.screen.height);
@@ -48,7 +60,7 @@ export class Floor extends GameObject {
         this.road = new PIXI.projection.TilingSprite2d(
             pixiRef.resources.landroad.texture,
             pixiRef.resources.landroad.texture.width*scale, // Road width is the same as the sprite
-            this.horizonY()*1.1,
+            this.horizonY() * this.yScale,
         );
         this.road.tilePosition.x += pixiRef.resources.landroad.texture.width/2*scale; // Offset by half
         this.road.anchor.set(0.5, 1.0);
@@ -80,20 +92,53 @@ export class Floor extends GameObject {
         // Create the filter from the displacement sprite. Then, apply the filter to the floor
         this.displacementFilter = new PIXI.filters.DisplacementFilter(this.displacementSprite);
         this.displacementFilter.padding = 150; // Giving extra space for the filter to work.
-        this.displacementFilter.scale.set(0, 100); // This represents how much the maximum horizon distortion map in pixels.
+        this.displacementFilter.scale.set(0, 80); // This represents how much the maximum horizon distortion map in pixels.
 
         this.floorContainer.filters = [this.displacementFilter]; // Apply here.
 
-        // Adds to all the container
+        /*
+            End of floor creation with road
+            begin with floordecor spawns
+        */
+       // This floor containers is useful to store the floor decorations
+       this.floorDecorContainer = new PIXI.projection.Container2d();
+
+        // Adds to all the floor to the container
         this.floorContainer.addChild(this.floor); // Add floor
         this.floorContainer.addChild(this.road); // Add road
         this.bruhContainer.addChild(this.bruh); // Add mask to maskcontainer
         this.floorContainer.addChild(this.bruhContainer); // Add maskcontainer to main container
         this.floorContainer.addChild(this.displacementSprite); // Add displacement to the main container
         this.drawTo.addChild(this.floorContainer); // Add main container to canvas.
+
+        // Add container about the grass
+        this.bruhContainer.addChild(this.floorDecorContainer);
     }
 
     loop(delta) {
+        // Move the floor decoration
+        for (let dec of this.floorDecorContainer.children) {
+            dec.y += this.floorSpeed;
+        }
+
+        this.counter += delta;
+        if (this.counter > this.counterBound) {
+
+            // Spawn a new floor decor at a random location.
+            this.floorDecorContainer.addChild(this.makeCloud());
+
+            // Delete all the floor decoration outside the bounds
+            for (let dec of this.floorDecorContainer.children) {
+                if (dec.y > 0) {
+                    this.floorDecorContainer.removeChild(dec);
+                }
+            }
+
+            // Reset counter
+            this.counter -= this.counterBound;
+            this.counterBound = randomRange(...this.counterRange);
+        }
+
         this.floor.tileProj.setAxisY(this.projPoint, this.factor);
         this.road.tileProj.setAxisY(this.projPoint, this.factor);
 
@@ -112,7 +157,7 @@ export class Floor extends GameObject {
         this.projPoint.y = -this.horizonY();
 
         this.bruhContainer.position.set(this.app.screen.width / 2, this.app.screen.height);
-        this.bruh.height = this.app.screen.height*4 + 1; // Times by 4 and added by 1 to make it long enough to reach the horizon.
+        this.bruh.height = this.app.screen.height*14 + 1; // Times by 4 and added by 1 to make it long enough to reach the horizon.
 
         this.displacementSprite.width = this.app.screen.width;
         this.displacementSprite.height = this.horizonY() - this.displace_y_correction;
@@ -121,9 +166,30 @@ export class Floor extends GameObject {
         this.displacementSprite.y = this.horizonY() + this.displace_y_correction;
 
         this.floor.width = this.app.screen.width;
-        this.floor.height = this.horizonY();
+        this.floor.height = this.horizonY() * this.yScale;
 
         this.road.width = this.app.screen.width;
-        this.road.height = this.horizonY();
+        this.road.height = this.horizonY() * this.yScale;
+
+        this.floorDecorYSpawn = this.app.screen.height + this.yOffset - this.horizonY() * this.yScale;
+    }
+
+    makeCloud() {
+        // This function randomly generates a cloud.
+        let grass = new PIXI.projection.Sprite2d(randomProperty(this.floorDecorTex.textures));
+        
+        grass.scale.set(8, 8);
+        grass.anchor.set(0.5, 1);
+
+        // Set the projection to be upright from the user.
+        grass.proj.affine = PIXI.projection.AFFINE.AXIS_X;
+
+        // Set random position
+        grass.position.set(
+            randomRange(-this.app.screen.width*10, this.app.screen.width*10),
+            -8000
+        );
+
+        return grass;
     }
 }
