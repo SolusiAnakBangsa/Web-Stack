@@ -25,6 +25,7 @@ export class Floor extends GameObject {
 
         // Floor container
         this.floorContainer = new PIXI.projection.Container2d();
+        this.floorContainer.y += 50;
 
         // Pixel scale.
         const scale = 4;
@@ -35,7 +36,7 @@ export class Floor extends GameObject {
         this.floor = new PIXI.projection.TilingSprite2d(
                 pixiRef.resources.landsurface.texture,
                 pixiRef.app.screen.width,
-                this.horizonY(),
+                this.horizonY()*1.1,
             );
         this.floor.anchor.set(0.5, 1.0);
         this.floor.position.set(pixiRef.app.screen.width/2, pixiRef.app.screen.height);
@@ -47,7 +48,7 @@ export class Floor extends GameObject {
         this.road = new PIXI.projection.TilingSprite2d(
             pixiRef.resources.landroad.texture,
             pixiRef.resources.landroad.texture.width*scale, // Road width is the same as the sprite
-            this.horizonY(),
+            this.horizonY()*1.1,
         );
         this.road.tilePosition.x += pixiRef.resources.landroad.texture.width/2*scale; // Offset by half
         this.road.anchor.set(0.5, 1.0);
@@ -61,7 +62,7 @@ export class Floor extends GameObject {
 
         this.bruh = new PIXI.projection.Sprite2d(PIXI.Texture.WHITE);
         this.bruh.width = pixiRef.resources.landroad.texture.width*scale;
-        this.bruh.height = pixiRef.app.screen.height*4 + 1; // Times by 4 and added by 1 to make it long enough to reach the horizon.
+        this.bruh.height = pixiRef.app.screen.height*14 + 1; // Times by 4 and added by 1 to make it long enough to reach the horizon.
         this.bruh.anchor.set(0.5, 1.0);
         
         this.road.mask = this.bruh; // Set the mask here
@@ -74,7 +75,7 @@ export class Floor extends GameObject {
         this.displacementSprite.height = this.horizonY() - this.displace_y_correction;
 
         this.displacementSprite.x = pixiRef.app.screen.width/2;
-        this.displacementSprite.y = this.horizonY() + this.displace_y_correction;
+        this.displacementSprite.y = this.horizonY();
         
         // Create the filter from the displacement sprite. Then, apply the filter to the floor
         this.displacementFilter = new PIXI.filters.DisplacementFilter(this.displacementSprite);
