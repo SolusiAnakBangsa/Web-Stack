@@ -22,13 +22,15 @@ export class ShadowShader extends PIXI.Filter {
     uniform vec4 outputFrame;
     uniform vec2 shadowDirection;
     uniform float floorY;
+    uniform float opacity;
 
     void main(void) {
-        //1. get the screen coordinate
+        
         vec2 screenCoord = vTextureCoord * inputSize.xy + outputFrame.xy;
-        //2. calculate Y shift of our dimension vector
+        
         vec2 shadow;
         //shadow coordinate system is a bit skewed, but it has to be the same for screenCoord.y = floorY
+
         float paramY = (screenCoord.y - floorY) / shadowDirection.y;
         shadow.y = paramY + floorY;
         shadow.x = screenCoord.x + paramY * shadowDirection.x;
@@ -37,7 +39,7 @@ export class ShadowShader extends PIXI.Filter {
         vec4 originalColor = texture2D(uSampler, vTextureCoord);
         vec4 shadowColor = texture2D(uSampler, bodyFilterCoord);
         shadowColor.rgb = vec3(0.0);
-        shadowColor.a *= 0.5;
+        shadowColor.a *= opacity;
 
         // normal blend mode coefficients (1, 1-src_alpha)
         // shadow is destination (backdrop), original is source
@@ -45,11 +47,12 @@ export class ShadowShader extends PIXI.Filter {
     }
     `
 
-    constructor(shadowDirection, floorY) {
+    constructor(shadowDirection, floorY, opacity=0.2) {
         super(ShadowShader.myVertex, ShadowShader.myFragment);
 
         this.uniforms.shadowDirection = shadowDirection;
         this.uniforms.floorY = floorY;
+        this.uniforms.opacity = opacity;
 
         this.padding = 300;
     }
