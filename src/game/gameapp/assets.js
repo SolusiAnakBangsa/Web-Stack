@@ -3,5 +3,6 @@ export const assets = {
     landroad: "road.png",
     landdisplacement: "horizon_map.png",
     cloud: "cloud.json",
-    floorDecor: "tallgrass.json"
+    floorDecor: "tallgrass.json",
+    runman: "running.json"
 };
