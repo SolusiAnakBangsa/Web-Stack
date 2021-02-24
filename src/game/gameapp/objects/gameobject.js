@@ -3,6 +3,7 @@ export class GameObject {
 
         this.drawTo = drawTo;
         this.app = pixiRef.app;
+        this.pixiref = pixiRef;
     }
 
     setup(pixiRef) {

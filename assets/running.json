@@ -1,0 +1,103 @@
+{ "frames": {
+   "run0": {
+    "frame": { "x": 0, "y": 0, "w": 42, "h": 117 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 42, "h": 117 },
+    "sourceSize": { "w": 42, "h": 117 },
+    "duration": 100
+   },
+   "run1": {
+    "frame": { "x": 42, "y": 0, "w": 42, "h": 117 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 42, "h": 117 },
+    "sourceSize": { "w": 42, "h": 117 },
+    "duration": 66
+   },
+   "run2": {
+    "frame": { "x": 84, "y": 0, "w": 42, "h": 117 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 42, "h": 117 },
+    "sourceSize": { "w": 42, "h": 117 },
+    "duration": 66
+   },
+   "run3": {
+    "frame": { "x": 126, "y": 0, "w": 42, "h": 117 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 42, "h": 117 },
+    "sourceSize": { "w": 42, "h": 117 },
+    "duration": 66
+   },
+   "run4": {
+    "frame": { "x": 168, "y": 0, "w": 42, "h": 117 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 42, "h": 117 },
+    "sourceSize": { "w": 42, "h": 117 },
+    "duration": 66
+   },
+   "run5": {
+    "frame": { "x": 0, "y": 117, "w": 42, "h": 117 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 42, "h": 117 },
+    "sourceSize": { "w": 42, "h": 117 },
+    "duration": 66
+   },
+   "run6": {
+    "frame": { "x": 42, "y": 117, "w": 42, "h": 117 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 42, "h": 117 },
+    "sourceSize": { "w": 42, "h": 117 },
+    "duration": 66
+   },
+   "run7": {
+    "frame": { "x": 84, "y": 117, "w": 42, "h": 117 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 42, "h": 117 },
+    "sourceSize": { "w": 42, "h": 117 },
+    "duration": 66
+   },
+   "run8": {
+    "frame": { "x": 126, "y": 117, "w": 42, "h": 117 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 42, "h": 117 },
+    "sourceSize": { "w": 42, "h": 117 },
+    "duration": 66
+   },
+   "run9": {
+    "frame": { "x": 168, "y": 117, "w": 42, "h": 117 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 42, "h": 117 },
+    "sourceSize": { "w": 42, "h": 117 },
+    "duration": 66
+   }
+ },
+ "meta": {
+  "app": "http://www.aseprite.org/",
+  "version": "1.2.25-x64",
+  "image": "running.png",
+  "format": "RGBA8888",
+  "size": { "w": 210, "h": 234 },
+  "scale": "1",
+  "frameTags": [
+   { "name": "Loop", "from": 1, "to": 10, "direction": "forward" }
+  ],
+  "layers": [
+   { "name": "Nakkade Boddy", "opacity": 255, "blendMode": "normal" },
+   { "name": "Clothos", "opacity": 255, "blendMode": "normal" },
+   { "name": "ClothosUp", "opacity": 255, "blendMode": "normal" },
+   { "name": "hair", "opacity": 255, "blendMode": "normal" },
+   { "name": "Shoes", "opacity": 255, "blendMode": "normal" }
+  ],
+  "slices": [
+  ]
+ }
+}
