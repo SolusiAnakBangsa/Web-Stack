@@ -25,7 +25,11 @@ export class Floor extends GameObject {
         this.floorDecorYSpawn = this.app.screen.height + this.yOffset - this.horizonY() * this.yScale;
 
         // Counter to check
-        this.counterRange = [400, 1000]; // Range to spawn the floor decorations
+        // If the speed changes, this should change too.
+        // The baseline range should be [400, 800] if the floorSpeed is 14.
+        // Increases and decreases linearly. (If floorSpeed == 7, then range [800, 1600])
+        // Formula is 14/speed*400, 14/speed*800 == 5600/speed, 11200
+        this.counterRange = [400, 800]; // Milliseconds range to spawn the floor decorations
         this.counter = 0;
         this.counterBound = randomRange(...this.counterRange); // Check every 500ms
 
@@ -120,6 +124,9 @@ export class Floor extends GameObject {
         for (let dec of this.floorDecorContainer.children) {
             dec.y += this.floorSpeed;
         }
+
+        // Update the range according to floorSpeed.
+        this.counterRange = [5600/this.floorSpeed, 11200/this.floorSpeed]
 
         this.counter += delta;
         if (this.counter > this.counterBound) {

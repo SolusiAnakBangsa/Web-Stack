@@ -1,0 +1,59 @@
+{ "frames": {
+   "pace0": {
+    "frame": { "x": 0, "y": 0, "w": 46, "h": 46 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 46, "h": 46 },
+    "sourceSize": { "w": 46, "h": 46 },
+    "duration": 100
+   },
+   "pace1": {
+    "frame": { "x": 46, "y": 0, "w": 46, "h": 46 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 46, "h": 46 },
+    "sourceSize": { "w": 46, "h": 46 },
+    "duration": 100
+   },
+   "pace2": {
+    "frame": { "x": 0, "y": 46, "w": 46, "h": 46 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 46, "h": 46 },
+    "sourceSize": { "w": 46, "h": 46 },
+    "duration": 100
+   },
+   "pace3": {
+    "frame": { "x": 46, "y": 46, "w": 46, "h": 46 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 46, "h": 46 },
+    "sourceSize": { "w": 46, "h": 46 },
+    "duration": 100
+   }
+ },
+ "meta": {
+  "app": "http://www.aseprite.org/",
+  "version": "1.2.25-x64",
+  "image": "pace.png",
+  "format": "RGBA8888",
+  "size": { "w": 92, "h": 92 },
+  "scale": "1",
+  "frameTags": [
+  ],
+  "layers": [
+   { "name": "RockBase", "opacity": 255, "blendMode": "normal" },
+   { "name": "Dark", "opacity": 255, "blendMode": "normal" },
+   { "name": "Light", "opacity": 255, "blendMode": "normal" },
+   { "name": "CrackLight", "opacity": 41, "blendMode": "normal" },
+   { "name": "CrackDark", "opacity": 153, "blendMode": "normal" },
+   { "name": "Red", "opacity": 255, "blendMode": "normal" },
+   { "name": "Orange", "opacity": 255, "blendMode": "normal" },
+   { "name": "Yellow", "opacity": 255, "blendMode": "normal" },
+   { "name": "PaceCrack", "opacity": 192, "blendMode": "normal" },
+   { "name": "Pace", "opacity": 255, "blendMode": "normal" }
+  ],
+  "slices": [
+  ]
+ }
+}

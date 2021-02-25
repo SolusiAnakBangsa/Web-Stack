@@ -1,9 +1,6 @@
 import { assets } from "./assets";
-import { Floor } from "./objects/floor";
-import { Sky } from "./objects/sky";
 import { Resizer } from "./resizer";
-import { RunMan } from "./objects/runningman";
-import { Scene } from "./scene";
+import { RunScene } from "./scenes/runscene";
 
 export class GameApp {
 
@@ -12,7 +9,7 @@ export class GameApp {
         this.app = new PIXI.Application(options);
         this.loader = new PIXI.Loader();
         this.resizer = new Resizer();
-        this.scene = new Scene();
+        this.scene;
         
         // Initializes the program
         this.initialize();
@@ -41,12 +38,8 @@ export class GameApp {
             resizer: this.resizer,
         };
         
-        // Make the floor object. and add then to the scene.
-        this.scene.addObj(new Floor(pixiRef));
-        this.scene.addObj(new Sky(pixiRef));
-        const runman = new RunMan(pixiRef);
-        runman.speed = 0.25;
-        this.scene.addObj(runman);
+        // Make the scene
+        this.scene = new RunScene(pixiRef);
         
         // Add the scene to the main stage
         this.app.stage.addChild(this.scene.container);
