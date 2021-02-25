@@ -43,6 +43,7 @@ export class GameApp {
         this.floor = new Floor(pixiRef, this.app.stage);
         this.sky = new Sky(pixiRef, this.app.stage);
         this.runman = new RunMan(pixiRef, this.app.stage);
+        this.runman.speed = 0.25;
 
         // Setup the loop
         this.app.ticker.add(this.loop.bind(this));

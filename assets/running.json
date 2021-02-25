@@ -5,7 +5,7 @@
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 42, "h": 117 },
     "sourceSize": { "w": 42, "h": 117 },
-    "duration": 100
+    "duration": 66
    },
    "run1": {
     "frame": { "x": 42, "y": 0, "w": 42, "h": 117 },
@@ -21,7 +21,7 @@
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 42, "h": 117 },
     "sourceSize": { "w": 42, "h": 117 },
-    "duration": 66
+    "duration": 100
    },
    "run3": {
     "frame": { "x": 126, "y": 0, "w": 42, "h": 117 },
@@ -40,7 +40,7 @@
     "duration": 66
    },
    "run5": {
-    "frame": { "x": 0, "y": 117, "w": 42, "h": 117 },
+    "frame": { "x": 210, "y": 0, "w": 42, "h": 117 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 42, "h": 117 },
@@ -48,7 +48,7 @@
     "duration": 66
    },
    "run6": {
-    "frame": { "x": 42, "y": 117, "w": 42, "h": 117 },
+    "frame": { "x": 0, "y": 117, "w": 42, "h": 117 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 42, "h": 117 },
@@ -56,7 +56,7 @@
     "duration": 66
    },
    "run7": {
-    "frame": { "x": 84, "y": 117, "w": 42, "h": 117 },
+    "frame": { "x": 42, "y": 117, "w": 42, "h": 117 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 42, "h": 117 },
@@ -64,7 +64,7 @@
     "duration": 66
    },
    "run8": {
-    "frame": { "x": 126, "y": 117, "w": 42, "h": 117 },
+    "frame": { "x": 84, "y": 117, "w": 42, "h": 117 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 42, "h": 117 },
@@ -72,7 +72,23 @@
     "duration": 66
    },
    "run9": {
+    "frame": { "x": 126, "y": 117, "w": 42, "h": 117 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 42, "h": 117 },
+    "sourceSize": { "w": 42, "h": 117 },
+    "duration": 66
+   },
+   "run10": {
     "frame": { "x": 168, "y": 117, "w": 42, "h": 117 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 42, "h": 117 },
+    "sourceSize": { "w": 42, "h": 117 },
+    "duration": 66
+   },
+   "run11": {
+    "frame": { "x": 210, "y": 117, "w": 42, "h": 117 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 42, "h": 117 },
@@ -85,10 +101,10 @@
   "version": "1.2.25-x64",
   "image": "running.png",
   "format": "RGBA8888",
-  "size": { "w": 210, "h": 234 },
+  "size": { "w": 252, "h": 234 },
   "scale": "1",
   "frameTags": [
-   { "name": "Loop", "from": 1, "to": 10, "direction": "forward" }
+   { "name": "Loop", "from": 2, "to": 11, "direction": "forward" }
   ],
   "layers": [
    { "name": "Nakkade Boddy", "opacity": 255, "blendMode": "normal" },
