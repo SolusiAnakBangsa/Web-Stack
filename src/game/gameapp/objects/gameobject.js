@@ -4,11 +4,11 @@ export class GameObject {
         this.drawTo = drawTo;
         this.app = pixiRef.app;
         this.pixiref = pixiRef;
+        this.mainContainer; // This is the main container to store all the objects. Insert this to the stage to draw it.
     }
 
     setup(pixiRef) {
         // Add to the resizer events
-        pixiRef.resizer.add(this.onResize.bind(this));
     }
 
     loop(delta) {}

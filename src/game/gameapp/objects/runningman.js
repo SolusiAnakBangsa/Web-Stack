@@ -51,8 +51,7 @@ export class RunMan extends GameObject {
         this.manShadow = new ShadowShader([-0.6, -0.6], this.app.screen.height - this.manHeight - 15, 0.25);
         this.sprite.filters = [ this.manShadow ];
         
-
-        this.app.stage.addChild(this.sprite);
+        this.mainContainer = this.sprite;
     }
 
     loop() {

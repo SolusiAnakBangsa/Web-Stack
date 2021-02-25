@@ -7,7 +7,7 @@ export class Floor extends GameObject {
         // Object to render the floor in the game.
         super(pixiRef, drawTo);
 
-        this.floorSpeed = 10;
+        this.floorSpeed = 14;
 
         this.horizonY = () => pixiRef.app.screen.height/2.3;
 
@@ -109,7 +109,7 @@ export class Floor extends GameObject {
         this.bruhContainer.addChild(this.bruh); // Add mask to maskcontainer
         this.floorContainer.addChild(this.bruhContainer); // Add maskcontainer to main container
         this.floorContainer.addChild(this.displacementSprite); // Add displacement to the main container
-        this.drawTo.addChild(this.floorContainer); // Add main container to canvas.
+        this.mainContainer = this.floorContainer; // Add main container to canvas.
 
         // Add container about the grass
         this.bruhContainer.addChild(this.floorDecorContainer);
@@ -125,11 +125,11 @@ export class Floor extends GameObject {
         if (this.counter > this.counterBound) {
 
             // Spawn a new floor decor at a random location.
-            this.floorDecorContainer.addChild(this.makeCloud());
+            this.floorDecorContainer.addChild(this.makeDecor());
 
             // Delete all the floor decoration outside the bounds
             for (let dec of this.floorDecorContainer.children) {
-                if (dec.y > 0) {
+                if (dec.y > 20) {
                     this.floorDecorContainer.removeChild(dec);
                 }
             }
@@ -174,7 +174,7 @@ export class Floor extends GameObject {
         this.floorDecorYSpawn = this.app.screen.height + this.yOffset - this.horizonY() * this.yScale;
     }
 
-    makeCloud() {
+    makeDecor() {
         // This function randomly generates a cloud.
         let grass = new PIXI.projection.Sprite2d(randomProperty(this.floorDecorTex.textures));
         

@@ -44,7 +44,7 @@ export class Sky extends GameObject {
         this.skyProj.anchor.set(0.5, 0);
 
         this.skyContainer.addChild(this.skyProj);
-        this.drawTo.addChild(this.skyContainer);
+        this.mainContainer = this.skyContainer;
 
         // Here, we can spawn some clouds to fill the sky initially.
         for (var i = 0; i < this.initialClouds; i++) {
