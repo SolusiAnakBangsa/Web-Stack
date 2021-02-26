@@ -136,7 +136,7 @@ export class Pace extends GameObject {
     onResize() {
         this.paceSprite.position.set(this.pixiRef.app.screen.width - 100, 100);
         this.outerPace.position.set(this.pixiRef.app.screen.width - 100, 100);
-        this.paceText.position.set(pixiRef.app.screen.width - 100, 210);
+        this.paceText.position.set(this.pixiRef.app.screen.width - 100, 210);
         this._redrawCircleMask();
     }
 

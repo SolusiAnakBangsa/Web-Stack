@@ -10,6 +10,8 @@ export class RunScene extends Scene {
         super(pixiRef);
         // The formula of runSpeed to animSpeed is runSpeed/2400
 
+        this.speedRange = [0, 700]; // The range between min and max speed.
+
         this.runSpeed = 500; // In pixel / second
         this.runSpeedToAnimSpeed = function (floorSpeed) { return this.runSpeed/2700 };
     }
@@ -37,6 +39,7 @@ export class RunScene extends Scene {
 
         this.floor.floorSpeed = this.runSpeed*deltaS;
         this.runman.speed = this.runSpeedToAnimSpeed(this.floor.floorSpeed);
+        this.pace.pace = (this.runSpeed/this.speedRange[1]) * 100;
     }  
 
     onResizeCode() {
