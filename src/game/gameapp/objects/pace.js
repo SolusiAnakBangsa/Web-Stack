@@ -38,12 +38,23 @@ export class Pace extends GameObject {
         this.outerPace.anchor.set(0.5, 0.5);
         this.outerPace.scale.set(3, 3);
         this.outerPace.position.set(pixiRef.app.screen.width - 100, 100);
-
+        
+        // Apply the mask
         this.outerPace.mask = this.graphic;
+
+        // Create the text for the pace.
+        this.paceText = new PIXI.Text(
+            String(this.pace << 0),
+            {fontFamily: 'Thoughts', fontSize: 16, fill: 'black'}
+        );
+        this.paceText.anchor.set(0.5, 0.5);
+        this.paceText.position.set(pixiRef.app.screen.width - 100, 210);
+        this.paceText.scale.set(4, 4);
 
         this.mainContainer.addChild(this.outerPace);
         this.mainContainer.addChild(this.graphic);
         this.mainContainer.addChild(this.paceSprite);
+        this.mainContainer.addChild(this.paceText);
     }
 
     _updatePace() {
@@ -57,6 +68,9 @@ export class Pace extends GameObject {
         } else {
             this.paceSprite.gotoAndStop(3);
         }
+
+        // Update text
+        this.paceText.text = String(this.pace << 0);
 
         // Here, we remake the graphic that masks the outer ring.
         this._redrawCircleMask();
@@ -122,6 +136,7 @@ export class Pace extends GameObject {
     onResize() {
         this.paceSprite.position.set(this.pixiRef.app.screen.width - 100, 100);
         this.outerPace.position.set(this.pixiRef.app.screen.width - 100, 100);
+        this.paceText.position.set(pixiRef.app.screen.width - 100, 210);
         this._redrawCircleMask();
     }
 
