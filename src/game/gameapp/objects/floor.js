@@ -136,7 +136,7 @@ export class Floor extends GameObject {
 
             // Delete all the floor decoration outside the bounds
             for (let dec of this.floorDecorContainer.children) {
-                if (dec.y > 20) {
+                if (dec.y > -50) {
                     this.floorDecorContainer.removeChild(dec);
                 }
             }
