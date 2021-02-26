@@ -4,5 +4,7 @@ export const assets = {
     landdisplacement: "horizon_map.png",
     cloud: "cloud.json",
     floorDecor: "tallgrass.json",
-    runman: "running.json"
+    runman: "running.json",
+    pacesprite: "pace.json",
+    outerpace: "progressbar.png"
 };

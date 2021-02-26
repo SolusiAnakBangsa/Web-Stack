@@ -2,6 +2,7 @@ import { Scene } from "./../scene";
 import { Floor } from "./../objects/floor";
 import { Sky } from "./../objects/sky";
 import { RunMan } from "./../objects/runningman";
+import { Pace } from "./../objects/pace";
 
 export class RunScene extends Scene {
     
@@ -17,14 +18,18 @@ export class RunScene extends Scene {
         // Make the objects
         // Make the floor object. and add then to the scene.
         this.floor = new Floor(pixiRef);
-        this.sky = new Sky(pixiRef);
-        this.runman = new RunMan(pixiRef);
 
+        this.sky = new Sky(pixiRef);
+
+        this.runman = new RunMan(pixiRef);
         this.runman.speed = 0.25; // Initial
+
+        this.pace = new Pace(pixiRef);
 
         this.addObj(this.floor);
         this.addObj(this.sky);
         this.addObj(this.runman);
+        this.addObj(this.pace);
     }
 
     loopCode(delta) {
