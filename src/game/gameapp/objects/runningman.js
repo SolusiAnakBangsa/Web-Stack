@@ -67,8 +67,10 @@ export class RunMan extends GameObject {
 
             this.sprite.textures = this.runTex;
             this.sprite.gotoAndPlay(0);
-            this.sprite.animationSpeed = this.speed;
             this._state = 1;
+        }
+        if (this.speed != 0) {
+            this.sprite.animationSpeed = this.speed;
         }
     }
 
