@@ -18,10 +18,23 @@ export function getHeight() {
   );
 }
 
-export function randomRange(min, max, rounded=true) {
+function randomRangeSupplied(min, max, rand, rounded=true) {
   if (rounded)
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-  return (Math.random() * (max - min + 1)) + min
+    return Math.floor(rand * (max - min + 1)) + min;
+  return (rand * (max - min + 1)) + min
+}
+
+export function randomRange(min, max, rounded=true) {
+  return randomRangeSupplied(min, max, Math.random(), rounded);
+}
+
+export function randomFour(min1, max1, min2, max2, rounded=true) {
+  const rand = Math.random();
+  if (rand > 0.5) {
+    return randomRangeSupplied(min2, max2, 2*(rand-0.5), rounded);
+  } else {
+    return randomRangeSupplied(min1, max1, 2*rand, rounded);
+  }
 }
 
 export function randomProperty (obj) {

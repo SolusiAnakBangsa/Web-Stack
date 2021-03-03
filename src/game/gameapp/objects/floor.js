@@ -1,5 +1,5 @@
 import { GameObject } from "./gameobject";
-import { randomRange, randomProperty } from "./../../../script/util";
+import { randomRange, randomFour, randomProperty } from "./../../../script/util";
 
 export class Floor extends GameObject {
 
@@ -8,6 +8,8 @@ export class Floor extends GameObject {
         super(pixiRef, drawTo);
 
         this.floorSpeed = 14;
+        this.spawnMultiplier = 3; // Multiplier of how often does the grass spawn.
+        this.initialDecor = 40; // Number of initial decor objects
 
         this.horizonY = () => pixiRef.app.screen.height/2.3;
 
@@ -29,7 +31,7 @@ export class Floor extends GameObject {
         // The baseline range should be [400, 800] if the floorSpeed is 14.
         // Increases and decreases linearly. (If floorSpeed == 7, then range [800, 1600])
         // Formula is 14/speed*400, 14/speed*800 == 5600/speed, 11200
-        this.counterRange = [400, 800]; // Milliseconds range to spawn the floor decorations
+        this.counterRange = [400/this.spawnMultiplier, 800/this.spawnMultiplier]; // Milliseconds range to spawn the floor decorations
         this.counter = 0;
         this.counterBound = randomRange(...this.counterRange); // Check every 500ms
 
@@ -117,6 +119,11 @@ export class Floor extends GameObject {
 
         // Add container about the grass
         this.bruhContainer.addChild(this.floorDecorContainer);
+
+        // Randomly generate floor decorations
+        for (var i = 0; i < this.initialDecor; i++) {
+            this.floorDecorContainer.addChild(this.makeDecor(null, randomRange(-8000, -100)));
+        }
     }
 
     loop(delta) {
@@ -124,9 +131,6 @@ export class Floor extends GameObject {
         for (let dec of this.floorDecorContainer.children) {
             dec.y += this.floorSpeed;
         }
-
-        // Update the range according to floorSpeed.
-        this.counterRange = [5600/this.floorSpeed, 11200/this.floorSpeed]
 
         this.counter += delta;
         if (this.counter > this.counterBound) {
@@ -136,7 +140,7 @@ export class Floor extends GameObject {
 
             // Delete all the floor decoration outside the bounds
             for (let dec of this.floorDecorContainer.children) {
-                if (dec.y > -50) {
+                if (dec.y > -100) {
                     this.floorDecorContainer.removeChild(dec);
                 }
             }
@@ -181,7 +185,15 @@ export class Floor extends GameObject {
         this.floorDecorYSpawn = this.app.screen.height + this.yOffset - this.horizonY() * this.yScale;
     }
 
-    makeDecor() {
+    setFloorSpeed(speed) {
+        this.floorSpeed = speed;
+        // Change range
+        this.counterRange = [5600/this.spawnMultiplier/speed, 11200/this.spawnMultiplier/speed]
+        // Generate new counter
+        this.counterBound = randomRange(...this.counterRange);
+    }
+
+    makeDecor(x=null, y=null) {
         // This function randomly generates a cloud.
         let grass = new PIXI.projection.Sprite2d(randomProperty(this.floorDecorTex.textures));
         
@@ -191,10 +203,13 @@ export class Floor extends GameObject {
         // Set the projection to be upright from the user.
         grass.proj.affine = PIXI.projection.AFFINE.AXIS_X;
 
+        // Set x random spawn. so that the grass does not spawn on the road.
+        const roadWidthHalf = this.bruh.width/2
+
         // Set random position
         grass.position.set(
-            randomRange(-this.app.screen.width*10, this.app.screen.width*10),
-            -8000
+            x == null ? randomFour(-this.app.screen.width*10, -roadWidthHalf, roadWidthHalf, this.app.screen.width*10) : x,
+            y == null ? -8000 : y
         );
 
         return grass;

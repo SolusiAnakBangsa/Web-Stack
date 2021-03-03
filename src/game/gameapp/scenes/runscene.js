@@ -37,7 +37,7 @@ export class RunScene extends Scene {
     loopCode(delta) {
         const deltaS = delta/1000;
 
-        this.floor.floorSpeed = this.runSpeed*deltaS;
+        this.floor.setFloorSpeed(this.runSpeed*deltaS);
         this.runman.speed = this.runSpeedToAnimSpeed(this.floor.floorSpeed);
         this.pace.pace = (this.runSpeed/this.speedRange[1]) * 100;
     }  
