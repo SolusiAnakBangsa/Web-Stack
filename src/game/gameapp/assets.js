@@ -6,5 +6,6 @@ export const assets = {
     floorDecor: "tallgrass.json",
     runman: "running.json",
     pacesprite: "pace.json",
-    outerpace: "progressbar.png"
+    outerpace: "progressbar.png",
+    backgroundfront: "backgroundfront.png"
 };
