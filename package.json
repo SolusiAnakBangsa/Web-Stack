@@ -14,7 +14,8 @@
   "staticFiles": {
     "staticPath": [
       "assets"
-    ]
+    ],
+    "watcherGlob": "**"
   },
   "repository": {
     "type": "git",

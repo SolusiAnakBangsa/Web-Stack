@@ -118,13 +118,26 @@ export class Floor extends GameObject {
         }
 
         // Create the backgrounds
+        // Front background
         this.frontBG = new PIXI.TilingSprite(
             pixiRef.resources.backgroundfront.texture,
-            pixiRef.app.screen.width*2,
+            pixiRef.app.screen.width,
             pixiRef.resources.backgroundfront.texture.height,
         );
         this.frontBG.anchor.set(0.5, 1);
+        this.frontBG.scale.set(3, 3);
+        this.frontBG.x = pixiRef.app.screen.width/2
         this.frontBG.y = pixiRef.app.screen.height - this.horizonY()*1.1;
+        
+        // back background
+        this.backBG = new PIXI.Sprite(pixiRef.resources.backgroundback.texture)
+        this.backBG.anchor.set(0.5, 1);
+        this.backBG.scale.set(3, 3);
+        this.backBG.x = pixiRef.app.screen.width/2
+        this.backBG.y = pixiRef.app.screen.height - this.horizonY()*1.1;
+        
+        // Add back background to the back of the container
+        this.floorContainer.addChild(this.backBG);
 
         // Adds to all the floor to the container
         this.floorContainer.addChild(this.floor); // Add floor
@@ -136,6 +149,7 @@ export class Floor extends GameObject {
 
         this.mainContainer = this.wholeContainer; // Add main container to canvas.
         
+        // Adds front background to the front
         this.floorContainer.addChild(this.frontBG);
 
         // Add container about the grass
@@ -195,8 +209,12 @@ export class Floor extends GameObject {
         this.floor.width = this.app.screen.width;
         this.floor.height = this.horizonY() * this.yScale;
 
-        this.frontBG.width = this.app.screen.width*2;
+        this.frontBG.width = this.app.screen.width;
+        this.frontBG.x = this.app.screen.width/2;
         this.frontBG.y = this.app.screen.height - this.horizonY() * 1.1;
+
+        this.backBG.x = this.app.screen.width/2
+        this.backBG.y = this.app.screen.height - this.horizonY()*1.1;
 
         this.road.width = this.app.screen.width;
         this.road.height = this.horizonY() * this.yScale;
