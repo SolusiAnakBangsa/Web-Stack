@@ -7,6 +7,7 @@ export class Floor extends GameObject {
         // Object to render the floor in the game.
         super(pixiRef, drawTo);
 
+        this.atmosphericAlpha = 0.2;
         this.floorSpeed = 14;
         this.spawnMultiplier = 3; // Multiplier of how often does the grass spawn.
         this.initialDecor = 40; // Number of initial decor objects
@@ -105,6 +106,29 @@ export class Floor extends GameObject {
 
         this.floorContainer.filters = [this.displacementFilter]; // Apply here.
 
+        // Create atmospheric effect for the road.
+        // First, we create the gradient canvas
+        const qualityAtm = 64;
+        const canvasAtm = document.createElement('canvas');
+        canvasAtm.width = 1;
+        canvasAtm.height = qualityAtm;
+
+        const ctxAtm = canvasAtm.getContext('2d');
+        const grdAtm = ctxAtm.createLinearGradient(0, 0, 0, qualityAtm);
+        grdAtm.addColorStop(0, `rgba(143, 235, 218, ${this.atmosphericAlpha})`);
+        grdAtm.addColorStop(1, 'rgba(143, 235, 218, 0.0)');
+
+        ctxAtm.fillStyle = grdAtm;
+        ctxAtm.fillRect(0, 0, 1, qualityAtm);
+
+        // Create the sprite and position it.
+        this.floorAtm = new PIXI.Sprite(PIXI.Texture.from(canvasAtm));
+        this.floorAtm.anchor.set(0.5, 0);
+        this.floorAtm.x = pixiRef.app.screen.width/2;
+        this.floorAtm.y = pixiRef.app.screen.height - this.horizonY()*1.1;
+        this.floorAtm.width = pixiRef.app.screen.width;
+        this.floorAtm.height = this.horizonY()/3;
+
         /*
             End of floor creation with road
             begin with floordecor spawns
@@ -133,11 +157,16 @@ export class Floor extends GameObject {
         this.backBG = new PIXI.Sprite(pixiRef.resources.backgroundback.texture)
         this.backBG.anchor.set(0.5, 1);
         this.backBG.scale.set(3, 3);
-        this.backBG.x = pixiRef.app.screen.width/2
+        this.backBG.x = pixiRef.app.screen.width/2;
         this.backBG.y = pixiRef.app.screen.height - this.horizonY()*1.1;
         
+        /*
+            Add everything to the container.
+        */
         // Add back background to the back of the container
         this.floorContainer.addChild(this.backBG);
+        // Adds front background to the front
+        this.floorContainer.addChild(this.frontBG);
 
         // Adds to all the floor to the container
         this.floorContainer.addChild(this.floor); // Add floor
@@ -147,10 +176,9 @@ export class Floor extends GameObject {
         this.floorContainer.addChild(this.displacementSprite); // Add displacement to the main container
         this.wholeContainer.addChild(this.floorContainer);
 
+        this.floorContainer.addChild(this.floorAtm);
+
         this.mainContainer = this.wholeContainer; // Add main container to canvas.
-        
-        // Adds front background to the front
-        this.floorContainer.addChild(this.frontBG);
 
         // Add container about the grass
         this.bruhContainer.addChild(this.floorDecorContainer);
@@ -215,6 +243,11 @@ export class Floor extends GameObject {
 
         this.backBG.x = this.app.screen.width/2
         this.backBG.y = this.app.screen.height - this.horizonY()*1.1;
+
+        this.floorAtm.x = this.app.screen.width/2;
+        this.floorAtm.y = this.app.screen.height - this.horizonY()*1.1;
+        this.floorAtm.width = this.app.screen.width;
+        this.floorAtm.height = this.horizonY()/3;
 
         this.road.width = this.app.screen.width;
         this.road.height = this.horizonY() * this.yScale;
