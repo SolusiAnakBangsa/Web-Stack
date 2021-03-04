@@ -9,7 +9,8 @@
     "game-build": "npm run clean && parcel build public/game.html --no-content-hash --out-dir dist --public-url ./",
     "clean": "npm run clean-extra && rimraf dist",
     "clean-dev": "npm run clean-extra && rimraf development",
-	"clean-extra": "rimraf .cache && rimraf .firebase"
+	  "clean-extra": "rimraf .cache && rimraf .firebase",
+    "build-deploy": "npm run build && firebase deploy"
   },
   "staticFiles": {
     "staticPath": [

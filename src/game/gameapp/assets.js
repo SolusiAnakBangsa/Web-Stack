@@ -1,12 +1,12 @@
 export const assets = {
-    landsurface: "grass.png",
-    landroad: "road.png",
-    landdisplacement: "horizon_map.png",
-    cloud: "cloud.json",
-    floorDecor: "tallgrass.json",
-    runman: "running.json",
-    pacesprite: "pace.json",
-    outerpace: "progressbar.png",
-    backgroundfront: "backgroundfront.png",
-    backgroundback: "backgroundback.png"
+    landsurface: "graphics/floor/grass.png",
+    landroad: "graphics/floor/road.png",
+    landdisplacement: "graphics/floor/horizon_map.png",
+    cloud: "graphics/cloud.json",
+    floorDecor: "graphics/floor/tallgrass.json",
+    runman: "graphics/floor/running.json",
+    pacesprite: "graphics/pace.json",
+    outerpace: "graphics/progressbar.png",
+    backgroundfront: "graphics/bg/backgroundfront.png",
+    backgroundback: "graphics/bg/backgroundback.png"
 };
