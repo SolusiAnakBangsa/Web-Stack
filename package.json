@@ -5,8 +5,8 @@
   "scripts": {
     "test": "npm run game-build",
     "build": "npm run game-build",
-    "game-dev": "rimraf development && parcel public/game.html --out-dir development -p 8000",
-    "game-build": "npm run clean && parcel build public/game.html --no-content-hash --out-dir dist --public-url ./",
+    "game-dev": "rimraf development && parcel public/game.html --global gameModule --out-dir development -p 8000",
+    "game-build": "npm run clean && parcel build public/game.html --global gameModule --no-content-hash --out-dir dist --public-url ./",
     "clean": "npm run clean-extra && rimraf dist",
     "clean-dev": "npm run clean-extra && rimraf development",
 	  "clean-extra": "rimraf .cache && rimraf .firebase",

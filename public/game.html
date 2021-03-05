@@ -7,6 +7,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/5.3.7/pixi.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/pixi-projection@0.3.15/dist/pixi-projection.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
+    <link href="game.css" rel="stylesheet">
     <script>
         WebFont.load({
             custom: {
@@ -15,8 +16,40 @@
             }
         });
     </script>
-    <style>* {padding: 0; margin: 0}</style>
+    <style>*{padding: 0; margin: 0}</style>
 <body>
-    <script src="../src/game/game.js"></script>
+<div id="peer_form" class="box spacecolor">
+    <div class="stars" id="stars">
+    </div>
+    <div class="area" id="lines">
+        <ul class="lines">
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+        </ul>
+    </div>
+    <div class="ctrflex">
+        <div class="logo">
+            <!-- <div class="gyf"><p>Game Your Fit</p></div> -->
+        </div>
+        <div class="formbox">
+            <h3>Ready for your dose of fit?</h3>
+
+            <div class="form-group">
+                <input type="text" class="form-control" id="usr" required>
+                <label for="usr">Game Code</label>
+            </div>
+            <button onclick="gameModule.toggleGame();">PLAY!</button>
+        </div>
+    </div>
+</div>
+<script src="../src/game/game.js"></script>
 </body>
 </html>

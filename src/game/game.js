@@ -13,5 +13,10 @@ PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
 // Change the DOM display to be block.
 game.app.renderer.view.style.display = "block";
 
-// Display in browser
-document.body.appendChild(game.app.view);
+module.exports.toggleGame = function toggleGame() {
+    var peerText = document.getElementById("peer_form");
+    peerText.style.display = "none";
+
+    // Display in browser
+    document.body.appendChild(game.app.view);
+}
