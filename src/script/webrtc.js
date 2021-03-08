@@ -1,48 +1,133 @@
+class PeerObj {
+    /*
+        Peer objects accepts one argument: ID.
+        Creates a peer with ID in the server.
+        If an peer with the same ID exists, it will throw an error.
 
-function createPeer(roomID){
-    /////////////////////////
-    // Configure account here
-    peer = new Peer(roomID,
-        {config:
-            {'iceServers': [
-                {url: 'stun:stun.l.google.com:19302'},
-                {url: 'turn:numb.viagenie.ca:3478', username: 'email', credential: 'password' }]
+        This peer implementation supports only one connection.
+    */
+    constructor() {
+        this.peer; // Peer object.
+        this.connection; // Connection object to send and receive data.
+        this.opened = false; // Whether the peer has been opened.
+        this._queueConnect; // Queue to connect to other clients, when the peer has been opened.
+    }
+
+    _openConnection(id) {
+        // Open connection to other peer using the id.
+        this.connection = new ConnectionObj(this.peer.connect(id,
+            {config:
+                {'reliable' : 'true'}
             }
-        })
-    peer.on('open', function(id){
-        console.log("Peer opened, ID : " + id)
-    })
-    peer.on('connection',function(conn){
-        console.log("Connected")
-        setConnectionListener(conn)
-    })
-    peer.on('error', function(err){
-        console.log(err)
-    })
-}
-function connectToOther(destinationID){
-    connection = peer.connect(destinationID,
-        {config:
-            {'reliable' : 'true'}
-        }
+        ));
+    }
+
+    init(id){
+        // Configure and create new peer
+        // Using the id in the function
+        this.peer = new Peer(id,
+            {
+                config:
+                    {'iceServers': [
+                        {url: 'stun:stun.l.google.com:19302'},
+                        {url: 'turn:rtc.gameyourfit.com:3478', username: 'webcl', credential: 'webcl' }
+                        ]
+                    },
+                debug: 1
+            }
         );
-    setListener(connection)
+        console.log(this.peer);
+        // The current connection object
+        this.connection = null;
+        
+        this.peer.on('open', (id) => {
+            console.log("Peer made with ID : " + id);
+            // If queue is already supplied with id to connect to, make connection.
+            if (this._queueConnect != undefined) {
+                this._openConnection(this._queueConnect);
+            }
+            this.opened = true;
+        });
+
+        this.peer.on('connection',function(conn){
+            // When this peer accepts a connection, make another
+            // connection object to store it.
+            console.log("Connected");
+            this.connection = new ConnectionObj(conn);
+        });
+
+        this.peer.on('error', function(err){
+            // Handle error
+            console.log("Error creating peer with ID: " + id + "\n" + err);
+        });
+    }
+
+    // Connect to other peer.
+    connectTo(destinationID){
+        // Make the connection object with the other object
+
+        // If the peer has been opened, then open the connection immedieately.
+        // else, queue the connection to be made as soon as the peer is made.
+        if (this.opened) {
+            this._openConnection(destinationID);
+        } else {
+            this._queueConnect = destinationID;
+        }
+    }
+
+    isConnected() {
+        return this.connection == null;
+    }
 }
 
-// Sends data to the established connection, does nothing if not connected
-// Data sent to Android-side JS will automatically be passed to kotlin
-function sendData(data){
-    try{
-        connection.send(data)
-        console.log("Local : " + data)
+class ConnectionObj {
+    constructor(connection) {
+        /*
+            The only argument is the connection object between this object
+            to the directed peer. The connection object is made through peer.connect()
+        */
+        this.connection = connection;
+
+        this.connection.on('open', () => {
+            console.log(`Connection succesfully made with "${this.connection.peer}"`);
+        });
+
+        this.callbacks = []; // All functions to run when the connection receives something.
+        // Adds the listener
+        this._initializeListener();
     }
-    catch(err){
+
+    _initializeListener() {
+        this.connection.on('data', function(payload) {
+            _onReceiveData();
+        });
+    }
+
+    _onReceiveData() {
+        for (let c of this.callbacks) {
+            c();
+        }
+    }
+
+    sendData(data){
+        // Sends data to the established connection, prints error if connection is lost.
+        try{
+            this.connection.send(data);
+            console.log("Local sent: " + data);
+        }
+        catch(err) {
+            console.log("Connection lost with " + this.connection);
+        }
+    }
+    
+    addReceiveHandler(func) {
+        /*
+            This is to add new handler when this connection receives a new data from
+            the other client.
+            This will be added to onReceiveData.
+        */
+       this.callbacks.push(func);
     }
 }
 
-// Helper function
-function setConnectionListener(connection){
-    connection.on('data',function(data){
-        console.log("Remote : " + data)
-    });
-}
+export const peer = new PeerObj();
