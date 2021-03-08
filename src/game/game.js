@@ -8,6 +8,7 @@ peer.connection.addEvents('open', () => {
     const textbox = document.getElementById("gamecode");
     const playb = document.getElementById("playbutton");
     const flavor = document.getElementById("flavor");
+    const screenItem = document.getElementById("screenitem");
     
     notif.innerText = "Connected!";
     notif.style.display = "block";
@@ -18,6 +19,9 @@ peer.connection.addEvents('open', () => {
     playb.style.display = "none";
 
     flavor.innerText = "Let's go! Entering game..."
+
+    setTimeout(() => {screenItem.style.opacity = 0;}, 1000);
+    setTimeout(() => {ExModule.startGame();}, 5000);
 });
 
 // Game
@@ -34,7 +38,7 @@ PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
 game.app.renderer.view.style.display = "block";
 
 class ExModule {
-    static toggleGame() {
+    static startGame() {
         var peerText = document.getElementById("peer_form");
         peerText.style.display = "none";
 
@@ -42,16 +46,12 @@ class ExModule {
         document.body.appendChild(game.app.view);
     }
 
-    static bruh() {
-        peer.connection.sendData("Bruh memento");
-    }
-
     static initMobileConnection() {
         // Get the game code
         const connectId = document.getElementById("gamecode").value;
         const notif = document.getElementById("ntf");
 
-        if (connectId == "" || connectId.length != 1) {
+        if (connectId == "" || connectId.length != 5) {
             notif.innerText = "Please insert a valid game code.";
             notif.style.display = "block";
             notif.style.backgroundColor = "#f27963";
