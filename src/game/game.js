@@ -1,6 +1,26 @@
 import { GameApp } from "./gameapp/app";
 import { peer } from "./../script/webrtc";
 
+// Here, lets initialize the webrtc object
+peer.init(Math.random().toString(36).slice(2).substr(0, 8));
+peer.connection.addEvents('open', () => {
+    const notif = document.getElementById("ntf");
+    const textbox = document.getElementById("gamecode");
+    const playb = document.getElementById("playbutton");
+    const flavor = document.getElementById("flavor");
+    
+    notif.innerText = "Connected!";
+    notif.style.display = "block";
+    notif.style.backgroundColor = "#22e0da";
+    notif.style.padding = "17.5px 50px 17.5px 50px";
+
+    textbox.readOnly = true;
+    playb.style.display = "none";
+
+    flavor.innerText = "Let's go! Entering game..."
+});
+
+// Game
 const game = new GameApp({
     resolution: 1,
     backgroundColor: 0x8febda,
@@ -22,14 +42,28 @@ class ExModule {
         document.body.appendChild(game.app.view);
     }
 
+    static bruh() {
+        peer.connection.sendData("Bruh memento");
+    }
+
     static initMobileConnection() {
-        // Makes the connection
-        if (peer.connection == undefined) {
-            // Generate random peer ID
-            peer.init(Math.random().toString(36).slice(2).substr(0, 8));
+        // Get the game code
+        const connectId = document.getElementById("gamecode").value;
+        const notif = document.getElementById("ntf");
+
+        if (connectId == "" || connectId.length != 1) {
+            notif.innerText = "Please insert a valid game code.";
+            notif.style.display = "block";
+            notif.style.backgroundColor = "#f27963";
+            return;
         }
+
+        notif.innerText = `Connecting to "${connectId}"`;
+        notif.style.display = "block";
+        notif.style.backgroundColor = "#5c99fa";
+
         // Connect to the gamecode.
-        peer.connectTo("B");
+        peer.connectTo(connectId);
     }
 }
 

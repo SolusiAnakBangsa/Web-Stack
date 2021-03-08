@@ -37,17 +37,18 @@
         </ul>
     </div>
     <div class="ctrflex">
+        <div class="notification" id="ntf">asdfdsa</div>
         <div class="logo">
             <!-- <div class="gyf"><p>Game Your Fit</p></div> -->
         </div>
         <div class="formbox">
-            <h3>Ready for your dose of fit?</h3>
+            <h3 onclick="gameModule.bruh();" id="flavor">Ready for your dose of fit?</h3>
 
             <div class="form-group">
-                <input type="text" class="form-control" id="usr" required>
-                <label for="usr">Game Code</label>
+                <input type="text" class="form-control" id="gamecode" required>
+                <label>Game Code</label>
             </div>
-            <button onclick="gameModule.initMobileConnection();">PLAY!</button>
+            <button onclick="gameModule.initMobileConnection();" id="playbutton">PLAY!</button>
         </div>
     </div>
 </div>

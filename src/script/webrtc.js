@@ -8,14 +8,14 @@ class PeerObj {
     */
     constructor() {
         this.peer; // Peer object.
-        this.connection; // Connection object to send and receive data.
+        this.connection = new ConnectionObj(); // Connection object to send and receive data.
         this.opened = false; // Whether the peer has been opened.
         this._queueConnect; // Queue to connect to other clients, when the peer has been opened.
     }
 
     _openConnection(id) {
         // Open connection to other peer using the id.
-        this.connection = new ConnectionObj(this.peer.connect(id,
+        this.connection.init(this.peer.connect(id,
             {config:
                 {'reliable' : 'true'}
             }
@@ -30,15 +30,13 @@ class PeerObj {
                 config:
                     {'iceServers': [
                         {url: 'stun:stun.l.google.com:19302'},
-                        {url: 'turn:rtc.gameyourfit.com:3478', username: 'webcl', credential: 'webcl' }
+                        {url: 'turn:rtc.gameyourfit.com:3478', username: 'test', credential: 'test123' }
                         ]
                     },
                 debug: 1
             }
         );
         console.log(this.peer);
-        // The current connection object
-        this.connection = null;
         
         this.peer.on('open', (id) => {
             console.log("Peer made with ID : " + id);
@@ -53,7 +51,7 @@ class PeerObj {
             // When this peer accepts a connection, make another
             // connection object to store it.
             console.log("Connected");
-            this.connection = new ConnectionObj(conn);
+            this.connection.init(conn);
         });
 
         this.peer.on('error', function(err){
@@ -65,6 +63,7 @@ class PeerObj {
     // Connect to other peer.
     connectTo(destinationID){
         // Make the connection object with the other object
+        console.log("Attempting connection with: " + destinationID);
 
         // If the peer has been opened, then open the connection immedieately.
         // else, queue the connection to be made as soon as the peer is made.
@@ -81,7 +80,13 @@ class PeerObj {
 }
 
 class ConnectionObj {
-    constructor(connection) {
+
+    constructor() {
+        this.connection;
+        this.eventQueue = {};
+    }
+
+    init(connection) {
         /*
             The only argument is the connection object between this object
             to the directed peer. The connection object is made through peer.connect()
@@ -93,13 +98,24 @@ class ConnectionObj {
         });
 
         this.callbacks = []; // All functions to run when the connection receives something.
-        // Adds the listener
+
+        // Adds all the events
+        for (const ev in this.eventQueue) {
+            this.connection.on(ev, this.eventQueue[ev]);
+        }
+
+        // and the listener too.
         this._initializeListener();
     }
 
+    addEvents(event, func) {
+        this.eventQueue[event] = func;
+    }
+
     _initializeListener() {
-        this.connection.on('data', function(payload) {
-            _onReceiveData();
+        this.connection.on('data', (payload) => {
+            this._onReceiveData();
+            console.log(payload);
         });
     }
 
