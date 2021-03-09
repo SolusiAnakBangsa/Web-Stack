@@ -49,6 +49,14 @@
                 <label>Game Code</label>
             </div>
             <button onclick="gameModule.initMobileConnection();" id="playbutton">PLAY!</button>
+            <script>
+                document.getElementById("gamecode").addEventListener("keyup", () => {
+                    event.preventDefault();
+                    if (event.keyCode === 13) {
+                        document.getElementById("playbutton").click();
+                    }
+                })
+            </script>
         </div>
     </div>
 </div>

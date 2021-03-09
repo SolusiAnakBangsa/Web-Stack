@@ -44,7 +44,8 @@ export class Sky extends GameObject {
         this.skyProj.anchor.set(0.5, 0);
 
         this.skyContainer.addChild(this.skyProj);
-        this.mainContainer = this.skyContainer;
+        this.mainContainer = new PIXI.Container();
+        this.mainContainer.addChild(this.skyContainer);
 
         // Here, we can spawn some clouds to fill the sky initially.
         for (var i = 0; i < this.initialClouds; i++) {

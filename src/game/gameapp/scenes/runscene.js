@@ -3,6 +3,7 @@ import { Floor } from "./../objects/floor";
 import { Sky } from "./../objects/sky";
 import { RunMan } from "./../objects/runningman";
 import { Pace } from "./../objects/pace";
+import { peer } from "./../../../script/webrtc";
 
 export class RunScene extends Scene {
     
@@ -65,7 +66,11 @@ export class RunScene extends Scene {
             this.floatCounter += deltaS;
 
             // Stop the animation once it reaches floatDuration.
-            if (this.floatCounter > this.floatDuration) this.floatState = false;
+            // and send a trigger that the animation is completed.
+            if (this.floatCounter > this.floatDuration) {
+                this.floatState = false;
+                this.animationDone();
+            }
         }
     }
 
@@ -78,6 +83,11 @@ export class RunScene extends Scene {
         this.floor.mainContainer.y += this.initYOffset*2;
         this.runman.mainContainer.y += this.initYOffset*2;
         this.sky.mainContainer.y += this.initYOffset;
+    }
+
+    animationDone() {
+        this.onResize();
+        peer.connection.sendData({"activityType" : "game", "status" : "start"});
     }
 
     floatDown() {

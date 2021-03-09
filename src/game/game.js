@@ -62,7 +62,7 @@ class ExModule {
         const connectId = document.getElementById("gamecode").value;
         const notif = document.getElementById("ntf");
 
-        if (connectId == "" || connectId.length != 1) {
+        if (connectId == "" || connectId.length != 5) {
             notif.innerText = "Please insert a valid game code.";
             notif.style.display = "block";
             notif.style.backgroundColor = "#f27963";

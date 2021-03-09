@@ -51,12 +51,13 @@ export class RunMan extends GameObject {
         this.manShadow = new ShadowShader([-0.6, -0.6], this.sprite.y - 15, 0.25);
         this.sprite.filters = [ this.manShadow ];
         
-        this.mainContainer = this.sprite;
+        this.mainContainer = new PIXI.Container();
+        this.mainContainer.addChild(this.sprite);
     }
 
     loop() {
         // Move shadow
-        this.manShadow.uniforms.floorY = this.mainContainer.y - 15;
+        this.manShadow.uniforms.floorY = this.mainContainer.y + this.sprite.y - 15;
         // Check guy speed and state here, and change the texture and animation speed accordingly
         if (this.speed == 0 && this._state == 1) {
             // Do texture change and animation here.
@@ -81,7 +82,5 @@ export class RunMan extends GameObject {
             this.app.screen.width/2,
             this.app.screen.height - this.manHeight
         );
-
-        this.manShadow.uniforms.floorY = this.app.screen.height - this.manHeight - 15;
     }
 }

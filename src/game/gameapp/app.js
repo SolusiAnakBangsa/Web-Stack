@@ -62,6 +62,8 @@ export class GameApp {
         // Starts the game.
         if (this.loaded) {
             this.scene.start();
+            // Call resize execution to be safe.
+            this.scene.onResize();
         } else {
             this.loadCallback.push(this.start.bind(this));
         }
@@ -69,7 +71,6 @@ export class GameApp {
 
     loop(delta) {
         // Everything here will loop every frame
-
         // Do resizer event handler
         this.resizer.loop(this.app.ticker.deltaMS);
 
