@@ -2,6 +2,7 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto');
 html, body {
     height: 100%;
+    background-color: rgb(143,235,218);
 }
 .box {
     background-color: powderblue;
@@ -9,7 +10,13 @@ html, body {
 }
 #screenitem {
     opacity: 1;
-    transition: opacity 3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transition: opacity 3s ease;
+}
+#peer_form {
+    position: absolute;
+    width: 100%;
+    transition: bottom 4s cubic-bezier(0.550, 0.055, 0.675, 0.190);
+    bottom: 0%;
 }
 .ctrflex {
     z-index: 10;

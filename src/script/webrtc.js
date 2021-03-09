@@ -56,7 +56,7 @@ class PeerObj {
 
         this.peer.on('error', function(err){
             // Handle error
-            console.log("Error creating peer with ID: " + id + "\n" + err);
+            console.log("webrtc error " + err);
         });
     }
 

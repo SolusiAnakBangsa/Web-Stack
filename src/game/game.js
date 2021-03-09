@@ -9,6 +9,7 @@ peer.connection.addEvents('open', () => {
     const playb = document.getElementById("playbutton");
     const flavor = document.getElementById("flavor");
     const screenItem = document.getElementById("screenitem");
+    const peerForm = document.getElementById("peer_form");
     
     notif.innerText = "Connected!";
     notif.style.display = "block";
@@ -18,10 +19,19 @@ peer.connection.addEvents('open', () => {
     textbox.readOnly = true;
     playb.style.display = "none";
 
-    flavor.innerText = "Let's go! Entering game..."
+    flavor.innerText = "Let's go! Entering game...";
 
-    setTimeout(() => {screenItem.style.opacity = 0;}, 1000);
-    setTimeout(() => {ExModule.startGame();}, 5000);
+    setTimeout(() => {screenItem.style.opacity = 0;}, 2000);
+    setTimeout(() => {peerForm.style.bottom = "100%";}, 4000);
+    setTimeout(() => {ExModule.startGame();}, 10000);
+});
+peer.peer.on('error', function(err){
+    // Display error notif
+    const notif = document.getElementById("ntf");
+
+    notif.style.display = "block";
+    notif.style.backgroundColor = "#f27963";
+    notif.innerText = err;
 });
 
 // Game
@@ -51,7 +61,7 @@ class ExModule {
         const connectId = document.getElementById("gamecode").value;
         const notif = document.getElementById("ntf");
 
-        if (connectId == "" || connectId.length != 5) {
+        if (connectId == "" || connectId.length != 1) {
             notif.innerText = "Please insert a valid game code.";
             notif.style.display = "block";
             notif.style.backgroundColor = "#f27963";
