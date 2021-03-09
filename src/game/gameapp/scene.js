@@ -23,6 +23,10 @@ export class Scene {
 
     }
 
+    start() {
+        
+    }
+
     setActive(boolean) {
         this.active = boolean;
         this.container.renderable = boolean;

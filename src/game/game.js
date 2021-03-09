@@ -54,6 +54,7 @@ class ExModule {
 
         // Display in browser
         document.body.appendChild(game.app.view);
+        game.start();
     }
 
     static initMobileConnection() {

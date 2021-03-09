@@ -10,6 +10,9 @@ export class GameApp {
         this.loader = new PIXI.Loader();
         this.resizer = new Resizer();
         this.scene;
+
+        this.loaded = false; // Whether the resources have been loaded.
+        this.loadCallback = []; // When game is loaded, run everything here.
         
         // Initializes the program
         this.initialize();
@@ -47,6 +50,21 @@ export class GameApp {
         // Setup the loop
         this.app.ticker.add(this.loop.bind(this));
         this.resizer.add(this.onResize.bind(this));
+        this.loaded = true;
+
+        // Execute all callbacks
+        for (let c of this.loadCallback) {
+            c();
+        }
+    }
+
+    start() {
+        // Starts the game.
+        if (this.loaded) {
+            this.scene.start();
+        } else {
+            this.loadCallback.push(this.start.bind(this));
+        }
     }
 
     loop(delta) {

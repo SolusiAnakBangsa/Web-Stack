@@ -10,7 +10,7 @@ export class RunMan extends GameObject {
 
         this._state = 0; // State of the running guy. 0 = idle 1 = run.
 
-        this.manHeight = 50;
+        this.manHeight = 50; // Position of the guy in the screen, relative to the bottom of the screen.
         this.speed = 0; // in pixel/second.
 
         // Textures
@@ -48,13 +48,15 @@ export class RunMan extends GameObject {
         this.sprite.animationSpeed = 0.01;
 
         // Create a shadow filter
-        this.manShadow = new ShadowShader([-0.6, -0.6], this.app.screen.height - this.manHeight - 15, 0.25);
+        this.manShadow = new ShadowShader([-0.6, -0.6], this.sprite.y - 15, 0.25);
         this.sprite.filters = [ this.manShadow ];
         
         this.mainContainer = this.sprite;
     }
 
     loop() {
+        // Move shadow
+        this.manShadow.uniforms.floorY = this.mainContainer.y - 15;
         // Check guy speed and state here, and change the texture and animation speed accordingly
         if (this.speed == 0 && this._state == 1) {
             // Do texture change and animation here.
