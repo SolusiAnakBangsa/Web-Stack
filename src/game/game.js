@@ -23,7 +23,7 @@ peer.connection.addEvents('open', () => {
 
     setTimeout(() => {screenItem.style.opacity = 0;}, 2000);
     setTimeout(() => {peerForm.style.bottom = "100%";}, 4000);
-    setTimeout(() => {ExModule.startGame();}, 10000);
+    setTimeout(() => {ExModule.startGame();}, 8200);
 });
 peer.peer.on('error', function(err){
     // Display error notif

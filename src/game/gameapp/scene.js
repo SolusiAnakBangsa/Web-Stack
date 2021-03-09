@@ -38,6 +38,18 @@ export class Scene {
         this.container.addChild(obj.mainContainer);
     }
 
+    delObj(obj) {
+        var c = 0;
+        for (let ob of this.objects) {
+            if (ob === obj) {
+                this.container.removeChild(ob.mainContainer);
+                this.objects.splice(c, 1);
+                break;
+            }
+            c++;
+        }
+    }
+
     loopCode(delta) {
         // You put the actual code that you want to loop of the scene here.
     }

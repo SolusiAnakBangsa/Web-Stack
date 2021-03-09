@@ -36,7 +36,6 @@ class PeerObj {
                 debug: 1
             }
         );
-        console.log(this.peer);
         
         this.peer.on('open', (id) => {
             console.log("Peer made with ID : " + id);
@@ -84,6 +83,7 @@ class ConnectionObj {
     constructor() {
         this.connection;
         this.eventQueue = {};
+        this.callbacks = []; // All functions to run when the connection receives something.
     }
 
     init(connection) {
@@ -97,8 +97,6 @@ class ConnectionObj {
             console.log(`Connection succesfully made with "${this.connection.peer}"`);
         });
 
-        this.callbacks = []; // All functions to run when the connection receives something.
-
         // Adds all the events
         for (const ev in this.eventQueue) {
             this.connection.on(ev, this.eventQueue[ev]);
@@ -109,19 +107,19 @@ class ConnectionObj {
     }
 
     addEvents(event, func) {
+        // Add events to webrtc peer object before it begins.
         this.eventQueue[event] = func;
     }
 
     _initializeListener() {
         this.connection.on('data', (payload) => {
-            this._onReceiveData();
-            console.log(payload);
+            this._onReceiveData(payload);
         });
     }
 
-    _onReceiveData() {
+    _onReceiveData(payload) {
         for (let c of this.callbacks) {
-            c();
+            c(payload);
         }
     }
 
@@ -135,7 +133,7 @@ class ConnectionObj {
             console.log("Connection lost with " + this.connection);
         }
     }
-    
+
     addReceiveHandler(func) {
         /*
             This is to add new handler when this connection receives a new data from

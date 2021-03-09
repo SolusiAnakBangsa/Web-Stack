@@ -1,8 +1,14 @@
 import { assets } from "./assets";
 import { Resizer } from "./resizer";
 import { RunScene } from "./scenes/runscene";
+import { peer } from "./../../script/webrtc";
 
 export class GameApp {
+
+    // Static enum to store all the workouts.
+    static Workouts = Object.freeze({
+        JOG: 0,
+    });
 
     constructor(options) {
         // Creates the app according to the options
@@ -13,6 +19,8 @@ export class GameApp {
 
         this.loaded = false; // Whether the resources have been loaded.
         this.loadCallback = []; // When game is loaded, run everything here.
+        
+        this.currentWorkout = GameApp.Workouts.JOG;
         
         // Initializes the program
         this.initialize();
@@ -56,6 +64,8 @@ export class GameApp {
         for (let c of this.loadCallback) {
             c();
         }
+        // Register _dataListener
+        peer.connection.addReceiveHandler(this._dataListener.bind(this));
     }
 
     start() {
@@ -67,6 +77,12 @@ export class GameApp {
         } else {
             this.loadCallback.push(this.start.bind(this));
         }
+    }
+
+    _dataListener(payload) {
+        // This function is used as what will be executed when the peer
+        // Receives a data. This function will determine what to do with the data.
+        console.log(payload);
     }
 
     loop(delta) {
