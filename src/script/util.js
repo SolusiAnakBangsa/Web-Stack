@@ -37,16 +37,20 @@ export function randomFour(min1, max1, min2, max2, rounded=true) {
   }
 }
 
-export function randomProperty (obj) {
+export function randomProperty(obj) {
   var keys = Object.keys(obj);
   return obj[keys[ keys.length * Math.random() << 0]];
 };
 
-export function propertyLength (obj) {
+export function propertyLength(obj) {
   var size = 0,
     key;
   for (key in obj) {
     if (obj.hasOwnProperty(key)) size++;
   }
   return size;
+}
+
+export function clamp(num, min, max) {
+  return num <= min ? min : num >= max ? max : num;
 }

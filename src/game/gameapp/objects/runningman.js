@@ -61,6 +61,7 @@ export class RunMan extends GameObject {
         // Check guy speed and state here, and change the texture and animation speed accordingly
         if (this.speed == 0 && this._state == 1) {
             // Do texture change and animation here.
+            // If the sprite is stopped then, do this.
             this.sprite.textures = this.idleTex;
             this.sprite.gotoAndPlay(0);
             this.sprite.animationSpeed = 0.01;

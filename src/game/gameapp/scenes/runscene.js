@@ -42,7 +42,7 @@ export class RunScene extends Scene {
 
         // New countdown object.
         // Once countdown is done, start the game.
-        this.count = new Countdown(pixiRef, 3);
+        this.count = new Countdown(pixiRef, 5);
         this.count.callback = () => {
             // Set text to go, then set a timer for 1 second to delete it.
             this.count.mainContainer.text = "GO!";
@@ -66,7 +66,7 @@ export class RunScene extends Scene {
         const deltaS = delta/1000;
 
         this.floor.setFloorSpeed(this.runSpeed*deltaS);
-        this.runman.speed = this.runSpeedToAnimSpeed(this.floor.floorSpeed);
+        this.runman.speed = this.runSpeedToAnimSpeed();
         this.pace.pace = (this.runSpeed/this.speedRange[1]) * 100;
         
         if (this.floatState) {
@@ -92,6 +92,7 @@ export class RunScene extends Scene {
 
     start() {
         this.floatDown();
+        this.count.start();
     }
 
     setAbove() {

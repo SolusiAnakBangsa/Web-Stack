@@ -2,6 +2,7 @@ import { assets } from "./assets";
 import { Resizer } from "./resizer";
 import { RunScene } from "./scenes/runscene";
 import { peer } from "./../../script/webrtc";
+import { clamp } from "./../../script/util";
 
 export class GameApp {
 
@@ -19,6 +20,9 @@ export class GameApp {
 
         this.loaded = false; // Whether the resources have been loaded.
         this.loadCallback = []; // When game is loaded, run everything here.
+
+        // Object to store all the running data
+        this.lastRunObject = {step: 0, time: 1000};
         
         this.currentWorkout = GameApp.Workouts.JOG;
         
@@ -82,7 +86,17 @@ export class GameApp {
     _dataListener(payload) {
         // This function is used as what will be executed when the peer
         // Receives a data. This function will determine what to do with the data.
-        console.log(payload);
+        // TODO: Make smooth running application
+        // if ("exerciseType" in payload) {
+        //     // Pace calculator time
+        //     const maxSpeed = this.scene.speedRange[1];
+        //     const stepPerS = (payload.repAmount - this.lastRunObject.step) / ((payload.time - this.lastRunObject.time)/1000);
+        //     const maxSPS = 4 // (4/s) jj baseline
+
+        //     this.scene.runSpeed = clamp(stepPerS, 0, maxSPS)/4 * maxSpeed;
+
+        //     this.lastRunObject = {step: payload.repAmount, time: payload.time};
+        // }
     }
 
     loop(delta) {
