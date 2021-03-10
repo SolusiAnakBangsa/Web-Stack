@@ -48,7 +48,7 @@ export class RunMan extends GameObject {
         this.sprite.animationSpeed = 0.01;
 
         // Create a shadow filter
-        this.manShadow = new ShadowShader([-0.6, -0.6], this.sprite.y - 15, 0.25);
+        this.manShadow = new ShadowShader([-0.6, -0.6], (this.sprite.y - 15) << 0, 0.25);
         this.sprite.filters = [ this.manShadow ];
         
         this.mainContainer = new PIXI.Container();
@@ -57,8 +57,7 @@ export class RunMan extends GameObject {
 
     loop() {
         // Move shadow
-        this.manShadow.uniforms.floorY = this.mainContainer.y + this.sprite.y - 15;
-        console.log(this.manShadow.uniforms.floorY);
+        this.manShadow.uniforms.floorY = (this.mainContainer.y + this.sprite.y - 15) << 0;
         // Check guy speed and state here, and change the texture and animation speed accordingly
         if (this.speed == 0 && this._state == 1) {
             // Do texture change and animation here.
