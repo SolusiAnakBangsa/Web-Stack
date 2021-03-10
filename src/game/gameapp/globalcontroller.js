@@ -1,7 +1,7 @@
 import { peer } from "./../../script/webrtc";
 import { clamp } from "./../../script/util";
 
-const RUNPOLL = 500; // Time in ms to update the running animation.
+const RUNPOLL = 250; // Time in ms to update the running animation.
 
 // Time in ms to retain the running pace.
 // If the running pace is 100 and the user stops running, the pace will be 0 in RUNRETAIN ms.
