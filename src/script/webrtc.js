@@ -27,8 +27,12 @@ class PeerObj {
         // Using the id in the function
         this.peer = new Peer(id,
             {
+                host:'rtc.gameyourfit.com',
+                secure:false,
+                port:6311,
                 config:
-                    {'iceServers': [
+                    {
+                    'iceServers': [
                         {url: 'stun:stun.l.google.com:19302'},
                         {url: 'turn:rtc.gameyourfit.com:3478', username: 'test', credential: 'test123' }
                         ]

@@ -104,7 +104,6 @@ export class RunScene extends Scene {
 
     animationDone() {
         this.onResize();
-        this.count.start();
     }
 
     floatDown() {
