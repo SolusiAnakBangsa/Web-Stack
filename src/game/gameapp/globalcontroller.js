@@ -47,7 +47,7 @@ export class GlobalController {
                 this.lastRunObject = {step: payload.repAmount, time: payload.time}; // Set before.
 
                 // Update steps in UI object
-                this.app.scene.pace.steps = payload.repAmount;
+                this.app.scene.pace.setSteps(payload.repAmount);
             }
         }
     }

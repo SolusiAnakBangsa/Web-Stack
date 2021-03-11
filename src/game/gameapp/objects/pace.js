@@ -64,7 +64,7 @@ export class Pace extends GameObject {
         this.paceText.position.set(pixiRef.app.screen.width - 100, 210);
         this.paceText.scale.set(4, 4);
         // ***************
-        
+
         // ***************
         // Run progress bar.
         this.runProgress = new PIXI.Sprite(pixiRef.resources.runprogress.texture);
@@ -79,13 +79,36 @@ export class Pace extends GameObject {
         this.runProgressBar.beginFill(0xf9ad3f);
         const pX = this.runProgress.x;
         const pY = this.runProgress.y;
+
+        // Draws the progress bar.
         this.runProgressBar.drawRect(
             pX + PROGRESSXOFFSET,
             pY + PROGRESSYOFFSET,
-            PROGRESSLENGTH,
+            this.steps/this.targetSteps * PROGRESSLENGTH,
             PROGRESSHEIGHT
         );
+        
+        // Draws the arrow
+        const progressX = pX + PROGRESSXOFFSET + this.steps/this.targetSteps * PROGRESSLENGTH;
+        const progressY = pY + PROGRESSYOFFSET + 25;
+
+        this.runProgressBar.lineStyle(5, 0xF85A12, 1);
         this.runProgressBar.endFill();
+
+        this.runProgressBar.moveTo(
+            progressX - 10,
+            progressY + 15
+        );
+        this.runProgressBar.lineTo(
+            progressX,
+            progressY
+        );
+        this.runProgressBar.lineTo(
+            progressX + 10,
+            progressY + 15
+        );
+
+        this.runProgressBar.lineStyle(0);
         // ***************
 
         this.mainContainer.addChild(this.runProgress);
@@ -163,6 +186,45 @@ export class Pace extends GameObject {
         ); // Full circle.
         
         this.graphic.endFill();
+    }
+
+    setSteps(step) {
+        this.steps = step;
+
+        // Redraw run bar
+        this.runProgressBar.beginFill(0xf9ad3f);
+        const pX = this.runProgress.x;
+        const pY = this.runProgress.y;
+        this.runProgressBar.drawRect(
+            pX + PROGRESSXOFFSET,
+            pY + PROGRESSYOFFSET,
+            this.steps/this.targetSteps * PROGRESSLENGTH,
+            PROGRESSHEIGHT
+        );
+        this.runProgressBar.endFill();
+                
+        // Draws the arrow in the bar
+        
+        const progressX = pX + PROGRESSXOFFSET + this.steps/this.targetSteps * PROGRESSLENGTH;
+        const progressY = pY + PROGRESSYOFFSET + 25;
+
+        this.runProgressBar.lineStyle(5, 0xF85A12, 1);
+        this.runProgressBar.endFill();
+
+        this.runProgressBar.moveTo(
+            progressX - 10,
+            progressY + 15
+        );
+        this.runProgressBar.lineTo(
+            progressX,
+            progressY
+        );
+        this.runProgressBar.lineTo(
+            progressX + 10,
+            progressY + 15
+        );
+
+        this.runProgressBar.lineStyle(0);
     }
 
     loop(delta) {
