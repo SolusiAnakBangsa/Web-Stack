@@ -36,7 +36,7 @@ export class RunScene extends Scene {
         this.sky = new Sky(pixiRef);
 
         this.runman = new RunMan(pixiRef);
-        this.runman.speed = 0.25; // Initial
+        this.runman.speed = 0; // Initial
 
         this.pace = new Pace(pixiRef);
 
@@ -65,9 +65,8 @@ export class RunScene extends Scene {
     loopCode(delta) {
         const deltaS = delta/1000;
 
+        // Set floorspeed according to delta.
         this.floor.setFloorSpeed(this.runSpeed*deltaS);
-        this.runman.speed = this.runSpeedToAnimSpeed();
-        this.pace.pace = (this.runSpeed/this.speedRange[1]) * 100;
         
         if (this.floatState) {
             // Calculate offset
@@ -106,8 +105,12 @@ export class RunScene extends Scene {
         // 0-100
         if (speed > 10) {
             this.runSpeed = this.speedRange[0] + ((speed / 100) * (this.speedRange[1] - this.speedRange[0]));
+            this.runman.speed = this.runSpeedToAnimSpeed();
+            this.pace.pace = speed;
         } else {
             this.runSpeed = 0;
+            this.runman.speed = 0;
+            this.pace.pace = 0;
         }
     }
 

@@ -29,8 +29,11 @@ export class GameApp {
             resizer: this.resizer,
         };
         
+        // Start the controller
+        this.controller.start(pixiRef);
+
         // Setups the main controller first.
-        this.controller.setup(pixiRef);
+        this.controller.setup();
 
         // Setup the loop
         this.app.ticker.add(this.loop.bind(this));
@@ -41,9 +44,6 @@ export class GameApp {
         for (let c of this.loadCallback) {
             c();
         }
-
-        // Start the controller
-        this.controller.start();
     }
 
     start() {

@@ -8,5 +8,6 @@ export const assets = {
     pacesprite: "graphics/pace.json",
     outerpace: "graphics/progressbar.png",
     backgroundfront: "graphics/bg/backgroundfront.png",
-    backgroundback: "graphics/bg/backgroundback.png"
+    backgroundback: "graphics/bg/backgroundback.png",
+    runprogress: "graphics/runprogress.png"
 };

@@ -1,12 +1,23 @@
 import { GameObject } from "./gameobject";
 
+// Length of the progress bar.
+const PROGRESSXOFFSET = 10 * 3;
+const PROGRESSYOFFSET = 4 * 3;
+const PROGRESSLENGTH = 121 * 3;
+const PROGRESSHEIGHT = 3 * 3;
+
 export class Pace extends GameObject {
+    /*
+    Originally for pace. Now, this object is for running gui
+    */
 
     constructor(pixiRef, drawTo) {
         super(pixiRef, drawTo);
 
         this._prevPace = 0;
         this.pace = 0; // 0-100
+        this.targetSteps = 5000;
+        this.steps = 0;
 
         this.padding = 100;
 
@@ -19,6 +30,8 @@ export class Pace extends GameObject {
         // Make the container
         this.mainContainer = new PIXI.Container();
 
+        // **************
+        // Pace sprite loading
         // Load all the texture.
         const texture = [];
         for (let tex in pixiRef.resources.pacesprite.spritesheet.textures) {
@@ -50,6 +63,33 @@ export class Pace extends GameObject {
         this.paceText.anchor.set(0.5, 0.5);
         this.paceText.position.set(pixiRef.app.screen.width - 100, 210);
         this.paceText.scale.set(4, 4);
+        // ***************
+        
+        // ***************
+        // Run progress bar.
+        this.runProgress = new PIXI.Sprite(pixiRef.resources.runprogress.texture);
+        // this.runProgress.anchor.set(0.5, 0.5);
+        this.runProgress.scale.set(3, 3);
+        this.runProgress.position.set(
+            32,
+            32
+        );
+
+        this.runProgressBar = new PIXI.Graphics();
+        this.runProgressBar.beginFill(0xf9ad3f);
+        const pX = this.runProgress.x;
+        const pY = this.runProgress.y;
+        this.runProgressBar.drawRect(
+            pX + PROGRESSXOFFSET,
+            pY + PROGRESSYOFFSET,
+            PROGRESSLENGTH,
+            PROGRESSHEIGHT
+        );
+        this.runProgressBar.endFill();
+        // ***************
+
+        this.mainContainer.addChild(this.runProgress);
+        this.mainContainer.addChild(this.runProgressBar);
 
         this.mainContainer.addChild(this.outerPace);
         this.mainContainer.addChild(this.graphic);

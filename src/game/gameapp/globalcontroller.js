@@ -45,28 +45,33 @@ export class GlobalController {
                 this.runQueue += stepTimeframe/MAXPACE;
 
                 this.lastRunObject = {step: payload.repAmount, time: payload.time}; // Set before.
+
+                // Update steps in UI object
+                this.app.scene.pace.steps = payload.repAmount;
             }
         }
     }
 
-    setup(pixiRef) {
-        this.pixiRef = pixiRef;
+    setup() {
 
         // **** Objects to store workout data
-        this.currentWorkout = Workouts.NONE;
+        this.currentWorkout = Workouts.JOG;
         this.runCounter = 0; // Stored to keep track of poll in time.
         this.runQueue = 0; // Queue to be added to target pace in the loop event.
         this.paceArrayCounter = 0; // Helper variable to count the head in the array.
         this.paceArray = Array(RUNARRLEN).fill(0); // The size of this array is RUNPOLL/RUNRETAIN
 
         this.lastRunObject = undefined; // To help with difference.
+
+        this.app.scene.pace.targetSteps = 4000;
         // ******
 
         // Register _dataListener
         peer.connection.addReceiveHandler(this._dataListener.bind(this));
     }
 
-    start() {
+    start(pixiRef) {
+        this.pixiRef = pixiRef;
         // When global controller starts, set the first scene to be the unning scene.
         this.runScene = new RunScene(this.pixiRef, this);
         this.app.setScene(this.runScene);
@@ -74,7 +79,7 @@ export class GlobalController {
         this.app.scene.start();
         this.app.scene.onResize();
 
-        this.currentWorkout = Workouts.JOG;
+        this.currentWorkout = Workouts.NONE;
     }
 
     loop(delta) {

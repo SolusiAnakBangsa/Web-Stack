@@ -28,7 +28,7 @@ class PeerObj {
         this.peer = new Peer(id,
             {
                 host:'rtc.gameyourfit.com',
-                secure:false,
+                secure:true,
                 port:6311,
                 config:
                     {
