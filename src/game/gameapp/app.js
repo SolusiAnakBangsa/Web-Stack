@@ -1,23 +1,15 @@
 import { assets } from "./assets";
 import { Resizer } from "./resizer";
-import { RunScene } from "./scenes/runscene";
 import { GlobalController } from "./globalcontroller";
 
 export class GameApp {
 
     constructor(options) {
         // Creates the app according to the options
-        this.app = new PIXI.Application(options);
-        this.loader = new PIXI.Loader();
-        this.resizer = new Resizer();
-        this.controller = new GlobalController(this);
+        this.options = options;
         this.scene;
-
         this.loaded = false; // Whether the resources have been loaded.
         this.loadCallback = []; // When game is loaded, run everything here.
-        
-        // Initializes the program
-        this.load();
     }
 
     load() {
@@ -37,12 +29,8 @@ export class GameApp {
             resizer: this.resizer,
         };
         
-        // Make the scene
-        // Add the scene to the main stage
-        this.runScene = new RunScene(pixiRef);
-        this.setScene(this.runScene);
-
-        this.controller.setup();
+        // Setups the main controller first.
+        this.controller.setup(pixiRef);
 
         // Setup the loop
         this.app.ticker.add(this.loop.bind(this));
@@ -53,17 +41,28 @@ export class GameApp {
         for (let c of this.loadCallback) {
             c();
         }
+
+        // Start the controller
+        this.controller.start();
     }
 
     start() {
-        // Starts the game.
-        if (this.loaded) {
-            this.scene.start();
-            // Call resize execution to be safe.
-            this.scene.onResize();
-        } else {
-            this.loadCallback.push(this.start.bind(this));
-        }
+        // // Everything in this function will be run, once the game is started.
+        
+        // Initializes the PIXI game instance with options.
+        this.app = new PIXI.Application(this.options);
+        this.loader = new PIXI.Loader(); // PIXI loader.
+        this.resizer = new Resizer();
+        this.controller = new GlobalController(this);
+
+        // Change the HTML DOM display to be block.
+        this.app.renderer.view.style.display = "block";
+
+        // Add the renderer to the browser.
+        document.body.appendChild(this.app.view);
+
+        // Loads all the game data. When done, start the game.
+        this.load();
     }
 
     setScene(scene) {
@@ -76,13 +75,14 @@ export class GameApp {
     loop(delta) {
         // Everything here will loop every frame
         // Do resizer event handler
-        this.resizer.loop(this.app.ticker.deltaMS);
+        delta = this.app.ticker.deltaMS;
+        this.resizer.loop(delta);
 
-        this.controller.loop(this.app.ticker.deltaMS);
+        this.controller.loop(delta);
 
         // Scene too
         if (this.scene !== undefined)
-        this.scene.loop(this.app.ticker.deltaMS);
+        this.scene.loop(delta);
     }
 
     onResize() {

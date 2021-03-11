@@ -8,8 +8,8 @@ import { peer } from "./../../../script/webrtc";
 
 export class RunScene extends Scene {
     
-    constructor(pixiRef) {
-        super(pixiRef);
+    constructor(pixiRef, controller) {
+        super(pixiRef, controller);
         // The formula of runSpeed to animSpeed is runSpeed/2400
 
         this.speedRange = [100, 700]; // The range between min and max speed.

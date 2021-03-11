@@ -3,7 +3,10 @@ import { peer } from "./../script/webrtc";
 
 // Here, lets initialize the webrtc object
 peer.init(Math.random().toString(36).slice(2).substr(0, 8));
+
 peer.connection.addEvents('open', () => {
+    // This callback will be run when connection has been established
+    // Successfully with the phone.
     const notif = document.getElementById("ntf");
     const textbox = document.getElementById("gamecode");
     const playb = document.getElementById("playbutton");
@@ -44,16 +47,11 @@ const game = new GameApp({
 // Epic pixel look man!
 PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
 
-// Change the DOM display to be block.
-game.app.renderer.view.style.display = "block";
-
 class ExModule {
     static startGame() {
         var peerText = document.getElementById("peer_form");
         peerText.style.display = "none";
 
-        // Display in browser
-        document.body.appendChild(game.app.view);
         game.start();
     }
 

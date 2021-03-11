@@ -1,5 +1,6 @@
 import { peer } from "./../../script/webrtc";
 import { clamp } from "./../../script/util";
+import { RunScene } from "./scenes/runscene";
 
 const RUNPOLL = 250; // Time in ms to update the running animation.
 
@@ -15,7 +16,8 @@ const RUNARRLEN = (RUNRETAIN/RUNPOLL) << 0;
 
 // Static enum to store all the workouts.
 let Workouts = Object.freeze({
-    JOG: 0,
+    NONE: 0,
+    JOG: 1,
 });
 
 export class GlobalController {
@@ -45,50 +47,59 @@ export class GlobalController {
                 this.lastRunObject = {step: payload.repAmount, time: payload.time}; // Set before.
             }
         }
-        // Pace calculator time
-        // const maxSpeed = this.app.scene.speedRange[1];
-        // const stepPerS = (payload.repAmount - this.lastRunObject.step) / ((payload.time - this.lastRunObject.time)/1000);
-        // const maxSPS = 4 // (4/s) jj baseline
-
-        // this.app.scene.runSpeed = clamp(stepPerS, 0, maxSPS)/4 * maxSpeed;
-
-        // this.lastRunObject = {step: payload.repAmount, time: payload.time};
     }
 
-    setup() {
-        // Object to store workout data
-        this.currentWorkout = Workouts.JOG;
-        // this.targetPace = 0; // Target pace whe ncalculated based on the data received.
+    setup(pixiRef) {
+        this.pixiRef = pixiRef;
+
+        // **** Objects to store workout data
+        this.currentWorkout = Workouts.NONE;
         this.runCounter = 0; // Stored to keep track of poll in time.
         this.runQueue = 0; // Queue to be added to target pace in the loop event.
-        this.paceArrayCounter = 0; // Helper variable to
+        this.paceArrayCounter = 0; // Helper variable to count the head in the array.
         this.paceArray = Array(RUNARRLEN).fill(0); // The size of this array is RUNPOLL/RUNRETAIN
 
-        this.lastRunObject = undefined;
+        this.lastRunObject = undefined; // To help with difference.
+        // ******
 
         // Register _dataListener
         peer.connection.addReceiveHandler(this._dataListener.bind(this));
     }
 
+    start() {
+        // When global controller starts, set the first scene to be the unning scene.
+        this.runScene = new RunScene(this.pixiRef, this);
+        this.app.setScene(this.runScene);
+        // Start the scene and trigger on resize.
+        this.app.scene.start();
+        this.app.scene.onResize();
+
+        this.currentWorkout = Workouts.JOG;
+    }
+
     loop(delta) {
-        this.runCounter += delta;
+        switch (this.currentWorkout) {
+            case Workouts.JOG:
+                this.runCounter += delta;
 
-        // Update the running animation.
-        if (this.runCounter > RUNPOLL) {
+                // Update the running animation.
+                if (this.runCounter > RUNPOLL) {
 
-            // Update the array.
-            this.paceArray[this.paceArrayCounter] = this.runQueue;
-            this.paceArrayCounter = this.paceArrayCounter + 1 < RUNARRLEN ? this.paceArrayCounter + 1 : 0;
-            this.runQueue = 0;
+                    // Update the array.
+                    this.paceArray[this.paceArrayCounter] = this.runQueue;
+                    this.paceArrayCounter = this.paceArrayCounter + 1 < RUNARRLEN ? this.paceArrayCounter + 1 : 0; // Add to the counter.
+                    this.runQueue = 0; // Reset run queue
 
-            // Set the running speed to be the array average.
-            var avg = 0;
-            for (var i = 0; i < RUNARRLEN; i++) {
-                avg += this.paceArray[i];
-            }
-            avg /= RUNARRLEN;
-            this.app.scene.setSpeed(clamp(avg, 0, 100)); // Set the speed of the scene.
-            this.runCounter -= RUNPOLL;
+                    // Set the running speed to be the array average.
+                    var avg = 0;
+                    for (var i = 0; i < RUNARRLEN; i++) {
+                        avg += this.paceArray[i];
+                    }
+                    avg /= RUNARRLEN;
+                    this.app.scene.setSpeed(clamp(avg, 0, 100)); // Set the speed of the scene.
+                    this.runCounter -= RUNPOLL;
+                }
+            break;
         }
     }
 

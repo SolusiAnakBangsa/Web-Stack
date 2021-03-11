@@ -11,9 +11,10 @@ export class Scene {
 
     // Can be inherited.
     
-    constructor(pixiRef) {
+    constructor(pixiRef, controller) {
         this.container = new PIXI.Container();
         this.objects = [];
+        this.controller = controller;
 
         this.active = true;
         this.setup(pixiRef);
