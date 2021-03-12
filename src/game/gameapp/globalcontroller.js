@@ -76,7 +76,7 @@ export class GlobalController {
         this.runScene = new RunScene(this.pixiRef, this);
         this.gymScene = new GymScene(this.pixiRef, this);
         this.app.setScene(this.runScene);
-        // this.app.setScene(this.gymScene);
+        this.app.setScene(this.gymScene);
         // Start the scene and trigger on resize.
         this.app.scene.start();
         this.app.scene.onResize();

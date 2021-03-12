@@ -1,6 +1,8 @@
 import { GameObject } from "./gameobject";
 import { randomRange, randomFour, randomProperty } from "./../../../script/util";
 
+const XPROJECTIONOFFSET = -200;
+
 export class FightFloor extends GameObject {
 
     constructor(pixiRef, drawTo) {
@@ -138,7 +140,7 @@ export class FightFloor extends GameObject {
     loop(delta) {
         // Move the floor decoration
         this.bruhContainer.proj.setAxisY({x: -this.projPoint.x, y: -this.projPoint.y}, -this.factor);
-        this.floor.tileProj.setAxisY({x: this.projPoint.x + 150, y: this.projPoint.y}, this.factor);
+        this.floor.tileProj.setAxisY(this.projPoint, this.factor);
     }
 
     onResize() {
@@ -159,7 +161,7 @@ export class FightFloor extends GameObject {
         this.frontBG.x = this.app.screen.width/2;
         this.frontBG.y = this.app.screen.height - this.horizonY() * 1.1;
 
-        this.backBG.x = this.app.screen.width/2 + 150;
+        this.backBG.x = this.app.screen.width/2 + XPROJECTIONOFFSET;
         this.backBG.y = this.app.screen.height - this.horizonY()*1.1;
 
         this.floorAtm.x = this.app.screen.width/2;

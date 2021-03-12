@@ -9,5 +9,6 @@ export const assets = {
     outerpace: "graphics/progressbar.png",
     backgroundfront: "graphics/bg/backgroundfront.png",
     backgroundback: "graphics/bg/backgroundback.png",
-    runprogress: "graphics/runprogress.png"
+    runprogress: "graphics/runprogress.png",
+    fightman: "graphics/ourguy.json"
 };
