@@ -44,13 +44,11 @@ export class Pace extends GameObject {
         this.paceSprite = new PIXI.AnimatedSprite(texture);
         this.paceSprite.scale.set(3, 3);
         this.paceSprite.anchor.set(0.5, 0.5);
-        this.paceSprite.position.set(pixiRef.app.screen.width - 100, 100);
 
         // Load the outer ring for pacesprite.
         this.outerPace = new PIXI.Sprite(pixiRef.resources.outerpace.texture);
         this.outerPace.anchor.set(0.5, 0.5);
         this.outerPace.scale.set(3, 3);
-        this.outerPace.position.set(pixiRef.app.screen.width - 100, 100);
         
         // Apply the mask
         this.outerPace.mask = this.graphic;
@@ -61,7 +59,6 @@ export class Pace extends GameObject {
             {fontFamily: 'Thoughts', fontSize: 16, fill: 'black'}
         );
         this.paceText.anchor.set(0.5, 0.5);
-        this.paceText.position.set(pixiRef.app.screen.width - 100, 210);
         this.paceText.scale.set(4, 4);
         // ***************
 
@@ -86,6 +83,9 @@ export class Pace extends GameObject {
         this.mainContainer.addChild(this.graphic);
         this.mainContainer.addChild(this.paceSprite);
         this.mainContainer.addChild(this.paceText);
+
+        // Call onresize
+        this.onResize();
     }
 
     _updatePace() {

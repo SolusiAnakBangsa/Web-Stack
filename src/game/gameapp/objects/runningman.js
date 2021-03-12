@@ -38,10 +38,6 @@ export class RunMan extends GameObject {
         this.sprite = new PIXI.AnimatedSprite(this.idleTex);
         this.sprite.anchor.set(0.5, 1);
         this.sprite.scale.set(3, 3);
-        this.sprite.position.set(
-            this.app.screen.width/2,
-            this.app.screen.height - this.manHeight
-        );
         
         // Animation
         this.sprite.gotoAndPlay(0);
@@ -53,6 +49,9 @@ export class RunMan extends GameObject {
         
         this.mainContainer = new PIXI.Container();
         this.mainContainer.addChild(this.sprite);
+
+        // Call onresize
+        this.onResize();
     }
 
     loop() {

@@ -25,7 +25,6 @@ export class Floor extends GameObject {
 
         // Textures from a spritesheet for the floor decorations
         this.floorDecorTex = pixiRef.resources.floorDecor.spritesheet;
-        this.floorDecorYSpawn = this.app.screen.height + this.yOffset - this.horizonY() * this.yScale;
 
         // Counter to check
         // If the speed changes, this should change too.
@@ -61,7 +60,6 @@ export class Floor extends GameObject {
                 this.horizonY() * this.yScale,
             );
         this.floor.anchor.set(0.5, 1.0);
-        this.floor.position.set(pixiRef.app.screen.width/2, pixiRef.app.screen.height);
         this.floor.tileScale.set(scale, scale);
 
         // Loads the texture of the road, and positions it in the bottom center of the screen too.
@@ -74,13 +72,11 @@ export class Floor extends GameObject {
         );
         this.road.tilePosition.x += pixiRef.resources.landroad.texture.width/2*scale; // Offset by half
         this.road.anchor.set(0.5, 1.0);
-        this.road.position.set(pixiRef.app.screen.width/2, pixiRef.app.screen.height);
         this.road.tileScale.set(scale, scale);
         
         // We need to create a mask so that the road tiling does not mess up.
         // The road mask shall be created inside a new container, and placed bottom middle.
         this.bruhContainer = new PIXI.projection.Container2d();
-        this.bruhContainer.position.set(pixiRef.app.screen.width / 2, pixiRef.app.screen.height);
 
         this.bruh = new PIXI.projection.Sprite2d(PIXI.Texture.WHITE);
         this.bruh.width = pixiRef.resources.landroad.texture.width*scale;
@@ -93,11 +89,6 @@ export class Floor extends GameObject {
 
         this.displacementSprite = PIXI.Sprite.from(pixiRef.resources.landdisplacement.texture);
         this.displacementSprite.anchor.set(0.5, 0);
-        this.displacementSprite.width = Math.max(pixiRef.app.screen.width, 800);
-        this.displacementSprite.height = this.horizonY() - this.displace_y_correction;
-
-        this.displacementSprite.x = pixiRef.app.screen.width/2;
-        this.displacementSprite.y = this.horizonY();
         
         // Create the filter from the displacement sprite. Then, apply the filter to the floor
         this.displacementFilter = new PIXI.filters.DisplacementFilter(this.displacementSprite);
@@ -124,10 +115,6 @@ export class Floor extends GameObject {
         // Create the sprite and position it.
         this.floorAtm = new PIXI.Sprite(PIXI.Texture.from(canvasAtm));
         this.floorAtm.anchor.set(0.5, 0);
-        this.floorAtm.x = pixiRef.app.screen.width/2;
-        this.floorAtm.y = pixiRef.app.screen.height - this.horizonY()*1.1;
-        this.floorAtm.width = pixiRef.app.screen.width;
-        this.floorAtm.height = this.horizonY()/3;
 
         /*
             End of floor creation with road
@@ -150,15 +137,11 @@ export class Floor extends GameObject {
         );
         this.frontBG.anchor.set(0.5, 1);
         this.frontBG.scale.set(3, 3);
-        this.frontBG.x = pixiRef.app.screen.width/2
-        this.frontBG.y = pixiRef.app.screen.height - this.horizonY()*1.1;
         
         // back background
-        this.backBG = new PIXI.Sprite(pixiRef.resources.backgroundback.texture)
+        this.backBG = new PIXI.Sprite(pixiRef.resources.backgroundback.texture);
         this.backBG.anchor.set(0.5, 1);
         this.backBG.scale.set(3, 3);
-        this.backBG.x = pixiRef.app.screen.width/2;
-        this.backBG.y = pixiRef.app.screen.height - this.horizonY()*1.1;
         
         /*
             Add everything to the container.
@@ -182,6 +165,9 @@ export class Floor extends GameObject {
 
         // Add container about the grass
         this.bruhContainer.addChild(this.floorDecorContainer);
+
+        // Call positioning
+        this.onResize();
     }
 
     loop(delta) {
@@ -251,8 +237,6 @@ export class Floor extends GameObject {
 
         this.road.width = this.app.screen.width;
         this.road.height = this.horizonY() * this.yScale;
-
-        this.floorDecorYSpawn = this.app.screen.height + this.yOffset - this.horizonY() * this.yScale;
     }
 
     setFloorSpeed(speed) {

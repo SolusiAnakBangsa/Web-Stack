@@ -37,7 +37,6 @@ export class Sky extends GameObject {
 
         // Skybox container
         this.skyContainer = new PIXI.projection.Container2d();
-        this.skyContainer.position.set(this.app.screen.width/2, 0);
 
         // Create the sprite to place the clouds for the projection.
         this.skyProj = new PIXI.projection.Sprite2d(PIXI.Texture.BLANK);
@@ -52,6 +51,9 @@ export class Sky extends GameObject {
             let cloud = this.makeCloud(randomRange(-this.app.screen.width, this.app.screen.width));
             this.skyProj.addChild(cloud);
         }
+
+        // Call onresize
+        this.onResize();
     }
 
     makeCloud(x=null, y=null) {

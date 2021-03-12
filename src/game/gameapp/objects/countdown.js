@@ -30,7 +30,6 @@ export class Countdown extends GameObject {
     }
 
     setup(pixiRef) {
-        this.mainContainer.position.set(this.app.screen.width/2, this.app.screen.height/2);
         this.mainContainer.anchor.set(0.5, 0.5);
     }
 
