@@ -1,6 +1,7 @@
 import { peer } from "./../../script/webrtc";
 import { clamp } from "./../../script/util";
 import { RunScene } from "./scenes/runscene";
+import { GymScene } from "./scenes/gymscene";
 
 const RUNPOLL = 250; // Time in ms to update the running animation.
 
@@ -18,6 +19,7 @@ const RUNARRLEN = (RUNRETAIN/RUNPOLL) << 0;
 let Workouts = Object.freeze({
     NONE: 0,
     JOG: 1,
+    GYM: 2, // Gym transition scene
 });
 
 export class GlobalController {
@@ -55,15 +57,13 @@ export class GlobalController {
     setup() {
 
         // **** Objects to store workout data
-        this.currentWorkout = Workouts.JOG;
+        this.currentWorkout = Workouts.GYM;
         this.runCounter = 0; // Stored to keep track of poll in time.
         this.runQueue = 0; // Queue to be added to target pace in the loop event.
         this.paceArrayCounter = 0; // Helper variable to count the head in the array.
         this.paceArray = Array(RUNARRLEN).fill(0); // The size of this array is RUNPOLL/RUNRETAIN
 
         this.lastRunObject = undefined; // To help with difference.
-
-        this.app.scene.pace.targetSteps = 4000;
         // ******
 
         // Register _dataListener
@@ -74,7 +74,9 @@ export class GlobalController {
         this.pixiRef = pixiRef;
         // When global controller starts, set the first scene to be the unning scene.
         this.runScene = new RunScene(this.pixiRef, this);
+        this.gymScene = new GymScene(this.pixiRef, this);
         this.app.setScene(this.runScene);
+        this.app.setScene(this.gymScene);
         // Start the scene and trigger on resize.
         this.app.scene.start();
         this.app.scene.onResize();

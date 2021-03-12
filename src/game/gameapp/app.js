@@ -67,7 +67,9 @@ export class GameApp {
 
     setScene(scene) {
         // Remove previous scene from drawing
-        this.app.stage.removeChild(this.scene);
+        if (this.scene !== undefined) {
+            this.app.stage.removeChild(this.scene.container);
+        }
         this.scene = scene;
         this.app.stage.addChild(scene.container);
     }

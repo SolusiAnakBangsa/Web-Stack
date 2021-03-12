@@ -6,16 +6,16 @@ import { Pace } from "./../objects/pace";
 import { Countdown } from "./../objects/countdown";
 import { peer } from "./../../../script/webrtc";
 
+const SPEEDRANGE = [100, 700];
+
 export class RunScene extends Scene {
     
     constructor(pixiRef, controller) {
         super(pixiRef, controller);
         // The formula of runSpeed to animSpeed is runSpeed/2400
 
-        this.speedRange = [100, 700]; // The range between min and max speed.
-
         this.runSpeed = 0; // In pixel / second
-        this.runSpeedToAnimSpeed = function (floorSpeed) { return this.runSpeed/2700 };
+        this.runSpeedToAnimSpeed = function () { return this.runSpeed/2700 };
     }
 
     setup(pixiRef) {
@@ -104,7 +104,7 @@ export class RunScene extends Scene {
     setSpeed(speed) {
         // 0-100
         if (speed > 10) {
-            this.runSpeed = this.speedRange[0] + ((speed / 100) * (this.speedRange[1] - this.speedRange[0]));
+            this.runSpeed = SPEEDRANGE[0] + ((speed / 100) * (SPEEDRANGE[1] - SPEEDRANGE[0]));
             this.runman.speed = this.runSpeedToAnimSpeed();
             this.pace.pace = speed;
         } else {

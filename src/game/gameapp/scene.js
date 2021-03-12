@@ -12,20 +12,21 @@ export class Scene {
     // Can be inherited.
     
     constructor(pixiRef, controller) {
+        // Override this
         this.container = new PIXI.Container();
-        this.objects = [];
-        this.controller = controller;
+        this._objects = [];
+        this._controller = controller;
 
         this.active = true;
         this.setup(pixiRef);
     }
 
     setup(pixiRef) {
-
+        // Override this
     }
 
     start() {
-        
+        // Override this
     }
 
     setActive(boolean) {
@@ -35,16 +36,16 @@ export class Scene {
     }
 
     addObj(obj) {
-        this.objects.push(obj);
+        this._objects.push(obj);
         this.container.addChild(obj.mainContainer);
     }
 
     delObj(obj) {
         var c = 0;
-        for (let ob of this.objects) {
+        for (let ob of this._objects) {
             if (ob === obj) {
                 this.container.removeChild(ob.mainContainer);
-                this.objects.splice(c, 1);
+                this._objects.splice(c, 1);
                 break;
             }
             c++;
@@ -52,6 +53,7 @@ export class Scene {
     }
 
     loopCode(delta) {
+        // Override this
         // You put the actual code that you want to loop of the scene here.
     }
 
@@ -60,13 +62,14 @@ export class Scene {
         if (this.active) {
             this.loopCode(delta);
             // Do the loop of every object.
-            for (let obj of this.objects) {
+            for (let obj of this._objects) {
                 obj.loop(delta);
             }
         }
     }
 
     onResizeCode() {
+        // Override this
         // You put the actual code to resize of the scene here.
     }
 
@@ -74,7 +77,7 @@ export class Scene {
         // This does not need to be inherited.
         if (this.active) {
             this.onResizeCode();
-            for (let obj of this.objects) {
+            for (let obj of this._objects) {
                 obj.onResize();
             }
         }
