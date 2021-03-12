@@ -55,8 +55,6 @@ export class RunMan extends GameObject {
     }
 
     loop() {
-        // Move shadow
-        this.manShadow.uniforms.floorY = (this.mainContainer.y + this.sprite.y - 15) << 0;
         // Check guy speed and state here, and change the texture and animation speed accordingly
         if (this.speed == 0 && this._state == 1) {
             // Do texture change and animation here.
@@ -82,5 +80,8 @@ export class RunMan extends GameObject {
             this.app.screen.width/2,
             this.app.screen.height - this.manHeight
         );
+
+        // Move shadow
+        this.manShadow.uniforms.floorY = (this.mainContainer.y + this.sprite.y - 15) << 0;
     }
 }

@@ -1,0 +1,111 @@
+
+fightman.png
+size: 125,65
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+fightman/LeftLegDown
+  rotate: false
+  xy: 100, 1
+  size: 9, 37
+  orig: 9, 37
+  offset: 0, 0
+  index: -1
+fightman/LeftFoot
+  rotate: false
+  xy: 19, 58
+  size: 10, 5
+  orig: 10, 5
+  offset: 0, 0
+  index: -1
+fightman/LeftLegUp
+  rotate: false
+  xy: 57, 1
+  size: 15, 39
+  orig: 15, 39
+  offset: 0, 0
+  index: -1
+fightman/RightLegDown
+  rotate: false
+  xy: 89, 1
+  size: 9, 38
+  orig: 9, 38
+  offset: 0, 0
+  index: -1
+fightman/RightFeet
+  rotate: false
+  xy: 89, 41
+  size: 10, 5
+  orig: 10, 5
+  offset: 0, 0
+  index: -1
+fightman/RightLegUp
+  rotate: false
+  xy: 74, 1
+  size: 13, 39
+  orig: 13, 39
+  offset: 0, 0
+  index: -1
+fightman/LeftArmUp
+  rotate: false
+  xy: 111, 31
+  size: 9, 25
+  orig: 9, 25
+  offset: 0, 0
+  index: -1
+fightman/LeftArmDown
+  rotate: false
+  xy: 10, 36
+  size: 7, 26
+  orig: 7, 26
+  offset: 0, 0
+  index: -1
+fightman/LeftHand
+  rotate: false
+  xy: 19, 46
+  size: 5, 6
+  orig: 5, 6
+  offset: 0, 0
+  index: -1
+fightman/BodyUpper
+  rotate: false
+  xy: 29, 1
+  size: 26, 30
+  orig: 26, 30
+  offset: 0, 0
+  index: -1
+fightman/RightArmUp
+  rotate: false
+  xy: 111, 1
+  size: 12, 28
+  orig: 12, 28
+  offset: 0, 0
+  index: -1
+fightman/RightArmDown
+  rotate: false
+  xy: 1, 36
+  size: 7, 27
+  orig: 7, 27
+  offset: 0, 0
+  index: -1
+fightman/RightHand
+  rotate: false
+  xy: 19, 36
+  size: 5, 8
+  orig: 5, 8
+  offset: 0, 0
+  index: -1
+fightman/BodyLower
+  rotate: false
+  xy: 1, 1
+  size: 26, 33
+  orig: 26, 33
+  offset: 0, 0
+  index: -1
+fightman/Head
+  rotate: false
+  xy: 29, 33
+  size: 18, 21
+  orig: 18, 21
+  offset: 0, 0
+  index: -1
