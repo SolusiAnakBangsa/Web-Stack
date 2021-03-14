@@ -10,5 +10,6 @@ export const assets = {
     backgroundfront: "graphics/bg/backgroundfront.png",
     backgroundback: "graphics/bg/backgroundback.png",
     runprogress: "graphics/runprogress.png",
-    fightman: "graphics/fightman.json"
+    fightman: "graphics/fightman.json",
+    fightman2: "graphics/fightman2.json"
 };

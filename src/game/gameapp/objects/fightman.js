@@ -18,7 +18,7 @@ export class FightMan extends GameObject {
         this.mainContainer.addChild(this.fightMan);
     
         // Setup the shadows
-        this.manShadow = new ShadowShader([-0.6, -0.6], this.fightMan.y+210, 0.15);
+        this.manShadow = new ShadowShader([-0.6, -0.6], 0, 0.15);
         this.fightMan.filters = [this.manShadow];
 
         this.fightMan.scale.set(3);
@@ -28,7 +28,7 @@ export class FightMan extends GameObject {
         // this.fightMan.stateData.setMix('jump', 'walk', 0.4);
 
         // // play animation
-        this.fightMan.state.setAnimation(0, 'idle', true);
+        this.fightMan.state.setAnimation(0, 'jumpingjacks', true);
 
         this.onResize();
     }
@@ -40,9 +40,9 @@ export class FightMan extends GameObject {
     onResize() {
         this.fightMan.position.set(
             270,
-            this.app.screen.height - 350
+            this.app.screen.height - 100
         );
 
-        this.manShadow.uniforms.floorY = this.fightMan.y+210;
+        this.manShadow.uniforms.floorY = this.fightMan.y;
     }
 }
