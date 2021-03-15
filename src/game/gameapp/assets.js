@@ -15,4 +15,5 @@ export const assets = {
     armogus: "graphics/armogus.json",
     legolus: "graphics/legolus.json",
     absogus: "graphics/absogus.json",
+    enemyhealth: "graphics/enemyhealth.png"
 };

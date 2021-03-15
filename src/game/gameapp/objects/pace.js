@@ -157,6 +157,7 @@ export class Pace extends GameObject {
     }
 
     _redrawProgressBar() {
+        this.runProgressBar.clear();
         this.runProgressBar.beginFill(0xf9ad3f);
         const pX = this.runProgress.x;
         const pY = this.runProgress.y;

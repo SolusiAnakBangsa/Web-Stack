@@ -1,6 +1,9 @@
 import { GameObject } from "./gameobject";
 import { ShadowShader } from "./../shadowshader";
 
+const GUYOFFSETY = 120;
+const GUYOFFSETX = 270;
+
 export class FightMan extends GameObject {
 
     constructor(pixiRef, seconds, callback=null) {
@@ -14,7 +17,7 @@ export class FightMan extends GameObject {
     }
 
     setup(pixiRef) {
-        this.fightMan = new PIXI.spine.Spine(pixiRef.resources.absogus.spineData);
+        this.fightMan = new PIXI.spine.Spine(pixiRef.resources.fightman2.spineData);
         this.mainContainer.addChild(this.fightMan);
     
         // Setup the shadows
@@ -28,7 +31,7 @@ export class FightMan extends GameObject {
         // this.fightMan.stateData.setMix('jump', 'walk', 0.4);
 
         // // play animation
-        this.fightMan.state.setAnimation(0, 'idle', true);
+        this.fightMan.state.setAnimation(0, 'pushupknee', true);
 
         this.onResize();
     }
@@ -39,8 +42,8 @@ export class FightMan extends GameObject {
 
     onResize() {
         this.fightMan.position.set(
-            270,
-            this.app.screen.height - 100
+            GUYOFFSETX,
+            this.app.screen.height - GUYOFFSETY
         );
 
         this.manShadow.uniforms.floorY = this.fightMan.y;
