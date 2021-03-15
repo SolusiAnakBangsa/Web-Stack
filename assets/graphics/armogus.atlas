@@ -1,0 +1,62 @@
+
+armogus.png
+size: 61,61
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+armogus/RArmDown
+  rotate: false
+  xy: 13, 28
+  size: 10, 30
+  orig: 10, 30
+  offset: 0, 0
+  index: -1
+armogus/RArmUp
+  rotate: false
+  xy: 34, 22
+  size: 25, 17
+  orig: 25, 17
+  offset: 0, 0
+  index: -1
+armogus/RHand
+  rotate: false
+  xy: 25, 41
+  size: 10, 7
+  orig: 10, 7
+  offset: 0, 0
+  index: -1
+armogus/Ballman
+  rotate: false
+  xy: 1, 1
+  size: 31, 25
+  orig: 31, 25
+  offset: 0, 0
+  index: -1
+armogus/Blinkist
+  rotate: false
+  xy: 37, 41
+  size: 9, 6
+  orig: 9, 6
+  offset: 0, 0
+  index: -1
+armogus/LArmUp
+  rotate: false
+  xy: 34, 1
+  size: 24, 19
+  orig: 24, 19
+  offset: 0, 0
+  index: -1
+armogus/LArmDown
+  rotate: false
+  xy: 1, 28
+  size: 10, 31
+  orig: 10, 31
+  offset: 0, 0
+  index: -1
+armogus/LHand
+  rotate: false
+  xy: 25, 50
+  size: 11, 6
+  orig: 11, 6
+  offset: 0, 0
+  index: -1

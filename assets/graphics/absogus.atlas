@@ -1,0 +1,48 @@
+
+absogus.png
+size: 63,50
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+absogus/RLegDown
+  rotate: false
+  xy: 46, 21
+  size: 15, 13
+  orig: 15, 13
+  offset: 0, 0
+  index: -1
+absogus/RLegUp
+  rotate: false
+  xy: 29, 1
+  size: 15, 20
+  orig: 15, 20
+  offset: 0, 0
+  index: -1
+absogus/Bodey
+  rotate: false
+  xy: 1, 1
+  size: 26, 42
+  orig: 26, 42
+  offset: 0, 0
+  index: -1
+absogus/LLegDown
+  rotate: false
+  xy: 29, 36
+  size: 16, 12
+  orig: 16, 12
+  offset: 0, 0
+  index: -1
+absogus/LLegUp
+  rotate: false
+  xy: 46, 1
+  size: 14, 18
+  orig: 14, 18
+  offset: 0, 0
+  index: -1
+absogus/Blinkist
+  rotate: false
+  xy: 29, 23
+  size: 11, 8
+  orig: 11, 8
+  offset: 0, 0
+  index: -1

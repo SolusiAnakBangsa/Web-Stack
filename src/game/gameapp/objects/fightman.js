@@ -14,7 +14,7 @@ export class FightMan extends GameObject {
     }
 
     setup(pixiRef) {
-        this.fightMan = new PIXI.spine.Spine(pixiRef.resources.fightman.spineData);
+        this.fightMan = new PIXI.spine.Spine(pixiRef.resources.absogus.spineData);
         this.mainContainer.addChild(this.fightMan);
     
         // Setup the shadows
@@ -28,7 +28,7 @@ export class FightMan extends GameObject {
         // this.fightMan.stateData.setMix('jump', 'walk', 0.4);
 
         // // play animation
-        this.fightMan.state.setAnimation(0, 'jumpingjacks', true);
+        this.fightMan.state.setAnimation(0, 'idle', true);
 
         this.onResize();
     }

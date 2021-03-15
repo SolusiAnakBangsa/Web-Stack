@@ -1,0 +1,62 @@
+
+legolus.png
+size: 121,81
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+legolus/RLegDown
+  rotate: false
+  xy: 53, 44
+  size: 16, 35
+  orig: 16, 35
+  offset: 0, 0
+  index: -1
+legolus/RFeet
+  rotate: false
+  xy: 1, 52
+  size: 26, 14
+  orig: 26, 14
+  offset: 0, 0
+  index: -1
+legolus/RLegUp
+  rotate: false
+  xy: 53, 1
+  size: 25, 41
+  orig: 25, 41
+  offset: 0, 0
+  index: -1
+legolus/Bodey
+  rotate: false
+  xy: 1, 1
+  size: 50, 49
+  orig: 50, 49
+  offset: 0, 0
+  index: -1
+legolus/Blinky
+  rotate: false
+  xy: 1, 68
+  size: 16, 9
+  orig: 16, 9
+  offset: 0, 0
+  index: -1
+legolus/LLegDown
+  rotate: false
+  xy: 104, 1
+  size: 15, 34
+  orig: 15, 34
+  offset: 0, 0
+  index: -1
+legolus/LFeet
+  rotate: false
+  xy: 29, 52
+  size: 19, 15
+  orig: 19, 15
+  offset: 0, 0
+  index: -1
+legolus/LLegUp
+  rotate: false
+  xy: 80, 1
+  size: 22, 42
+  orig: 22, 42
+  offset: 0, 0
+  index: -1

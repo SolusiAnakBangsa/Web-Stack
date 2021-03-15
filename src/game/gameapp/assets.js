@@ -11,5 +11,8 @@ export const assets = {
     backgroundback: "graphics/bg/backgroundback.png",
     runprogress: "graphics/runprogress.png",
     fightman: "graphics/fightman.json",
-    fightman2: "graphics/fightman2.json"
+    fightman2: "graphics/fightman2.json",
+    armogus: "graphics/armogus.json",
+    legolus: "graphics/legolus.json",
+    absogus: "graphics/absogus.json",
 };
