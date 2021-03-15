@@ -2,6 +2,7 @@ import { peer } from "./../../script/webrtc";
 import { clamp } from "./../../script/util";
 import { RunScene } from "./scenes/runscene";
 import { GymScene } from "./scenes/gymscene";
+import { Transitioner } from "./transitioner";
 
 const RUNPOLL = 250; // Time in ms to update the running animation.
 
@@ -74,16 +75,52 @@ export class GlobalController {
     }
 
     _pointerUp(event) {
-        this.goToGym();
+        this._toggleScenes();
+    }
+
+    _toggleScenes() {
+        this.transitioner.transition(
+            () => {
+                // Remove the transitioner from current scene
+                this.appObj.scene.delObj(this.transitioner);
+
+                this.goToGym();
+
+                // Add the transitioner to the next scene.
+                this.appObj.scene.addObj(this.transitioner);
+            },
+            () => {
+                console.log("Transition done.");
+            });
+    }
+
+    goToGym() {
+        this.paceArray = Array(RUNARRLEN).fill(0);
+        this.appObj.setScene(this.gymScene);
+    }
+
+    goToRun() {
+        // Reset run array
+        this.paceArray = Array(RUNARRLEN).fill(0);
+        this.appObj.setScene(this.runScene);
     }
 
     start(pixiRef) {
         this.pixiRef = pixiRef;
-        // When global controller starts, set the first scene to be the unning scene.
+        // Makes the transitioner object.
+        this.transitioner = new Transitioner(pixiRef, 1);
+
+        // When global controller starts, set the first scene to be the running scene.
         this.runScene = new RunScene(this.pixiRef, this);
         this.gymScene = new GymScene(this.pixiRef, this);
+
         this.appObj.setScene(this.runScene);
         // this.appObj.setScene(this.gymScene);
+
+        // Add the transitioner to the current scene
+        // IMPORTANT NOTE: You can't add objects to two pixi containers. If done, then will not display.
+        this.appObj.scene.addObj(this.transitioner);
+
         // Start the scene and trigger on resize.
         this.appObj.scene.start();
         this.appObj.scene.onResize();
@@ -115,17 +152,6 @@ export class GlobalController {
                 }
                 break;
         }
-    }
-
-    goToGym() {
-        this.paceArray = Array(RUNARRLEN).fill(0);
-        this.appObj.setScene(this.gymScene);
-    }
-
-    goToRun() {
-        // Reset run array
-        this.paceArray = Array(RUNARRLEN).fill(0);
-        this.appObj.setScene(this.runScene);
     }
 
     onResize() {

@@ -18,10 +18,6 @@ export class GymScene extends Scene {
         this.addObj(this.fightUI);
     }
 
-    startTransition(data) {
-        
-    }
-
     loopCode(delta) {
 
     }

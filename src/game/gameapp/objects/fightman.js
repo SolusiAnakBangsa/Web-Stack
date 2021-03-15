@@ -6,7 +6,7 @@ const GUYOFFSETX = 270;
 
 export class FightMan extends GameObject {
 
-    constructor(pixiRef, seconds, callback=null) {
+    constructor(pixiRef) {
         super(pixiRef);
 
         this.setup(pixiRef);

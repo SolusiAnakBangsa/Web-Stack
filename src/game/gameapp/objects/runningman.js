@@ -37,7 +37,7 @@ export class RunMan extends GameObject {
         // Create the animation sprite, and set all the properties.
         this.sprite = new PIXI.AnimatedSprite(this.idleTex);
         this.sprite.anchor.set(0.5, 1);
-        this.sprite.scale.set(4, 4);
+        this.sprite.scale.set(3.5, 3.5);
         
         // Animation
         this.sprite.gotoAndPlay(0);
