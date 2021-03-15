@@ -121,16 +121,30 @@ export class FightUI extends GameObject {
 
     _redrawEnemyHealth() {
         this.enemyProgressBar.clear();
-        this.enemyProgressBar.beginFill(0x982134);
 
+        // Draw health bar portion
+        this.enemyProgressBar.beginFill(0x982134);
         this.enemyProgressBar.drawRect(
             this.enemyHealth.x - HEALTHBARXOFFSET,
             this.enemyHealth.y + HEALTHBARYOFFSET,
             -HEALTHBARLENGTH * this.enemyHealthCounter,
             HEALTHBARHEIGHT
         );
-
         this.enemyProgressBar.endFill();
+
+        // Draw health bar borders
+        this.enemyProgressBar.lineStyle(3, 0x1c2a6d, 1);
+        this.enemyProgressBar.drawRoundedRect(
+            this.enemyHealth.x - HEALTHBARXOFFSET - HEALTHBARLENGTH,
+            this.enemyHealth.y + HEALTHBARYOFFSET,
+            HEALTHBARLENGTH + 3,
+            HEALTHBARHEIGHT,
+            4
+        );
+
+        
+
+        this.enemyProgressBar.lineStyle(0);
     }
 
     _redrawWorkoutBar() {
