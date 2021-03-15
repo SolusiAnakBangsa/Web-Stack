@@ -54,6 +54,6 @@ export class ShadowShader extends PIXI.Filter {
         this.uniforms.floorY = floorY;
         this.uniforms.opacity = opacity;
 
-        this.padding = 300;
+        this.padding = 256;
     }
 }

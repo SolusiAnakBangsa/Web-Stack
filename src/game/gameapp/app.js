@@ -28,7 +28,10 @@ export class GameApp {
             resources: resources,
             resizer: this.resizer,
         };
-        
+
+        // Setup so that the user can interact with the screen.
+        this.app.stage.interactive = true;
+
         // Start the controller
         this.controller.start(pixiRef);
 
@@ -66,12 +69,14 @@ export class GameApp {
     }
 
     setScene(scene) {
+        if (this.scene == scene) return;
         // Remove previous scene from drawing
         if (this.scene !== undefined) {
             this.app.stage.removeChild(this.scene.container);
         }
         this.scene = scene;
         this.app.stage.addChild(scene.container);
+        this.onResize();
     }
 
     loop(delta) {

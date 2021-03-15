@@ -26,7 +26,7 @@ export class GlobalController {
 
     constructor(app) {
         // App object (not pixi app)
-        this.app = app;
+        this.appObj = app;
     }
 
     _dataListener(payload) {
@@ -49,7 +49,7 @@ export class GlobalController {
                 this.lastRunObject = {step: payload.repAmount, time: payload.time}; // Set before.
 
                 // Update steps in UI object
-                this.app.scene.pace.setSteps(payload.repAmount);
+                this.appObj.scene.pace.setSteps(payload.repAmount);
             }
         }
     }
@@ -68,6 +68,13 @@ export class GlobalController {
 
         // Register _dataListener
         peer.connection.addReceiveHandler(this._dataListener.bind(this));
+
+        // Set up simple mouse clicker
+        this.appObj.app.stage.on('pointerup', this._pointerUp.bind(this));
+    }
+
+    _pointerUp(event) {
+        this.goToGym();
     }
 
     start(pixiRef) {
@@ -75,11 +82,11 @@ export class GlobalController {
         // When global controller starts, set the first scene to be the unning scene.
         this.runScene = new RunScene(this.pixiRef, this);
         this.gymScene = new GymScene(this.pixiRef, this);
-        this.app.setScene(this.runScene);
-        this.app.setScene(this.gymScene);
+        this.appObj.setScene(this.runScene);
+        // this.appObj.setScene(this.gymScene);
         // Start the scene and trigger on resize.
-        this.app.scene.start();
-        this.app.scene.onResize();
+        this.appObj.scene.start();
+        this.appObj.scene.onResize();
 
         this.currentWorkout = Workouts.NONE;
     }
@@ -103,11 +110,22 @@ export class GlobalController {
                         avg += this.paceArray[i];
                     }
                     avg /= RUNARRLEN;
-                    this.app.scene.setSpeed(clamp(avg, 0, 100)); // Set the speed of the scene.
+                    this.appObj.scene.setSpeed(clamp(avg, 0, 100)); // Set the speed of the scene.
                     this.runCounter -= RUNPOLL;
                 }
-            break;
+                break;
         }
+    }
+
+    goToGym() {
+        this.paceArray = Array(RUNARRLEN).fill(0);
+        this.appObj.setScene(this.gymScene);
+    }
+
+    goToRun() {
+        // Reset run array
+        this.paceArray = Array(RUNARRLEN).fill(0);
+        this.appObj.setScene(this.runScene);
     }
 
     onResize() {

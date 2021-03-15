@@ -31,6 +31,7 @@ export class FightUI extends GameObject {
             {task: "situp", freq: 10},
             {task: "reclinedrhomb", freq: 10},
         ];
+        this.currentReps = 10; // The reps for the workout. Used for the workout progress bar
         // Current Workout index
         this.workoutIndex = 0;
 
@@ -44,7 +45,7 @@ export class FightUI extends GameObject {
 
         // Enemy sprite
         this.enemy = new PIXI.spine.Spine(pixiRef.resources.legolus.spineData);
-        this.enemy.scale.set(3);
+        this.enemy.scale.set(4);
         this.enemy.state.setAnimation(0, 'idle', true);
     
         // Setup the shadows

@@ -24,7 +24,7 @@ export class FightMan extends GameObject {
         this.manShadow = new ShadowShader([-0.6, -0.6], 0, 0.15);
         this.fightMan.filters = [this.manShadow];
 
-        this.fightMan.scale.set(3);
+        this.fightMan.scale.set(4);
 
         // // set up the mixes!
         // this.fightMan.stateData.setMix('walk', 'jump', 0.2);

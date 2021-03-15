@@ -37,7 +37,7 @@ export class RunMan extends GameObject {
         // Create the animation sprite, and set all the properties.
         this.sprite = new PIXI.AnimatedSprite(this.idleTex);
         this.sprite.anchor.set(0.5, 1);
-        this.sprite.scale.set(3, 3);
+        this.sprite.scale.set(4, 4);
         
         // Animation
         this.sprite.gotoAndPlay(0);
@@ -73,6 +73,9 @@ export class RunMan extends GameObject {
         if (this.speed != 0) {
             this.sprite.animationSpeed = this.speed;
         }
+
+        // Move shadow
+        this.manShadow.uniforms.floorY = (this.mainContainer.y + this.sprite.y - 15) << 0;
     }
 
     onResize() {
@@ -80,8 +83,5 @@ export class RunMan extends GameObject {
             this.app.screen.width/2,
             this.app.screen.height - this.manHeight
         );
-
-        // Move shadow
-        this.manShadow.uniforms.floorY = (this.mainContainer.y + this.sprite.y - 15) << 0;
     }
 }
