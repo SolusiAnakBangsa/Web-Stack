@@ -2,6 +2,7 @@ import { peer } from "./../../script/webrtc";
 import { clamp } from "./../../script/util";
 import { RunScene } from "./scenes/runscene";
 import { GymScene } from "./scenes/gymscene";
+import { VsScene } from "./scenes/vsscene";
 import { Transitioner } from "./transitioner";
 
 const RUNPOLL = 250; // Time in ms to update the running animation.
@@ -96,7 +97,7 @@ export class GlobalController {
 
     goToGym() {
         this.paceArray = Array(RUNARRLEN).fill(0);
-        this.appObj.setScene(this.gymScene);
+        this.appObj.setScene(this.vsScene);
     }
 
     goToRun() {
@@ -113,6 +114,7 @@ export class GlobalController {
         // When global controller starts, set the first scene to be the running scene.
         this.runScene = new RunScene(this.pixiRef, this);
         this.gymScene = new GymScene(this.pixiRef, this);
+        this.vsScene = new VsScene(this.pixiRef, this);
 
         this.appObj.setScene(this.runScene);
         // this.appObj.setScene(this.gymScene);
