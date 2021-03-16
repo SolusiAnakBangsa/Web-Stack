@@ -1,7 +1,14 @@
 import { GameApp } from "./gameapp/app";
 import { peer } from "./../script/webrtc";
 
-// Here, lets initialize the webrtc object
+// Game object
+const game = new GameApp({
+    resolution: 1,
+    backgroundColor: 0x8febda,
+    resizeTo: window, // Resize to the size of the browser window once.
+});
+
+// Here, lets initialize the webrtc object with a custom peerID
 peer.init(Math.random().toString(36).slice(2).substr(0, 8));
 
 peer.connection.addEvents('open', () => {
@@ -31,6 +38,7 @@ peer.connection.addEvents('open', () => {
         peerForm.style.display = "none";
     }, 8200);
 });
+
 peer.peer.on('error', function(err){
     // Display error notif
     const notif = document.getElementById("ntf");
@@ -38,13 +46,6 @@ peer.peer.on('error', function(err){
     notif.style.display = "block";
     notif.style.backgroundColor = "#f27963";
     notif.innerText = err;
-});
-
-// Game
-const game = new GameApp({
-    resolution: 1,
-    backgroundColor: 0x8febda,
-    resizeTo: window, // Resize to the size of the browser window once.
 });
 
 // Epic pixel look man!
