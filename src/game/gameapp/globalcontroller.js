@@ -2,7 +2,6 @@ import { peer } from "./../../script/webrtc";
 import { clamp } from "./../../script/util";
 import { RunScene } from "./scenes/runscene";
 import { GymScene } from "./scenes/gymscene";
-import { VsScene } from "./scenes/vsscene";
 import { Transitioner } from "./transitioner";
 
 const RUNPOLL = 250; // Time in ms to update the running animation.
@@ -20,9 +19,15 @@ const RUNARRLEN = (RUNRETAIN/RUNPOLL) << 0;
 // Static enum to store all the workouts.
 let Workouts = Object.freeze({
     NONE: 0,
-    JOG: 1,
-    GYM: 2, // Gym transition scene
+    JOG: 1, // Jog scene
+    GYM: 2, // Gym scene
 });
+
+const workouts = [
+    {task: "pushup", freq: 12},
+    {task: "situp", freq: 10},
+    {task: "reclinedrhomb", freq: 10},
+];
 
 export class GlobalController {
 
@@ -54,12 +59,15 @@ export class GlobalController {
                 this.appObj.scene.pace.setSteps(payload.repAmount);
             }
         }
+
+        // Do dataListener of current scene.
+        this.appObj.scene.dataListener(payload);
     }
 
     setup() {
 
         // **** Objects to store workout data
-        this.currentWorkout = Workouts.GYM;
+        this.currentWorkout = Workouts.JOG;
         this.runCounter = 0; // Stored to keep track of poll in time.
         this.runQueue = 0; // Queue to be added to target pace in the loop event.
         this.paceArrayCounter = 0; // Helper variable to count the head in the array.
@@ -85,7 +93,7 @@ export class GlobalController {
                 // Remove the transitioner from current scene
                 this.appObj.scene.delObj(this.transitioner);
 
-                this.goToGym();
+                this.goToGym(workouts);
 
                 // Add the transitioner to the next scene.
                 this.appObj.scene.addObj(this.transitioner);
@@ -95,9 +103,16 @@ export class GlobalController {
             });
     }
 
-    goToGym() {
+    goToGym(workouts) {
         this.paceArray = Array(RUNARRLEN).fill(0);
-        this.appObj.setScene(this.vsScene);
+
+        this.currentWorkout = Workouts.GYM;
+
+        // Send the workout data to the gym
+        this.gymScene.startNewWorkout(workouts);
+
+        // Set scene
+        this.appObj.setScene(this.gymScene);
     }
 
     goToRun() {
@@ -114,7 +129,6 @@ export class GlobalController {
         // When global controller starts, set the first scene to be the running scene.
         this.runScene = new RunScene(this.pixiRef, this);
         this.gymScene = new GymScene(this.pixiRef, this);
-        this.vsScene = new VsScene(this.pixiRef, this);
 
         this.appObj.setScene(this.runScene);
         // this.appObj.setScene(this.gymScene);

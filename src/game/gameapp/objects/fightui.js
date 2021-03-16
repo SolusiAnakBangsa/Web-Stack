@@ -23,19 +23,13 @@ export class FightUI extends GameObject {
 
     constructor(pixiRef) {
         super(pixiRef);
-        this.enemyHealthCounter = 0.8;
-
-        // The workouts that will be done in this stage
-        this.workouts = [
-            {task: "pushup", freq: 10},
-            {task: "situp", freq: 10},
-            {task: "reclinedrhomb", freq: 10},
-        ];
-        this.currentReps = 10; // The reps for the workout. Used for the workout progress bar
-        // Current Workout index
-        this.workoutIndex = 0;
+        this.enemyHealthP = 0.8;
+        this.workoutP = 0.5;
 
         this.enemyName = "Legolus";
+        this.nameText;
+        this.workoutText;
+        this.workoutCounter;
 
         this.setup(pixiRef);
     }
@@ -102,7 +96,7 @@ export class FightUI extends GameObject {
         });
 
         this.workoutText = new PIXI.Text("Push up", this.workoutStyle); // Displaying workout text
-        this.workoutCounter = new PIXI.Text("10x", this.workoutCounterStyle); // Displaying counter
+        this.workoutCounter = new PIXI.Text("10", this.workoutCounterStyle); // Displaying counter
 
         this.workoutText.anchor.set(1, 1);
         this.workoutCounter.anchor.set(0.5, 0.5);
@@ -132,7 +126,7 @@ export class FightUI extends GameObject {
         this.enemyProgressBar.drawRect(
             this.enemyHealth.x - HEALTHBARXOFFSET,
             this.enemyHealth.y + HEALTHBARYOFFSET,
-            -ACTUALHEALTHBARLEN * this.enemyHealthCounter,
+            -ACTUALHEALTHBARLEN * this.enemyHealthP,
             HEALTHBARHEIGHT
         );
         this.enemyProgressBar.endFill();
@@ -156,9 +150,6 @@ export class FightUI extends GameObject {
 
         this.workoutGraphic.clear();
 
-        // Draw and update the text part.
-        this.workoutCounter.text = "10";
-
         const BARHEIGHT = 24;
 
         // Draw empty bar completion.
@@ -178,7 +169,7 @@ export class FightUI extends GameObject {
         this.workoutGraphic.drawRoundedRect(
             this.workoutCounter.x,
             this.workoutCounter.y - BARHEIGHT/2 + BARVERTICALPADDING,
-            ACTUALLENGTH * 0.4 - BARVERTICALPADDING,
+            ACTUALLENGTH * this.workoutP - BARVERTICALPADDING,
             BARHEIGHT - BARVERTICALPADDING*2,
             20
         );

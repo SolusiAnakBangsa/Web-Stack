@@ -25,7 +25,8 @@ export class Transitioner extends GameObject {
         this.setup(pixiRef);
     }
 
-    _redrawTransition() {
+
+    _basicTransition() {
         this.transitionGraphic.clear();
 
         this.transitionGraphic.beginFill(0xF77D08);
@@ -37,6 +38,10 @@ export class Transitioner extends GameObject {
         );
 
         this.transitionGraphic.endFill();
+    }
+
+    _vsTransition() {
+
     }
 
     setup(pixiRef) {
@@ -53,7 +58,7 @@ export class Transitioner extends GameObject {
         // If the transition is ongoing, do some stuff.
         if (this._going) {
             // Redraw transition object
-            this._redrawTransition();
+            this._transitionType();
 
             // Increment for the progress
             const progressIncrement = delta / (1000 * this.duration);
@@ -98,11 +103,12 @@ export class Transitioner extends GameObject {
             this._going = true;
     }
 
-    transition(callbackMid, callbackDone, pauseMid=false) {
+    transition(callbackMid, callbackDone, transitionType=this._basicTransition, pauseMid=false) {
         /*
         Does the transition.
         callbackMid will be called after the transition have covered the whole screen.
         callbackDone will be called after the whole transiion is done.
+        transitionType dictates which transition will this object use.
         pauseMid if true, transition will be paused when it has reached the mid point. resume() can be called to continue.
         */
 
@@ -113,6 +119,7 @@ export class Transitioner extends GameObject {
             this._callbackMid = callbackMid;
             this._callbackDone = callbackDone;
             this._pauseMid = pauseMid;
+            this._transitionType = transitionType;
         }
     }
 }

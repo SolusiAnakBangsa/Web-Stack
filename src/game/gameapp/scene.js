@@ -52,6 +52,10 @@ export class Scene {
         }
     }
 
+    dataListener(payload) {
+        // Data listener. Will do events inside here when a new data has been received from phone.
+    }
+
     loopCode(delta) {
         // Override this
         // You put the actual code that you want to loop of the scene here.
