@@ -1,5 +1,7 @@
 import { GameObject } from "./objects/gameobject";
 
+const VSLERP = (x) => Math.pow(x, 5);
+
 export class Transitioner extends GameObject {
 
     constructor(pixiRef, duration) {
@@ -22,6 +24,20 @@ export class Transitioner extends GameObject {
 
         this._pauseMid;
 
+        // vs attributes
+        this._vsGoing = false;
+
+        this._vsDuration = 3;
+        this._vsDurationCounter = 0;
+
+        this._vsStaticDuration = 5;
+        this._vsStaticDurationCounter = 0;
+
+        this.fightMan = new PIXI.spine.Spine(pixiRef.resources.fightman.spineData);
+
+        this.enemySprite = new PIXI.Sprite(pixiRef.resources.enemypack.texture);
+        this.enemySprite.anchor.set(0, 1);
+
         this.setup(pixiRef);
     }
 
@@ -40,8 +56,85 @@ export class Transitioner extends GameObject {
         this.transitionGraphic.endFill();
     }
 
-    _vsTransition() {
+    _vsInit() {
+        this._vsGoing = true; // TODO: This jank, fix
+        this.fightMan.scale.set(6);
+        this.fightMan.state.setAnimation(0, 'idle', true);
+        this.fightMan.x = -300;
 
+        this.enemySprite.scale.set(3);
+        this.enemySprite.x = this.app.screen.width;
+        this.mainContainer.addChild(this.fightMan);
+        this.mainContainer.addChild(this.enemySprite);
+    }
+
+    _vsTransition(delta) {
+        const swidth = this.app.screen.width;
+        const sheight = this.app.screen.height;
+
+        this.transitionGraphic.clear();
+
+        this.transitionGraphic.beginFill(0xF77D08);
+        this.transitionGraphic.drawRect(
+            this._goingDirection ? 0 : swidth * (1-VSLERP(this._progress)),
+            0,
+            swidth * VSLERP(this._progress),
+            sheight
+        );
+        
+        // 2 different durations are used here.
+        // normal duration and static duration.
+        // When progress mid, then add the vs duration counter.
+        if (this._progress >= 1 && this._vsGoing) {
+            // Cap progress at one point five.
+            this._progress = 1.5;
+
+            // Get the ratio
+            let tProgress = this._vsDurationCounter/this._vsDuration;
+
+            // Add the vs duration counter
+            if (tProgress < 0.5 || this._vsStaticDurationCounter > this._vsStaticDuration) {
+                this._vsDurationCounter += delta/1000;
+            } else if (tProgress >= 0.5) {
+                // Add the vs duration static counter
+                this._vsStaticDurationCounter += delta/1000;
+            }
+
+            tProgress = tProgress > 0.5 ? (1-tProgress)*2 : tProgress*2;
+
+            // Draws the frames
+            const path1 = [
+                0, sheight/2,
+                swidth/2*VSLERP(tProgress)*0.8, sheight/2,
+                swidth/2*VSLERP(tProgress)*1.2, sheight,
+                0, sheight,
+            ];
+            const path2 = [
+                swidth, 0,
+                swidth-swidth/2*VSLERP(tProgress)*1.2, 0,
+                swidth-swidth/2*VSLERP(tProgress)*0.8, sheight/2,
+                swidth, sheight/2,
+            ];
+            this.transitionGraphic.beginFill(0xFFFFFF);
+            this.transitionGraphic.drawPolygon(path1);
+            this.transitionGraphic.drawPolygon(path2);
+
+            // Man positioning
+            this.fightMan.x = swidth/2*VSLERP(tProgress)*0.65 - 200;
+            this.enemySprite.x = swidth - swidth/2*VSLERP(tProgress);
+            
+            // When the whole transition is done, this will be done.
+            if (this._vsDurationCounter >= this._vsDuration) {
+                this._vsDurationCounter = 0;
+                this._vsStaticDurationCounter = 0;
+                this._vsGoing = false;
+
+                // Remove the sprites
+                this.mainContainer.removeChild(this.fightMan);
+                this.mainContainer.removeChild(this.enemySprite);
+            }
+        }
+        this.transitionGraphic.endFill();
     }
 
     setup(pixiRef) {
@@ -58,7 +151,7 @@ export class Transitioner extends GameObject {
         // If the transition is ongoing, do some stuff.
         if (this._going) {
             // Redraw transition object
-            this._transitionType();
+            this._transitionType(delta);
 
             // Increment for the progress
             const progressIncrement = delta / (1000 * this.duration);
@@ -94,7 +187,8 @@ export class Transitioner extends GameObject {
     }
 
     onResize() {
-        
+        this.fightMan.y = this.app.screen.height+300;
+        this.enemySprite.y = this.app.screen.height/2 + 200;
     }
 
     resume() {
@@ -120,6 +214,10 @@ export class Transitioner extends GameObject {
             this._callbackDone = callbackDone;
             this._pauseMid = pauseMid;
             this._transitionType = transitionType;
+
+            if (transitionType === this._vsTransition) {
+                this._vsInit();
+            }
         }
     }
 }

@@ -20,7 +20,7 @@ export class GymScene extends Scene {
     startNewWorkout(workouts) {
         // Set a new workout routine that will be done in this stage.
         this.workouts = workouts;
-        this.workoutIndex = 2;
+        this.workoutIndex = 0;
         
         this.nextWorkout();
     }

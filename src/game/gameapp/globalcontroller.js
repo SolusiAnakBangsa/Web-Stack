@@ -100,7 +100,8 @@ export class GlobalController {
             },
             () => {
                 console.log("Transition done.");
-            });
+            },
+            this.transitioner._vsTransition);
     }
 
     goToGym(workouts) {
