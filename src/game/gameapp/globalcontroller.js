@@ -93,7 +93,16 @@ export class GlobalController {
                 // Remove the transitioner from current scene
                 this.appObj.scene.delObj(this.transitioner);
 
-                this.goToGym(workouts);
+                switch (this.currentWorkout) {
+                    case Workouts.JOG:
+                        this.goToGym(workouts);
+                        this.currentWorkout = Workouts.GYM;
+                        break;
+                    case Workouts.GYM:
+                        this.goToRun();
+                        this.currentWorkout = Workouts.JOG;
+                        break;
+                }
 
                 // Add the transitioner to the next scene.
                 this.appObj.scene.addObj(this.transitioner);
@@ -101,13 +110,14 @@ export class GlobalController {
             () => {
                 console.log("Transition done.");
             },
-            this.transitioner._vsTransition);
+            this.currentWorkout == Workouts.JOG ? this.transitioner._vsTransition : this.transitioner._basicTransition
+        );
     }
 
     goToGym(workouts) {
         this.paceArray = Array(RUNARRLEN).fill(0);
 
-        this.currentWorkout = Workouts.GYM;
+        this.currentWorkout = Workouts.JOG;
 
         // Send the workout data to the gym
         this.gymScene.startNewWorkout(workouts);
