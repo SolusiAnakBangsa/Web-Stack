@@ -1,6 +1,7 @@
 import { GameObject } from "./objects/gameobject";
 
-const VSLERP = (x) => Math.pow(x, 5);
+const QLERP = (x) => Math.pow(x, 5);
+const SLERP = (x) => Math.pow(x, 2);
 
 export class Transitioner extends GameObject {
 
@@ -34,9 +35,28 @@ export class Transitioner extends GameObject {
         this._vsStaticDurationCounter = 0;
 
         this.fightMan = new PIXI.spine.Spine(pixiRef.resources.fightman.spineData);
+        this.fightMan.state.timeScale = 0.1
 
         this.enemySprite = new PIXI.Sprite(pixiRef.resources.enemypack.texture);
         this.enemySprite.anchor.set(0, 1);
+
+        const vsStyle = new PIXI.TextStyle({
+            dropShadow: true,
+            dropShadowAngle: 0.7,
+            dropShadowDistance: 9,
+            fill: "white",
+            fontFamily: "Times New Roman",
+            fontSize: 320,
+            fontStyle: "italic",
+            fontWeight: "bold",
+            letterSpacing: 18,
+            lineHeight: 36,
+            padding: 32,
+            strokeThickness: 10
+        });
+        this.vsText = new PIXI.Text("V\n S", vsStyle);
+        this.vsText.alpha = 0;
+        this.vsText.anchor.set(0.5, 0.5);
 
         this.setup(pixiRef);
     }
@@ -66,6 +86,7 @@ export class Transitioner extends GameObject {
         this.enemySprite.x = this.app.screen.width;
         this.mainContainer.addChild(this.fightMan);
         this.mainContainer.addChild(this.enemySprite);
+        this.mainContainer.addChild(this.vsText);
     }
 
     _vsTransition(delta) {
@@ -74,11 +95,12 @@ export class Transitioner extends GameObject {
 
         this.transitionGraphic.clear();
 
+        // Sliding main transition
         this.transitionGraphic.beginFill(0xF77D08);
         this.transitionGraphic.drawRect(
-            this._goingDirection ? 0 : swidth * (1-VSLERP(this._progress)),
+            this._goingDirection ? 0 : swidth * (1-QLERP(this._progress)),
             0,
-            swidth * VSLERP(this._progress),
+            swidth * QLERP(this._progress),
             sheight
         );
         
@@ -105,14 +127,14 @@ export class Transitioner extends GameObject {
             // Draws the frames
             const path1 = [
                 0, sheight/2,
-                swidth/2*VSLERP(tProgress)*0.8, sheight/2,
-                swidth/2*VSLERP(tProgress)*1.2, sheight,
+                swidth/2*SLERP(tProgress)*0.8, sheight/2,
+                swidth/2*QLERP(tProgress)*1.2, sheight,
                 0, sheight,
             ];
             const path2 = [
                 swidth, 0,
-                swidth-swidth/2*VSLERP(tProgress)*1.2, 0,
-                swidth-swidth/2*VSLERP(tProgress)*0.8, sheight/2,
+                swidth-swidth/2*QLERP(tProgress)*1.2, 0,
+                swidth-swidth/2*SLERP(tProgress)*0.8, sheight/2,
                 swidth, sheight/2,
             ];
             this.transitionGraphic.beginFill(0xFFFFFF);
@@ -120,8 +142,11 @@ export class Transitioner extends GameObject {
             this.transitionGraphic.drawPolygon(path2);
 
             // Man positioning
-            this.fightMan.x = swidth/2*VSLERP(tProgress)*0.65 - 200;
-            this.enemySprite.x = swidth - swidth/2*VSLERP(tProgress);
+            this.fightMan.x = swidth/2*QLERP(tProgress)*0.65 - 200;
+            this.enemySprite.x = swidth - swidth/2*QLERP(tProgress);
+
+            // Text opacity
+            this.vsText.alpha = QLERP(tProgress);
             
             // When the whole transition is done, this will be done.
             if (this._vsDurationCounter >= this._vsDuration) {
@@ -132,6 +157,7 @@ export class Transitioner extends GameObject {
                 // Remove the sprites
                 this.mainContainer.removeChild(this.fightMan);
                 this.mainContainer.removeChild(this.enemySprite);
+                this.mainContainer.removeChild(this.vsText);
             }
         }
         this.transitionGraphic.endFill();
@@ -189,6 +215,7 @@ export class Transitioner extends GameObject {
     onResize() {
         this.fightMan.y = this.app.screen.height+300;
         this.enemySprite.y = this.app.screen.height/2 + 200;
+        this.vsText.position.set(this.app.screen.width/2, this.app.screen.height/2);
     }
 
     resume() {
