@@ -1,6 +1,6 @@
 
 absogus.png
-size: 63,50
+size: 64,64
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none

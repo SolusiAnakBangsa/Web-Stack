@@ -1,6 +1,6 @@
 
 legolus.png
-size: 121,81
+size: 128,128
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
