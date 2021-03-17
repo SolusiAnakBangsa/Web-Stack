@@ -42,6 +42,9 @@ export class GymScene extends Scene {
         // This should reset every value, so that the gym cycle can begin anew.
         this.workouts = workouts;
         this.workoutIndex = -1;
+
+        // Randomize enemy to spawn.
+        this.fightUI.changeEnemy();
         
         this.nextWorkout();
         // this._addOne(); // Testing Purposes

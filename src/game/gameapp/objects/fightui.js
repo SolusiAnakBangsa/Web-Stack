@@ -31,11 +31,19 @@ export class FightUI extends GameObject {
         this.workoutText;
         this.workoutCounter;
 
+        this.enemyList = [
+            {name: "Legolus", res: pixiRef.resources.legolus},
+            {name: "Absogus", res: pixiRef.resources.absogus},
+            {name: "Armogus", res: pixiRef.resources.armogus},
+        ];
+
         this.setup(pixiRef);
     }
 
     setup(pixiRef) {
         super.setup(pixiRef);
+
+        this.enemyCont = new PIXI.Container();
 
         // Enemy sprite
         this.enemy = new PIXI.spine.Spine(pixiRef.resources.legolus.spineData);
@@ -104,16 +112,38 @@ export class FightUI extends GameObject {
         // Graphics for displaying counter
         this.workoutGraphic = new PIXI.Graphics();
 
+        this.enemyCont.addChild(this.enemy);
+
         this.textContainer.addChild(this.workoutGraphic);
         this.textContainer.addChild(this.workoutText);
         this.textContainer.addChild(this.workoutCounter);
         this.mainContainer.addChild(this.nameText);
-        this.mainContainer.addChild(this.enemy);
+        this.mainContainer.addChild(this.enemyCont);
         this.mainContainer.addChild(this.enemyProgressBar);
         this.mainContainer.addChild(this.enemyHealth);
         this.mainContainer.addChild(this.textContainer);
 
         this._redrawEnemyHealth();
+    }
+
+    changeEnemy() {
+        const en = this.enemyList[Math.floor(Math.random()*this.enemyList.length)];
+        this.nameText.text = en.name;
+
+        // Remove from main container.
+        this.enemyCont.removeChild(this.enemy);
+        
+        // FIX: Kinda jank, maybe can just change the spinedata in the enemy object.
+        // Enemy sprite
+        this.enemy = new PIXI.spine.Spine(en.res.spineData);
+        this.enemy.scale.set(4);
+        this.enemy.state.setAnimation(0, 'idle', true);
+    
+        // Setup the shadows
+        this.enemy.filters = [this.enemyShadow];
+        this.onResize();
+
+        this.enemyCont.addChild(this.enemy);
     }
 
     _redrawEnemyHealth() {
