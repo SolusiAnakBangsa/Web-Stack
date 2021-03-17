@@ -6,8 +6,6 @@ import { Pace } from "./../objects/pace";
 import { Countdown } from "./../objects/countdown";
 import { peer } from "./../../../script/webrtc";
 
-import { Transitioner } from "./../transitioner";
-
 const SPEEDRANGE = [100, 700];
 
 export class RunScene extends Scene {
@@ -56,14 +54,11 @@ export class RunScene extends Scene {
             peer.connection.sendData({"status" : "startgame"});
         };
 
-        // this.transitioner = new Transitioner(pixiRef, 3);
-
         this.addObj(this.floor);
         this.addObj(this.sky);
         this.addObj(this.runman);
         this.addObj(this.pace);
         this.addObj(this.count);
-        // this.addObj(this.transitioner);
         this.setAbove();
     }
 
