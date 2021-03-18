@@ -1,20 +1,7 @@
 import { peer } from "./../../script/webrtc";
-import { clamp } from "./../../script/util";
 import { RunScene } from "./scenes/runscene";
 import { GymScene } from "./scenes/gymscene";
 import { Transitioner } from "./transitioner";
-
-const RUNPOLL = 250; // Time in ms to update the running animation.
-
-// Time in ms to retain the running pace.
-// If the running pace is 100 and the user stops running, the pace will be 0 in RUNRETAIN ms.
-const RUNRETAIN = 5000;
-
-// Baseline for 100 Pace.
-const MAXPACE = 4 // (4 steps/s) jj baseline
-
-// Length of the buffer running
-const RUNARRLEN = (RUNRETAIN/RUNPOLL) << 0;
 
 // Static enum to store all the workouts.
 let Workouts = Object.freeze({
@@ -25,9 +12,9 @@ let Workouts = Object.freeze({
 
 const workouts = [
     {task: "Push Up", freq: 12},
-    // {task: "Sit Up", freq: 5},
-    // // {task: "Jumping Jack", freq: 6},
-    // // {task: "Reclined Rhomboid Squeeze", freq: 6},
+    {task: "Sit Up", freq: 5},
+    {task: "Jumping Jack", freq: 6},
+    {task: "Reclined Rhomboid Squeeze", freq: 6},
 ];
 
 export class GlobalController {
@@ -43,41 +30,12 @@ export class GlobalController {
 
         console.log(payload);
 
-        if ("exerciseType" in payload) {
-            if (payload.exerciseType == "jog" && this.currentWorkout == Workouts.JOG) {
-                if (this.lastRunObject === undefined) {
-                    this.lastRunObject = {step: payload.repAmount, time: payload.time}; // Set
-                    return;
-                }
-                // Step per second in the data.
-                const dataDuration = (payload.time - this.lastRunObject.time); // Duration of data
-                const stepTimeframe = (payload.repAmount - this.lastRunObject.step) * (dataDuration/RUNPOLL) * 100;
-    
-                // this.runQueue += clamp((stepPerS/MAXPACE) * 100 * dataDuration/RUNRETAIN, 0, 100);
-                this.runQueue += stepTimeframe/MAXPACE;
-
-                this.lastRunObject = {step: payload.repAmount, time: payload.time}; // Set before.
-
-                // Update steps in UI object
-                this.appObj.scene.pace.setSteps(payload.repAmount);
-            }
-        }
-
         // Do dataListener of current scene.
         this.appObj.scene.dataListener(payload);
     }
 
     setup() {
-
-        // **** Objects to store workout data
         this.currentWorkout = Workouts.JOG;
-        this.runCounter = 0; // Stored to keep track of poll in time.
-        this.runQueue = 0; // Queue to be added to target pace in the loop event.
-        this.paceArrayCounter = 0; // Helper variable to count the head in the array.
-        this.paceArray = Array(RUNARRLEN).fill(0); // The size of this array is RUNPOLL/RUNRETAIN
-
-        this.lastRunObject = undefined; // To help with difference.
-        // ******
 
         // Register _dataListener
         peer.connection.addReceiveHandler(this._dataListener.bind(this));
@@ -116,8 +74,6 @@ export class GlobalController {
     }
 
     goToGym(workouts) {
-        this.paceArray = Array(RUNARRLEN).fill(0);
-
         // Send the workout data to the gym
         this.gymScene.startNewWorkout(workouts);
         this.currentWorkout = Workouts.GYM;
@@ -127,8 +83,6 @@ export class GlobalController {
     }
 
     goToRun() {
-        // Reset run array
-        this.paceArray = Array(RUNARRLEN).fill(0);
         this.appObj.setScene(this.runScene);
         this.currentWorkout = Workouts.JOG;
     }
@@ -159,29 +113,6 @@ export class GlobalController {
     }
 
     loop(delta) {
-        switch (this.currentWorkout) {
-            case Workouts.JOG:
-                this.runCounter += delta;
-
-                // Update the running animation.
-                if (this.runCounter > RUNPOLL) {
-
-                    // Update the array.
-                    this.paceArray[this.paceArrayCounter] = this.runQueue;
-                    this.paceArrayCounter = this.paceArrayCounter + 1 < RUNARRLEN ? this.paceArrayCounter + 1 : 0; // Add to the counter.
-                    this.runQueue = 0; // Reset run queue
-
-                    // Set the running speed to be the array average.
-                    var avg = 0;
-                    for (var i = 0; i < RUNARRLEN; i++) {
-                        avg += this.paceArray[i];
-                    }
-                    avg /= RUNARRLEN;
-                    this.appObj.scene.setSpeed(clamp(avg, 0, 100)); // Set the speed of the scene.
-                    this.runCounter -= RUNPOLL;
-                }
-                break;
-        }
     }
 
     onResize() {

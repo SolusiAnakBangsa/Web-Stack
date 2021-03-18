@@ -77,6 +77,10 @@ export class Scene {
         // You put the actual code to resize of the scene here.
     }
 
+    switchCallback() {
+        // This will be called once the scene is being switched
+    }
+
     onResize() {
         // This does not need to be inherited.
         if (this.active) {

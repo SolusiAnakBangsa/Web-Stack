@@ -5,7 +5,21 @@ import { RunMan } from "./../objects/runningman";
 import { Pace } from "./../objects/pace";
 import { Countdown } from "./../objects/countdown";
 import { peer } from "./../../../script/webrtc";
+import { clamp } from "./../../../script/util";
 
+const RUNPOLL = 250; // Time in ms to update the running animation.
+
+// Time in ms to retain the running pace.
+// If the running pace is 100 and the user stops running, the pace will be 0 in RUNRETAIN ms.
+const RUNRETAIN = 5000;
+
+// Baseline for 100 Pace.
+const MAXPACE = 4 // (4 steps/s) jj baseline
+
+// Length of the buffer running
+const RUNARRLEN = (RUNRETAIN/RUNPOLL) << 0;
+
+// Speed range running speed
 const SPEEDRANGE = [100, 700];
 
 export class RunScene extends Scene {
@@ -13,6 +27,15 @@ export class RunScene extends Scene {
     constructor(pixiRef, controller) {
         super(pixiRef, controller);
         // The formula of runSpeed to animSpeed is runSpeed/2400
+
+        // **** Objects to store workout data
+        this.runCounter = 0; // Stored to keep track of poll in time.
+        this.runQueue = 0; // Queue to be added to target pace in the loop event.
+        this.paceArrayCounter = 0; // Helper variable to count the head in the array.
+        this.paceArray = Array(RUNARRLEN).fill(0); // The size of this array is RUNPOLL/RUNRETAIN
+
+        this.lastRunObject = undefined; // To help with difference.
+        // ******
 
         this.runSpeed = 0; // In pixel / second
         this.runSpeedToAnimSpeed = function () { return this.runSpeed/2700 };
@@ -87,6 +110,27 @@ export class RunScene extends Scene {
                 this.animationDone();
             }
         }
+
+        // Run code
+        this.runCounter += delta;
+
+        // Update the running animation.
+        if (this.runCounter > RUNPOLL) {
+
+            // Update the array.
+            this.paceArray[this.paceArrayCounter] = this.runQueue;
+            this.paceArrayCounter = this.paceArrayCounter + 1 < RUNARRLEN ? this.paceArrayCounter + 1 : 0; // Add to the counter.
+            this.runQueue = 0; // Reset run queue
+
+            // Set the running speed to be the array average.
+            var avg = 0;
+            for (var i = 0; i < RUNARRLEN; i++) {
+                avg += this.paceArray[i];
+            }
+            avg /= RUNARRLEN;
+            this.setSpeed(clamp(avg, 0, 100)); // Set the speed of the scene.
+            this.runCounter -= RUNPOLL;
+        }
     }
 
     start() {
@@ -111,6 +155,33 @@ export class RunScene extends Scene {
             this.runSpeed = 0;
             this.runman.speed = 0;
             this.pace.pace = 0;
+        }
+    }
+
+    switchCallback() {
+        // Reset the pace array.
+        this.paceArray = Array(RUNARRLEN).fill(0);
+    }
+
+    dataListener(payload) {
+        if ("exerciseType" in payload) {
+            if (payload.exerciseType == "jog" && this.currentWorkout == Workouts.JOG) {
+                if (this.lastRunObject === undefined) {
+                    this.lastRunObject = {step: payload.repAmount, time: payload.time}; // Set
+                    return;
+                }
+                // Step per second in the data.
+                const dataDuration = (payload.time - this.lastRunObject.time); // Duration of data
+                const stepTimeframe = (payload.repAmount - this.lastRunObject.step) * (dataDuration/RUNPOLL) * 100;
+    
+                // this.runQueue += clamp((stepPerS/MAXPACE) * 100 * dataDuration/RUNRETAIN, 0, 100);
+                this.runQueue += stepTimeframe/MAXPACE;
+
+                this.lastRunObject = {step: payload.repAmount, time: payload.time}; // Set before.
+
+                // Update steps in UI object
+                this.appObj.scene.pace.setSteps(payload.repAmount);
+            }
         }
     }
 

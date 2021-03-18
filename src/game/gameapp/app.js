@@ -70,6 +70,10 @@ export class GameApp {
 
     setScene(scene) {
         if (this.scene == scene) return;
+
+        // First, call a callback in the scene if exists.
+        scene.switchCallback();
+
         // Remove previous scene from drawing
         if (this.scene !== undefined) {
             this.app.stage.removeChild(this.scene.container);

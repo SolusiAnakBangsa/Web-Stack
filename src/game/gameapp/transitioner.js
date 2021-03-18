@@ -103,7 +103,7 @@ export class Transitioner extends GameObject {
         this.transitionGraphic.drawRect(
             this._goingDirection ? 0 : swidth * (1-QLERP(this._progress)),
             0,
-            swidth * QLERP(this._progress),
+            swidth * QLERP(this._progress) * 1.2,
             sheight
         );
         
