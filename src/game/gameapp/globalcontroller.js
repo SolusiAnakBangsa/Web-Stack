@@ -24,10 +24,10 @@ let Workouts = Object.freeze({
 });
 
 const workouts = [
-    {task: "Push Up", freq: 5},
-    {task: "Sit Up", freq: 5},
-    {task: "Jumping Jack", freq: 6},
-    {task: "Reclined Rhomboid Squeeze", freq: 6},
+    {task: "Push Up", freq: 12},
+    // {task: "Sit Up", freq: 5},
+    // // {task: "Jumping Jack", freq: 6},
+    // // {task: "Reclined Rhomboid Squeeze", freq: 6},
 ];
 
 export class GlobalController {
@@ -40,6 +40,8 @@ export class GlobalController {
     _dataListener(payload) {
         // This function is used as what will be executed when the peer
         // Receives a data. This function will determine what to do with the data.
+
+        console.log(payload);
 
         if ("exerciseType" in payload) {
             if (payload.exerciseType == "jog" && this.currentWorkout == Workouts.JOG) {
@@ -82,7 +84,6 @@ export class GlobalController {
 
         // Set up simple mouse clicker
         this.appObj.app.stage.on('pointerup', this._pointerUp.bind(this));
-        // this.goToGym(workouts);
     }
 
     _pointerUp(event) {
@@ -141,8 +142,10 @@ export class GlobalController {
         this.runScene = new RunScene(this.pixiRef, this);
         this.gymScene = new GymScene(this.pixiRef, this);
 
+        // Add callback to be able to transition back from gym to run
+        this.gymScene.doneCallback = () => {this._toggleScenes()};
+
         this.appObj.setScene(this.runScene);
-        // this.appObj.setScene(this.gymScene);
 
         // Add the transitioner to the current scene
         // IMPORTANT NOTE: You can't add objects to two pixi containers. If done, then will not display.

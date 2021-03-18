@@ -66,18 +66,21 @@ export class Transitioner extends GameObject {
         this.transitionGraphic.clear();
 
         this.transitionGraphic.beginFill(0xF77D08);
+
+        this._goingDirection;
+
         this.transitionGraphic.drawRect(
-            this.app.screen.width/2 * (1-this._progress*1.2),
-            this.app.screen.height/2 * (1-this._progress*1.2),
-            this.app.screen.width * this._progress * 1.2,
-            this.app.screen.height * this._progress * 1.2
+            0,
+            this._goingDirection ? 0 : this.app.screen.height * (1 - QLERP(this._progress)),
+            this.app.screen.width,
+            this.app.screen.height * QLERP(this._progress) * 1.2
         );
 
         this.transitionGraphic.endFill();
     }
 
     _vsInit() {
-        this._vsGoing = true; // TODO: This jank, fix
+        this._vsGoing = true;
         this.fightMan.scale.set(6);
         this.fightMan.state.setAnimation(0, 'Idle', true);
         this.fightMan.x = -300;

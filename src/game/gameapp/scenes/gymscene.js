@@ -5,6 +5,7 @@ import { FightUI } from "./../objects/fightui";
 import { Countdown } from "./../objects/countdown";
 
 const RESTSECONDS = 15;
+const CALLBACKDELAY = 5000; // Callback delay to do doneCallback
 
 export class GymScene extends Scene {
     constructor(pixiRef, controller) {
@@ -15,6 +16,9 @@ export class GymScene extends Scene {
 
         // The reps for the workout. Used for the workout progress bar
         this.currentReps = 0;
+
+        // When the gym activity is done, callback will be run, after CALLBACKDELAY.
+        this.doneCallback;
 
         // Current Workout index
         this.workoutIndex;
@@ -101,6 +105,9 @@ export class GymScene extends Scene {
             this.fightUI.setWorkoutText("VICTORY!");
             this.fightUI.workoutP = 1;
             this.fightUI._redrawWorkoutBar();
+
+            // Do callback if done.
+            if (this.doneCallback !== undefined) setTimeout(this.doneCallback, CALLBACKDELAY);
         }
 
         // Update enemy health
