@@ -2,7 +2,7 @@ import { GameObject } from "./gameobject";
 
 export class Countdown extends GameObject {
 
-    constructor(pixiRef, seconds, callback=null) {
+    constructor(pixiRef, seconds=null, callback=null) {
         super(pixiRef);
 
         this.counter = seconds + 0.999;
@@ -31,6 +31,8 @@ export class Countdown extends GameObject {
 
     setup(pixiRef) {
         this.mainContainer.anchor.set(0.5, 0.5);
+
+        this.onResize();
     }
 
     loop(delta) {
@@ -49,5 +51,13 @@ export class Countdown extends GameObject {
 
     onResize() {
         this.mainContainer.position.set(this.app.screen.width/2, this.app.screen.height/2);
+    }
+
+    setSeconds(seconds) {
+        this.counter = seconds + 0.999;
+    }
+
+    setCallback(callback) {
+        this.callback = callback;
     }
 }

@@ -25,9 +25,9 @@ let Workouts = Object.freeze({
 
 const workouts = [
     {task: "Push Up", freq: 5},
-    // {task: "Sit Up", freq: 5},
-    // {task: "Jumping Jack", freq: 6},
-    // {task: "Reclined Rhomboid Squeeze", freq: 6},
+    {task: "Sit Up", freq: 5},
+    {task: "Jumping Jack", freq: 6},
+    {task: "Reclined Rhomboid Squeeze", freq: 6},
 ];
 
 export class GlobalController {
@@ -82,7 +82,7 @@ export class GlobalController {
 
         // Set up simple mouse clicker
         this.appObj.app.stage.on('pointerup', this._pointerUp.bind(this));
-        this.goToGym(workouts);
+        // this.goToGym(workouts);
     }
 
     _pointerUp(event) {
