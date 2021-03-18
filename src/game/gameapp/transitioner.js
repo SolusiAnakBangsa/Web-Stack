@@ -79,7 +79,7 @@ export class Transitioner extends GameObject {
     _vsInit() {
         this._vsGoing = true; // TODO: This jank, fix
         this.fightMan.scale.set(6);
-        this.fightMan.state.setAnimation(0, 'idle', true);
+        this.fightMan.state.setAnimation(0, 'Idle', true);
         this.fightMan.x = -300;
 
         this.enemySprite.scale.set(3);

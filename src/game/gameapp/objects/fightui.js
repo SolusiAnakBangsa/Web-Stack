@@ -48,7 +48,6 @@ export class FightUI extends GameObject {
         // Enemy sprite
         this.enemy = new PIXI.spine.Spine(pixiRef.resources.legolus.spineData);
         this.enemy.scale.set(4);
-        this.enemy.state.setAnimation(0, 'idle', true);
     
         // Setup the shadows
         this.enemyShadow = new ShadowShader([-0.6, -0.6], 0, 0.15);
@@ -138,6 +137,7 @@ export class FightUI extends GameObject {
         this.enemy = new PIXI.spine.Spine(en.res.spineData);
         this.enemy.scale.set(4);
         this.enemy.state.setAnimation(0, 'idle', true);
+        this.enemy.stateData.setMix('idle', 'fly', 0.2);
     
         // Setup the shadows
         this.enemy.filters = [this.enemyShadow];

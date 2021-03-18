@@ -3,8 +3,6 @@ import { FightFloor } from "./../objects/fightfloor";
 import { FightMan } from "./../objects/fightman";
 import { FightUI } from "./../objects/fightui";
 
-const WorkoutDictionary = {};
-
 export class GymScene extends Scene {
     constructor(pixiRef, controller) {
         super(pixiRef, controller);
@@ -25,6 +23,10 @@ export class GymScene extends Scene {
             const maxRep = this.workouts[this.workoutIndex].freq;
 
             if (this.currentReps < maxRep - 1) {
+                // Does rep animation
+                // TODO
+
+                // Increase the progress bar
                 this.currentReps++;
                 this.fightUI.workoutP = this.currentReps/maxRep;
                 this.fightUI.workoutCounter.text = maxRep - this.currentReps;
@@ -47,15 +49,15 @@ export class GymScene extends Scene {
         this.fightUI.changeEnemy();
         
         this.nextWorkout();
-        // this._addOne(); // Testing Purposes
+        this._addOne(); // Testing Purposes
     }
 
-    // _addOne() {
-    //     //  Testing Purposes
-    //     this._addOneRep();
-    //     console.log("Add one.");
-    //     setTimeout(this._addOne.bind(this), 2000);
-    // }
+    _addOne() {
+        //  Testing Purposes
+        this._addOneRep();
+        console.log("Add one.");
+        setTimeout(this._addOne.bind(this), 2000);
+    }
 
     nextWorkout() {
         // Skips to the next workout, and updates all the value.
@@ -66,11 +68,21 @@ export class GymScene extends Scene {
             this.workoutIndex++;
 
             if (this.workoutIndex < this.workouts.length) {
+                // Update the guy pose
+                this.fightMan.changePose(this.workouts[this.workoutIndex].task);
+
+                // Update the texts
                 this.fightUI.workoutCounter.text = this.workouts[this.workoutIndex].freq;
                 this.fightUI.workoutText.text = this.workouts[this.workoutIndex].task;
                 this.fightUI.workoutP = 0;
                 this.fightUI._redrawWorkoutBar();
             } else {
+                // Update to idle
+                this.fightMan.changePose('Idle');
+
+                // Obliterate the enemy
+                // TODO
+
                 // When all the workouts is done.
                 this.fightUI.workoutCounter.text = "✅";
                 this.fightUI.workoutText.text = "VICTORY!";
