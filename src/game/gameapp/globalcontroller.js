@@ -82,6 +82,7 @@ export class GlobalController {
 
         // Set up simple mouse clicker
         this.appObj.app.stage.on('pointerup', this._pointerUp.bind(this));
+        // this.goToGym(workouts);
     }
 
     _pointerUp(event) {
@@ -97,11 +98,9 @@ export class GlobalController {
                 switch (this.currentWorkout) {
                     case Workouts.JOG:
                         this.goToGym(workouts);
-                        this.currentWorkout = Workouts.GYM;
                         break;
                     case Workouts.GYM:
                         this.goToRun();
-                        this.currentWorkout = Workouts.JOG;
                         break;
                 }
 
@@ -118,10 +117,9 @@ export class GlobalController {
     goToGym(workouts) {
         this.paceArray = Array(RUNARRLEN).fill(0);
 
-        this.currentWorkout = Workouts.JOG;
-
         // Send the workout data to the gym
         this.gymScene.startNewWorkout(workouts);
+        this.currentWorkout = Workouts.GYM;
 
         // Set scene
         this.appObj.setScene(this.gymScene);
@@ -131,6 +129,7 @@ export class GlobalController {
         // Reset run array
         this.paceArray = Array(RUNARRLEN).fill(0);
         this.appObj.setScene(this.runScene);
+        this.currentWorkout = Workouts.JOG;
     }
 
     start(pixiRef) {

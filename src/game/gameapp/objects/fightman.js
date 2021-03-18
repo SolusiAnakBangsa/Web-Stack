@@ -9,6 +9,9 @@ export class FightMan extends GameObject {
     constructor(pixiRef) {
         super(pixiRef);
 
+        this.currentPose;
+        this.currentSprite;
+
         this.setup(pixiRef);
     }
 
@@ -20,6 +23,8 @@ export class FightMan extends GameObject {
 
         this.fightMan = new PIXI.spine.Spine(pixiRef.resources.fightman.spineData);
         this.fightMan2 = new PIXI.spine.Spine(pixiRef.resources.fightman2.spineData);
+
+        this.currentPose = this.fightMan;
 
         this.poseDictionary = {
             "Idle": this.fightMan,
@@ -49,7 +54,7 @@ export class FightMan extends GameObject {
         // this.fightMan.stateData.setMix('jump', 'walk', 0.4);
 
         // // play animation
-        this.fightMan.state.setAnimation(0, 'Idle', true);
+        this.fightMan.state.setAnimation(0, 'Idle', false);
 
         this.onResize();
     }
@@ -58,17 +63,22 @@ export class FightMan extends GameObject {
 
     }
 
+    repOnce() {
+        // Does rep animation once.
+        this.currentSprite.state.setAnimation(0, this.currentPose, false);
+    }
+
     changePose(pose) {
         // Clear the mainContainer
         this.mainContainer.removeChildren();
 
         // Get the corresponding sprite
-        const sprite = this.poseDictionary[pose];
+        this.currentSprite = this.poseDictionary[pose];
+        this.currentPose = pose.replace(/\s+/g, '');
 
         // Add the new fightman sprite
-        this.mainContainer.addChild(sprite);
-        console.log(pose.replace(/\s+/g, ''));
-        sprite.state.setAnimation(0, pose.replace(/\s+/g, ''), true);
+        this.mainContainer.addChild(this.currentSprite);
+        this.currentSprite.state.setAnimation(0, this.currentPose, false);
     }
 
     onResize() {

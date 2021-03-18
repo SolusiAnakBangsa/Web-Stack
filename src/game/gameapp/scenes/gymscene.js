@@ -24,7 +24,7 @@ export class GymScene extends Scene {
 
             if (this.currentReps < maxRep - 1) {
                 // Does rep animation
-                // TODO
+                this.fightMan.repOnce();
 
                 // Increase the progress bar
                 this.currentReps++;
