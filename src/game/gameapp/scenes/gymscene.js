@@ -49,7 +49,7 @@ export class GymScene extends Scene {
         this.fightUI.changeEnemy();
         
         this.nextWorkout();
-        this._addOne(); // Testing Purposes
+        // this._addOne(); // Testing Purposes
     }
 
     _addOne() {
@@ -73,7 +73,7 @@ export class GymScene extends Scene {
 
                 // Update the texts
                 this.fightUI.workoutCounter.text = this.workouts[this.workoutIndex].freq;
-                this.fightUI.workoutText.text = this.workouts[this.workoutIndex].task;
+                this.fightUI.setWorkoutText(this.workouts[this.workoutIndex].task);
                 this.fightUI.workoutP = 0;
                 this.fightUI._redrawWorkoutBar();
             } else {
@@ -85,7 +85,7 @@ export class GymScene extends Scene {
 
                 // When all the workouts is done.
                 this.fightUI.workoutCounter.text = "✅";
-                this.fightUI.workoutText.text = "VICTORY!";
+                this.fightUI.setWorkoutText("VICTORY!");
                 this.fightUI.workoutP = 1;
                 this.fightUI._redrawWorkoutBar();
             }

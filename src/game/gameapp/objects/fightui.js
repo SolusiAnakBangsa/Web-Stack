@@ -19,6 +19,8 @@ const ACTUALCOUNTERBARLENGTH = (app) => Math.min(COUNTERBARLENGTH, app.screen.wi
 const COUNTERBARYPOS = 52;
 const COUNTERBARPADDING = 4;
 
+const WORKOUTFONTSIZE = 80;
+
 export class FightUI extends GameObject {
 
     constructor(pixiRef) {
@@ -88,7 +90,7 @@ export class FightUI extends GameObject {
                 "#f46200"
             ],
             fontFamily: "\"Arial Black\", Gadget, sans-serif",
-            fontSize: 80,
+            fontSize: WORKOUTFONTSIZE,
             fontStyle: "italic",
             fontVariant: "small-caps",
             padding: 64,
@@ -123,6 +125,21 @@ export class FightUI extends GameObject {
         this.mainContainer.addChild(this.textContainer);
 
         this._redrawEnemyHealth();
+    }
+
+    setWorkoutText(text) {
+        this.workoutText.text = text;
+        // Scale them text to fit, if it's bigger than the counter bar length.
+        const textWidth = this.workoutText.width;
+        const targetWidth = ACTUALCOUNTERBARLENGTH(this.app) - 50;
+
+        if (textWidth > targetWidth) {
+            const ratio = targetWidth/textWidth;
+            // Scales the text by modyfing the fontSize
+            this.workoutStyle.fontSize = WORKOUTFONTSIZE*ratio;
+        } else {
+            this.workoutStyle.fontSize = WORKOUTFONTSIZE;
+        }
     }
 
     changeEnemy() {

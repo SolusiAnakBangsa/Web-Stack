@@ -49,11 +49,7 @@ export class FightMan extends GameObject {
         this.fightMan.scale.set(4);
         this.fightMan2.scale.set(4);
 
-        // // set up the mixes!
-        // this.fightMan.stateData.setMix('walk', 'jump', 0.2);
-        // this.fightMan.stateData.setMix('jump', 'walk', 0.4);
-
-        // // play animation
+        // play animation
         this.fightMan.state.setAnimation(0, 'Idle', false);
 
         this.onResize();
