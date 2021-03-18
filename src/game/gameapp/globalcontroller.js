@@ -24,10 +24,10 @@ let Workouts = Object.freeze({
 });
 
 const workouts = [
-    {task: "Push Up", freq: 12},
-    {task: "Sit Up", freq: 5},
-    {task: "Jumping Jack", freq: 6},
-    {task: "Reclined Rhomboid Squeeze", freq: 6},
+    {task: "Push Up", freq: 5},
+    // {task: "Sit Up", freq: 5},
+    // {task: "Jumping Jack", freq: 6},
+    // {task: "Reclined Rhomboid Squeeze", freq: 6},
 ];
 
 export class GlobalController {

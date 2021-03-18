@@ -33,6 +33,9 @@ export class FightUI extends GameObject {
         this.workoutText;
         this.workoutCounter;
 
+        this.enemyPosOffset = {x: 0, y: 0};
+        this.flying = false;
+
         this.enemyList = [
             {name: "Legolus", res: pixiRef.resources.legolus},
             {name: "Absogus", res: pixiRef.resources.absogus},
@@ -148,6 +151,10 @@ export class FightUI extends GameObject {
 
         // Remove from main container.
         this.enemyCont.removeChild(this.enemy);
+
+        // Reset enemy offset
+        this.enemyPosOffset = {x: 0, y: 0};
+        this.flying = false;
         
         // FIX: Kinda jank, maybe can just change the spinedata in the enemy object.
         // Enemy sprite
@@ -161,6 +168,12 @@ export class FightUI extends GameObject {
         this.onResize();
 
         this.enemyCont.addChild(this.enemy);
+    }
+
+    flyEnemy() {
+        // Knock enemy to the right.
+        this.flying = true;
+        this.enemy.state.setAnimation(0, 'fly', true, 0);
     }
 
     _redrawEnemyHealth() {
@@ -235,7 +248,16 @@ export class FightUI extends GameObject {
     }
 
     loop(delta) {
-
+        const speed = 20;
+        if (this.flying) {
+            if (this.enemyPosOffset.x < 1000) {
+                this.enemyPosOffset.x += speed;
+                this.enemyPosOffset.y -= speed/2;
+                this.enemy.x += speed;
+                this.enemy.y -= speed/2;
+                this.enemyShadow.uniforms.floorY += speed/2;
+            }
+        }
     }
 
     onResize() {
@@ -262,10 +284,10 @@ export class FightUI extends GameObject {
         );
 
         this.enemy.position.set(
-            this.app.screen.width - ENEMYOFFSETX,
-            this.app.screen.height - ENEMYOFFSETY,
+            this.app.screen.width - ENEMYOFFSETX + this.enemyPosOffset.x,
+            this.app.screen.height - ENEMYOFFSETY + this.enemyPosOffset.y,
         );
-        this.enemyShadow.uniforms.floorY = this.enemy.y;
+        this.enemyShadow.uniforms.floorY = this.enemy.y + this.enemyPosOffset.y;
 
         this._redrawEnemyHealth();
         this._redrawWorkoutBar();

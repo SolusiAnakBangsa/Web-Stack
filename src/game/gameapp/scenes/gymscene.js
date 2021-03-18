@@ -49,7 +49,7 @@ export class GymScene extends Scene {
         this.fightUI.changeEnemy();
         
         this.nextWorkout();
-        // this._addOne(); // Testing Purposes
+        this._addOne(); // Testing Purposes
     }
 
     _addOne() {
@@ -81,7 +81,7 @@ export class GymScene extends Scene {
                 this.fightMan.changePose('Idle');
 
                 // Obliterate the enemy
-                // TODO
+                this.fightUI.flyEnemy();
 
                 // When all the workouts is done.
                 this.fightUI.workoutCounter.text = "✅";
