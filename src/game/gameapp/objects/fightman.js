@@ -64,7 +64,7 @@ export class FightMan extends GameObject {
         this.currentSprite.state.setAnimation(0, this.currentPose, false);
     }
 
-    changePose(pose) {
+    changePose(pose, loop) {
         // Clear the mainContainer
         this.mainContainer.removeChildren();
 
@@ -74,7 +74,7 @@ export class FightMan extends GameObject {
 
         // Add the new fightman sprite
         this.mainContainer.addChild(this.currentSprite);
-        this.currentSprite.state.setAnimation(0, this.currentPose, false);
+        this.currentSprite.state.setAnimation(0, this.currentPose, loop);
     }
 
     onResize() {

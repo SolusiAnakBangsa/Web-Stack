@@ -250,12 +250,14 @@ export class FightUI extends GameObject {
     loop(delta) {
         const speed = 20;
         if (this.flying) {
-            if (this.enemyPosOffset.x < 1000) {
-                this.enemyPosOffset.x += speed;
-                this.enemyPosOffset.y -= speed/2;
-                this.enemy.x += speed;
-                this.enemy.y -= speed/2;
-                this.enemyShadow.uniforms.floorY += speed/2;
+            this.enemyPosOffset.x += speed;
+            this.enemyPosOffset.y -= speed/2;
+            this.enemy.x += speed;
+            this.enemy.y -= speed/2;
+            this.enemyShadow.uniforms.floorY += speed/2;
+
+            if (this.enemyPosOffset.x > 1000) {
+                this.flying = false;    
             }
         }
     }

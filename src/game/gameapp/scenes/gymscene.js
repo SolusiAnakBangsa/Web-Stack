@@ -69,7 +69,7 @@ export class GymScene extends Scene {
 
             if (this.workoutIndex < this.workouts.length) {
                 // Update the guy pose
-                this.fightMan.changePose(this.workouts[this.workoutIndex].task);
+                this.fightMan.changePose(this.workouts[this.workoutIndex].task, false);
 
                 // Update the texts
                 this.fightUI.workoutCounter.text = this.workouts[this.workoutIndex].freq;
@@ -78,7 +78,7 @@ export class GymScene extends Scene {
                 this.fightUI._redrawWorkoutBar();
             } else {
                 // Update to idle
-                this.fightMan.changePose('Idle');
+                this.fightMan.changePose('Idle', true);
 
                 // Obliterate the enemy
                 this.fightUI.flyEnemy();
