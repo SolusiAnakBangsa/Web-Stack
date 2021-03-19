@@ -2,6 +2,7 @@ import { peer } from "./../../script/webrtc";
 import { RunScene } from "./scenes/runscene";
 import { GymScene } from "./scenes/gymscene";
 import { Transitioner } from "./transitioner";
+import { Button } from "./objects/button";
 
 // Static enum to store all the workouts.
 let Workouts = Object.freeze({
@@ -22,6 +23,9 @@ export class GlobalController {
     constructor(app) {
         // App object (not pixi app)
         this.appObj = app;
+
+        // MultiObject. Object will be added to all of the scenes when transitioning.
+        this.multiObject = [];
     }
 
     _dataListener(payload) {
@@ -42,10 +46,12 @@ export class GlobalController {
 
         // Set up simple mouse clicker
         this.appObj.app.stage.on('pointerup', this._pointerUp.bind(this));
-        this.goToGym(workouts);
+        // this.goToGym(workouts);
     }
 
     _pointerUp(event) {
+        this.appObj.scene.tapCallback(event);
+
         this._toggleScenes();
     }
 
@@ -53,8 +59,10 @@ export class GlobalController {
         // Used to toggle scenes between running and gyming.
         this.transitioner.transition(
             () => {
-                // Remove the transitioner from current scene
-                this.appObj.scene.delObj(this.transitioner);
+                // Delete every multiObject instances.
+                for (let obj of this.multiObject) {
+                    this.appObj.scene.delObj(obj);
+                }
 
                 switch (this.currentWorkout) {
                     case Workouts.JOG:
@@ -65,8 +73,10 @@ export class GlobalController {
                         break;
                 }
 
-                // Add the transitioner to the next scene.
-                this.appObj.scene.addObj(this.transitioner);
+                // Add all multiObject instances to the next scene.
+                for (let obj of this.multiObject) {
+                    this.appObj.scene.addObj(obj);
+                }
             },
             undefined,
             this.currentWorkout == Workouts.JOG ? this.transitioner._vsTransition : this.transitioner._basicTransition
@@ -92,6 +102,9 @@ export class GlobalController {
         // Makes the transitioner object.
         this.transitioner = new Transitioner(pixiRef, 1);
 
+        // Pause button to be added to all the scenes
+        this.pauseButton = new Button(pixiRef, "pause", () => {console.log("Pause")}, null, null, 100, 0x2371d7);
+
         // When global controller starts, set the first scene to be the running scene.
         this.runScene = new RunScene(this.pixiRef, this);
         this.gymScene = new GymScene(this.pixiRef, this);
@@ -101,9 +114,10 @@ export class GlobalController {
 
         this.appObj.setScene(this.runScene);
 
-        // Add the transitioner to the current scene
+        // Add the transitioner and pause to the current scene
         // IMPORTANT NOTE: You can't add objects to two pixi containers. If done, then will not display.
-        this.appObj.scene.addObj(this.transitioner);
+        this.addMultiObject(this.pauseButton);
+        this.addMultiObject(this.transitioner);
 
         // Start the scene and trigger on resize.
         this.appObj.scene.start();
@@ -117,5 +131,10 @@ export class GlobalController {
 
     onResize() {
         
+    }
+
+    addMultiObject(obj) {
+        this.appObj.scene.addObj(obj);
+        this.multiObject.push(obj);
     }
 }

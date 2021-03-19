@@ -90,4 +90,8 @@ export class Scene {
             }
         }
     }
+
+    tapCallback(event) {
+        // This will be called once the screen is clicked.
+    }
 }
