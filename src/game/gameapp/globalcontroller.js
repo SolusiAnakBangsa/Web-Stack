@@ -11,13 +11,6 @@ let Workouts = Object.freeze({
     GYM: 2, // Gym scene
 });
 
-const workouts = [
-    {task: "Push Up", freq: 12},
-    {task: "Sit Up", freq: 5},
-    {task: "Jumping Jack", freq: 6},
-    {task: "Reclined Rhomboid Squeeze", freq: 6},
-];
-
 export class GlobalController {
 
     constructor(app) {
@@ -27,6 +20,34 @@ export class GlobalController {
         // MultiObject. Object will be added to all of the scenes when transitioning.
         this.multiObject = [];
 
+        // Title of the level
+        this.title;
+
+        // The workouts for this level.
+        this.workouts = [{
+            "freq": 400,
+            "task": "Jog"
+        }, {
+            "freq": 3,
+            "task": "Jumping Jack"
+        }, {
+            "task": "Squat",
+            "freq": 4
+        }, {
+            "freq": 4,
+            "task": "Knee Push Up"
+        }, {
+            "freq": 200,
+            "task": "Jog"
+        }, {
+            "task": "Squat",
+            "freq": 15
+        }
+        ];
+
+        // Index to keep track of the current workout.
+        this.currentWorkoutIndex = 0;
+
         this.isPaused = false;
     }
 
@@ -35,6 +56,14 @@ export class GlobalController {
         // Receives a data. This function will determine what to do with the data.
 
         console.log(payload);
+
+        // Receive whole workout data, and sets the variables.
+        if ("workoutList" in payload) {
+            // FIX: Don't let game start before receiving this.
+            this.title = payload["title"];
+            this.workouts = payload["tasks"];
+            return;
+        }
 
         // Do dataListener of current scene.
         this.appObj.scene.dataListener(payload);
@@ -65,7 +94,24 @@ export class GlobalController {
 
                 switch (this.currentWorkout) {
                     case Workouts.JOG:
-                        this.goToGym(workouts);
+                        // Slice this.workout object to include only the gym games from the index.
+                        // First, discover which index is the next jog (or the end).
+                        let lastIndex;
+                        let foundJog = false;
+                        for (lastIndex = this.currentWorkoutIndex + 1; lastIndex < this.workouts.length; lastIndex++) {
+                            if (this.workouts[lastIndex].task == "Jog") {
+                                foundJog = true;
+                                break;
+                            }
+                        }
+
+                        // Slice it.
+                        // If the next jog exercise is not found, then send Everything up until the last point.
+                        let workoutSlice = this.workouts.slice(this.currentWorkoutIndex + 1, foundJog ? lastIndex : lastIndex + 1);
+
+                        // Change current workout index to last index.
+                        this.currentWorkoutIndex = lastIndex;
+                        this.goToGym(workoutSlice);
                         break;
                     case Workouts.GYM:
                         this.goToRun();
