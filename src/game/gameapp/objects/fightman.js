@@ -74,7 +74,9 @@ export class FightMan extends GameObject {
 
         // Add the new fightman sprite
         this.mainContainer.addChild(this.currentSprite);
-        this.currentSprite.state.setAnimation(0, this.currentPose, loop);
+
+        let trackEntry = this.currentSprite.state.setAnimation(0, this.currentPose, loop);
+        trackEntry.trackTime = trackEntry.animationEnd; // Sets the animation to be in the last frame.
     }
 
     onResize() {

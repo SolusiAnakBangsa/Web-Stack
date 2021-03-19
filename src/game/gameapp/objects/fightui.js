@@ -98,7 +98,9 @@ export class FightUI extends GameObject {
             fontVariant: "small-caps",
             padding: 64,
             stroke: "#571c9f",
-            strokeThickness: 14
+            strokeThickness: 14,
+            align: "right",
+            lineHeight: 74,
         });
         this.workoutCounterStyle = new PIXI.TextStyle({
             fill: "white",

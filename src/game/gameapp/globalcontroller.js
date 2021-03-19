@@ -42,6 +42,7 @@ export class GlobalController {
 
         // Set up simple mouse clicker
         this.appObj.app.stage.on('pointerup', this._pointerUp.bind(this));
+        this.goToGym(workouts);
     }
 
     _pointerUp(event) {

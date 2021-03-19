@@ -38,7 +38,7 @@ export class GymScene extends Scene {
         
         this._updateScores();
         this._updatePose();
-        // this._addOne(); // Testing Purposes
+        this._addOne(); // Testing Purposes
     }
 
     _addOneRep() {
@@ -77,10 +77,10 @@ export class GymScene extends Scene {
                     };
                 }
 
-                // Wait for the duration of the last workout, and additional 1s.
+                // Wait for the duration of the last workout, and additional 500ms.
                 setTimeout(
                     callback,
-                    this.fightMan.currentSprite.state.getCurrent(0).animation.duration*1000 + 1000
+                    this.fightMan.currentSprite.state.getCurrent(0).animation.duration*1000 + 500
                 );
             }
         }
@@ -132,8 +132,13 @@ export class GymScene extends Scene {
         this.restCountdown.start();
         this.resting = true;
 
+        // Update scores
         this.workoutIndex++;
         this._updateScores();
+
+        // Add next workout text
+        const textRef = this.fightUI.workoutText;
+        textRef.text = "Next up:\n" + textRef.text;
 
         this.addObj(this.restCountdown);
 
@@ -145,17 +150,23 @@ export class GymScene extends Scene {
         // After the countdown has completed, jump to the next workout.
         this.delObj(this.restCountdown);
         this.resting = false;
+
+        // If next exists in the text, then delete it.
+        const textRef = this.fightUI.workoutText;
+        if (textRef.text.includes("\n")) {
+            textRef.text = textRef.text.split("\n")[1];
+        }
         
         // Change the pose
         this._updatePose();
     }
 
-    // _addOne() {
-    //     // TEST: Testing Purposes only
-    //     this._addOneRep();
-    //     console.log("Add one.");
-    //     setTimeout(this._addOne.bind(this), 2000);
-    // }
+    _addOne() {
+        // TEST: Testing Purposes only
+        this._addOneRep();
+        console.log("Add one.");
+        setTimeout(this._addOne.bind(this), 2000);
+    }
 
     dataListener(payload) {
 
