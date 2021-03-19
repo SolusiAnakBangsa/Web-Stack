@@ -70,4 +70,10 @@ export class Button extends GameObject {
         if (pressedCallback !== undefined && pressedCallback !== null)
             this.mainContainer.on("pointerdown", pressedCallback);
     }
+
+    changePosition(xFunction, yFunction) {
+        this.xFunction = xFunction ? xFunction : this.xFunction;
+        this.yFunction = yFunction ? yFunction : this.yFunction;
+        this.onResize();
+    }
 }

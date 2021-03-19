@@ -91,8 +91,7 @@ export class GlobalController {
         this.appObj.setScene(this.gymScene);
 
         // Move pause button
-        this.pauseButton.xFunction = (sWidth) => 32;
-        this.pauseButton.yFunction = (sHeight) => 32;
+        this.pauseButton.changePosition((sWidth) => 32, (sHeight) => 32);
     }
 
     goToRun() {
@@ -100,8 +99,7 @@ export class GlobalController {
         this.currentWorkout = Workouts.JOG;
 
         // Move the pause button
-        this.pauseButton.xFunction = (sWidth) => sWidth - 100;
-        this.pauseButton.yFunction = (sHeight) => 256;
+        this.pauseButton.changePosition((sWidth) => sWidth - 100, (sHeight) => 256);
     }
 
     start(pixiRef) {
