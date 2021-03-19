@@ -25,21 +25,19 @@ export class GlobalController {
 
         // The workouts for this level.
         this.workouts = [{
-            "freq": 400,
+            "freq": 30,
             "task": "Jog"
         }, {
             "freq": 3,
-            "task": "Jumping Jack"
-        }, {
-            "task": "Squat",
-            "freq": 4
+            "task": "Squat"
         }, {
             "freq": 4,
-            "task": "Knee Push Up"
+            "task": "Squat"
         }, {
-            "freq": 200,
+            "freq": 25,
             "task": "Jog"
-        }, {
+        },
+        {
             "task": "Squat",
             "freq": 15
         }
@@ -62,6 +60,14 @@ export class GlobalController {
             // FIX: Don't let game start before receiving this.
             this.title = payload["title"];
             this.workouts = payload["tasks"];
+
+            // Change the total steps.
+            var totalSteps = 0;
+            for (let workout of this.workouts) {
+                if (workout.task == "Jog") totalSteps += workout.freq;
+            }
+            this.runScene.pace.targetSteps = totalSteps;
+
             return;
         }
 
@@ -80,10 +86,14 @@ export class GlobalController {
     _pointerUp(event) {
         this.appObj.scene.tapCallback(event);
 
-        this._toggleScenes();
+        // this._toggleScenes();
     }
 
     _toggleScenes() {
+        if (this.currentWorkoutIndex >= this.workouts.length - 1) {
+            alert("You won ok...");
+            return;
+        }
         // Used to toggle scenes between running and gyming.
         this.transitioner.transition(
             () => {
@@ -144,6 +154,13 @@ export class GlobalController {
         this.appObj.setScene(this.runScene);
         this.currentWorkout = Workouts.JOG;
 
+        // Update the targetSteps in the runScene thingy based on current workout index.
+        var stepsUpUntil = 0;
+        for (let work of this.workouts.slice(0, this.currentWorkoutIndex + 1)) {
+            if (work.task == "Jog") stepsUpUntil += work.freq;
+        }
+        this.runScene.targetSteps = stepsUpUntil;
+
         // Move the pause button
         this.pauseButton.changePosition((sWidth) => sWidth - 100, (sHeight) => 256);
     }
@@ -170,11 +187,12 @@ export class GlobalController {
 
         // Add callback to be able to transition back from gym to run
         this.gymScene.doneCallback = () => {this._toggleScenes()};
+        this.runScene.doneCallback = () => {this._toggleScenes()};
 
         // this.goToGym(workouts);
 
         // Set first scene to be running
-        // TODO: Might wanna change this later.
+        // TODO: Might wanna change this later. so that it can detect what's the starting exercise.
         this.goToRun();
 
         // Add the transitioner and pause to the current scene

@@ -35,6 +35,11 @@ export class RunScene extends Scene {
         this.paceArray = Array(RUNARRLEN).fill(0); // The size of this array is RUNPOLL/RUNRETAIN
 
         this.lastRunObject = undefined; // To help with difference.
+
+        this.targetSteps = 0; // Target steps to reach, before calling the callback.
+
+        // When the run activity is done, callback will be run.
+        this.doneCallback = () => {};
         // ******
 
         this.runSpeed = 0; // In pixel / second
@@ -165,7 +170,7 @@ export class RunScene extends Scene {
 
     dataListener(payload) {
         if ("exerciseType" in payload) {
-            if (payload.exerciseType == "jog") {
+            if (payload.exerciseType == "Jog") {
                 if (this.lastRunObject === undefined) {
                     this.lastRunObject = {step: payload.repAmount, time: payload.time}; // Set
                     return;
@@ -180,7 +185,12 @@ export class RunScene extends Scene {
                 this.lastRunObject = {step: payload.repAmount, time: payload.time}; // Set before.
 
                 // Update steps in UI object
-                this.appObj.scene.pace.setSteps(payload.repAmount);
+                this.pace.setSteps(payload.repAmount);
+
+                // Check if current step is more than the target to call the callback to gym.
+                if (payload.repAmount >= this.targetSteps) {
+                    this.doneCallback();
+                }
             }
         }
     }

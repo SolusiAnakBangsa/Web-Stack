@@ -1,4 +1,5 @@
 import { GameObject } from "./gameobject";
+import { clamp } from "./../../../script/util";
 
 // Length of the progress bar.
 const PROGRESSXOFFSET = 10 * 3;
@@ -161,17 +162,19 @@ export class Pace extends GameObject {
         this.runProgressBar.beginFill(0xf9ad3f);
         const pX = this.runProgress.x;
         const pY = this.runProgress.y;
+    
+        const progressXPos = this.steps/this.targetSteps * PROGRESSLENGTH;
 
         // Draws the progress bar.
         this.runProgressBar.drawRect(
             pX + PROGRESSXOFFSET,
             pY + PROGRESSYOFFSET,
-            this.steps/this.targetSteps * PROGRESSLENGTH,
+            clamp(progressXPos, 0, PROGRESSLENGTH),
             PROGRESSHEIGHT
         );
         
         // Draws the arrow
-        const progressX = pX + PROGRESSXOFFSET + this.steps/this.targetSteps * PROGRESSLENGTH;
+        const progressX = pX + PROGRESSXOFFSET + progressXPos;
         const progressY = pY + PROGRESSYOFFSET + 20;
 
         this.runProgressBar.lineStyle(5, 0xF85A12, 1);
