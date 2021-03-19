@@ -12,6 +12,8 @@ let Workouts = Object.freeze({
 });
 
 export class GlobalController {
+    
+    static levelData;
 
     constructor(app) {
         // App object (not pixi app)
@@ -53,26 +55,21 @@ export class GlobalController {
         // This function is used as what will be executed when the peer
         // Receives a data. This function will determine what to do with the data.
 
-        console.log(payload);
-
-        // Receive whole workout data, and sets the variables.
-        if ("workoutList" in payload) {
-            // FIX: Don't let game start before receiving this.
-            this.title = payload["title"];
-            this.workouts = payload["tasks"];
-
-            // Change the total steps.
-            var totalSteps = 0;
-            for (let workout of this.workouts) {
-                if (workout.task == "Jog") totalSteps += workout.freq;
-            }
-            this.runScene.pace.targetSteps = totalSteps;
-
-            return;
-        }
 
         // Do dataListener of current scene.
         this.appObj.scene.dataListener(payload);
+    }
+
+    _updateWorkoutData() {
+        this.workouts = GlobalController.levelData["workoutList"]["tasks"];
+
+        console.log(this.workouts);
+
+        var totalSteps = 0;
+        for (let workout of this.workouts) {
+            if (workout.task == "Jog") totalSteps += workout.freq;
+        }
+        this.runScene.pace.targetSteps = totalSteps;
     }
 
     setup() {
@@ -133,7 +130,9 @@ export class GlobalController {
                     this.appObj.scene.addObj(obj);
                 }
             },
-            undefined,
+            () => {
+                peer.connection.sendData({"status" : "startnext"});
+            },
             this.currentWorkout == Workouts.JOG ? this.transitioner._vsTransition : this.transitioner._basicTransition
         );
     }
@@ -188,6 +187,9 @@ export class GlobalController {
         // Add callback to be able to transition back from gym to run
         this.gymScene.doneCallback = () => {this._toggleScenes()};
         this.runScene.doneCallback = () => {this._toggleScenes()};
+
+        // MINORFIX: This is assumption that the workout data is received. which it should already be.
+        this._updateWorkoutData();
 
         // this.goToGym(workouts);
 

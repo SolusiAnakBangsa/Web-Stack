@@ -122,6 +122,7 @@ class ConnectionObj {
     }
 
     _onReceiveData(payload) {
+        console.log(payload);
         for (let c of this.callbacks) {
             c(payload);
         }

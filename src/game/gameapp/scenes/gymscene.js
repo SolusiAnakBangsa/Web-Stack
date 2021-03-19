@@ -3,6 +3,7 @@ import { FightFloor } from "./../objects/fightfloor";
 import { FightMan } from "./../objects/fightman";
 import { FightUI } from "./../objects/fightui";
 import { Countdown } from "./../objects/countdown";
+import { peer } from "./../../../script/webrtc";
 
 const RESTSECONDS = 15;
 const CALLBACKDELAY = 5000; // Callback delay to do doneCallback
@@ -23,6 +24,9 @@ export class GymScene extends Scene {
         // Current Workout index
         this.workoutIndex;
 
+        // Prev rep, to keep track of payload reps.
+        this.prevRep;
+
         // Whether the player is currently resting.
         this.resting = false;
     }
@@ -32,6 +36,8 @@ export class GymScene extends Scene {
         // This should reset every value, so that the gym cycle can begin anew.
         this.workouts = workouts;
         this.workoutIndex = 0;
+
+        this.prevRep = 0;
 
         console.log(workouts);
         this.resting = false;
@@ -130,6 +136,7 @@ export class GymScene extends Scene {
     _restBeforeNext(seconds) {
         // Create a countdown object that will callback
         // The next workout event.
+        this.prevRep = 0;
         this.currentReps = 0;
         this.restCountdown.setSeconds(seconds);
         this.restCountdown.start();
@@ -150,6 +157,7 @@ export class GymScene extends Scene {
     }
 
     _nextWorkoutCountdown() {
+        // This event will be run after the resting countdown have been completed.
         // After the countdown has completed, jump to the next workout.
         this.delObj(this.restCountdown);
         this.resting = false;
@@ -159,6 +167,9 @@ export class GymScene extends Scene {
         if (textRef.text.includes("\n")) {
             textRef.text = textRef.text.split("\n")[1];
         }
+
+        // TODO: Send peer start command
+        peer.connection.sendData({"status" : "startnext"});
         
         // Change the pose
         this._updatePose();
@@ -176,8 +187,14 @@ export class GymScene extends Scene {
         // TODO: Send start signal when starting a new exercise.
         // If a payload data that corresponds to the current workout is received, then increase rep by one.
         if ("exerciseType" in payload && this.workoutIndex < this.workouts.length) {
-            if (payload.exerciseType == this.workouts[this.workoutIndex].task && payload.status == "mid") {
-                this._addOneRep();
+            if (payload.exerciseType == this.workouts[this.workoutIndex].task &&
+                payload.status == "mid" &&
+                this.prevRep < payload.repAmount)
+            {
+                const repAmount = payload.repAmount - this.prevRep;
+                this.prevRep = payload.repAmount;
+                for (var i = 0; i < repAmount; i++)
+                    this._addOneRep();
             }
         }
     }

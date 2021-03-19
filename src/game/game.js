@@ -1,5 +1,6 @@
 import { GameApp } from "./gameapp/app";
 import { peer } from "./../script/webrtc";
+import { GlobalController } from "./gameapp/globalcontroller"
 
 // Game object
 const game = new GameApp({
@@ -10,6 +11,13 @@ const game = new GameApp({
 
 // Here, lets initialize the webrtc object with a custom peerID
 peer.init(Math.random().toString(36).slice(2).substr(0, 8));
+
+peer.connection.addReceiveHandler((payload) => {
+    // FIX: This can be better, i think.
+    if ("workoutList" in payload) {
+        GlobalController.levelData = payload;
+    }
+});
 
 peer.connection.addEvents('open', () => {
     // This callback will be run when connection has been established

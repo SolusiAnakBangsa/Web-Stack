@@ -1,6 +1,7 @@
 import { assets } from "./assets";
 import { Resizer } from "./resizer";
 import { GlobalController } from "./globalcontroller";
+import { peer } from "../../script/webrtc";
 
 export class GameApp {
 
@@ -50,7 +51,7 @@ export class GameApp {
     }
 
     start() {
-        // // Everything in this function will be run, once the game is started.
+        // Everything in this function will be run, once the game is started.
         
         // Initializes the PIXI game instance with options.
         this.app = new PIXI.Application(this.options);

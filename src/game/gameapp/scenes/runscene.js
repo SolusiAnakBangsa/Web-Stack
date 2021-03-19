@@ -143,6 +143,12 @@ export class RunScene extends Scene {
         this.count.start();
     }
 
+    startRun() {
+        // Will be called every time jogging is called.
+        // TODO: send start to phone
+        peer.connection.sendData({"status" : "startnext"});
+    }
+
     setAbove() {
         // Function to set every object to be at bottom.
         this.floor.mainContainer.y += this.initYOffset*2;
@@ -171,24 +177,34 @@ export class RunScene extends Scene {
     dataListener(payload) {
         if ("exerciseType" in payload) {
             if (payload.exerciseType == "Jog") {
-                if (this.lastRunObject === undefined) {
-                    this.lastRunObject = {step: payload.repAmount, time: payload.time}; // Set
-                    return;
-                }
-                // Step per second in the data.
-                const dataDuration = (payload.time - this.lastRunObject.time); // Duration of data
-                const stepTimeframe = (payload.repAmount - this.lastRunObject.step) * (dataDuration/RUNPOLL) * 100;
-    
-                // this.runQueue += clamp((stepPerS/MAXPACE) * 100 * dataDuration/RUNRETAIN, 0, 100);
-                this.runQueue += stepTimeframe/MAXPACE;
 
-                this.lastRunObject = {step: payload.repAmount, time: payload.time}; // Set before.
+                // // Check if current step is more than the target to call the callback to gym.
+                // if (payload.repAmount >= this.targetSteps) {
+                //     this.doneCallback();
+                // }
+                console.log("Bruh1");
+                console.log(payload.status);
+                if (payload.status == "mid") {
+                    // if (this.lastRunObject === undefined) {
+                    //     this.lastRunObject = {step: payload.repAmount, time: payload.time}; // Set
+                    //     return;
+                    // }
+                    // Step per second in the data.
+                    const dataDuration = (payload.time - this.lastRunObject.time); // Duration of data
+                    const stepTimeframe = (payload.repAmount - this.lastRunObject.step) * (dataDuration/RUNPOLL) * 100;
+        
+                    // this.runQueue += clamp((stepPerS/MAXPACE) * 100 * dataDuration/RUNRETAIN, 0, 100);
+                    this.runQueue += stepTimeframe/MAXPACE;
 
-                // Update steps in UI object
-                this.pace.setSteps(payload.repAmount);
+                    this.lastRunObject = {step: payload.repAmount, time: payload.time}; // Set before.
 
-                // Check if current step is more than the target to call the callback to gym.
-                if (payload.repAmount >= this.targetSteps) {
+                    // Update steps in UI object
+                    this.pace.setSteps(payload.repAmount);
+
+                } else if (payload.status == "start") {
+                    this.lastRunObject = {step: payload.repAmount, time: payload.time}; // Sets
+                } else if (payload.status == "end") {
+                    console.log("Bruh");
                     this.doneCallback();
                 }
             }
