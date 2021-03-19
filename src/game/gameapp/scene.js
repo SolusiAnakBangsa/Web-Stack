@@ -18,6 +18,7 @@ export class Scene {
         this._controller = controller;
 
         this.active = true;
+        this.isPaused = false;
         this.setup(pixiRef);
     }
 
@@ -93,5 +94,10 @@ export class Scene {
 
     tapCallback(event) {
         // This will be called once the screen is clicked.
+    }
+
+    pauseCallback(isPaused) {
+        // This will be called if the game is paused.
+        this.isPaused = isPaused;
     }
 }

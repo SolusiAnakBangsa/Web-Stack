@@ -26,6 +26,8 @@ export class GlobalController {
 
         // MultiObject. Object will be added to all of the scenes when transitioning.
         this.multiObject = [];
+
+        this.isPaused = false;
     }
 
     _dataListener(payload) {
@@ -39,14 +41,11 @@ export class GlobalController {
     }
 
     setup() {
-        this.currentWorkout = Workouts.JOG;
-
         // Register _dataListener
         peer.connection.addReceiveHandler(this._dataListener.bind(this));
 
         // Set up simple mouse clicker
         this.appObj.app.stage.on('pointerup', this._pointerUp.bind(this));
-        // this.goToGym(workouts);
     }
 
     _pointerUp(event) {
@@ -90,11 +89,19 @@ export class GlobalController {
 
         // Set scene
         this.appObj.setScene(this.gymScene);
+
+        // Move pause button
+        this.pauseButton.xFunction = (sWidth) => 32;
+        this.pauseButton.yFunction = (sHeight) => 32;
     }
 
     goToRun() {
         this.appObj.setScene(this.runScene);
         this.currentWorkout = Workouts.JOG;
+
+        // Move the pause button
+        this.pauseButton.xFunction = (sWidth) => sWidth - 100;
+        this.pauseButton.yFunction = (sHeight) => 256;
     }
 
     start(pixiRef) {
@@ -103,7 +110,15 @@ export class GlobalController {
         this.transitioner = new Transitioner(pixiRef, 1);
 
         // Pause button to be added to all the scenes
-        this.pauseButton = new Button(pixiRef, "pause", () => {console.log("Pause")}, null, null, 100, 0x2371d7);
+        this.pauseButton = new Button(
+            pixiRef,
+            "pause",
+            () => {this.pauseCallback(!this.isPaused)},
+            null,
+            null,
+            64,
+            0x2371d7
+        );
 
         // When global controller starts, set the first scene to be the running scene.
         this.runScene = new RunScene(this.pixiRef, this);
@@ -112,7 +127,11 @@ export class GlobalController {
         // Add callback to be able to transition back from gym to run
         this.gymScene.doneCallback = () => {this._toggleScenes()};
 
-        this.appObj.setScene(this.runScene);
+        // this.goToGym(workouts);
+
+        // Set first scene to be running
+        // TODO: Might wanna change this later.
+        this.goToRun();
 
         // Add the transitioner and pause to the current scene
         // IMPORTANT NOTE: You can't add objects to two pixi containers. If done, then will not display.
@@ -122,8 +141,6 @@ export class GlobalController {
         // Start the scene and trigger on resize.
         this.appObj.scene.start();
         this.appObj.scene.onResize();
-
-        this.currentWorkout = Workouts.NONE;
     }
 
     loop(delta) {
@@ -131,6 +148,16 @@ export class GlobalController {
 
     onResize() {
         
+    }
+
+    pauseCallback(isPaused) {
+        // Set variable
+        this.isPaused = isPaused;
+
+        console.log("Paused: " + isPaused);
+
+        // Call pause on the scenes
+        this.appObj.scene.pauseCallback(isPaused);
     }
 
     addMultiObject(obj) {

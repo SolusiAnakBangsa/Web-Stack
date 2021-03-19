@@ -7,8 +7,8 @@ export class Button extends GameObject {
     constructor(pixiRef, icon, clickCallback, xFunction, yFunction, buttonSize, color) {
         super(pixiRef);
 
-        this.xFunction = xFunction;
-        this.yFunction = yFunction;
+        this.xFunction = xFunction ? xFunction : () => 0;
+        this.yFunction = yFunction ? yFunction : () => 0;
 
         this.buttonSize = buttonSize;
 
@@ -54,9 +54,15 @@ export class Button extends GameObject {
     }
 
     onResize() {
+        const screenRef = this.app.screen;
+        const x = this.xFunction(screenRef.width);
+        const y = this.yFunction(screenRef.height);
+
+        // Move all
+        this.buttonGraphic.position.set(x, y);
         this.iconText.position.set(
-            this.buttonSize/2,
-            this.buttonSize/2 + this.yOffset
+            x + this.buttonSize/2,
+            y + this.buttonSize/2 + this.yOffset
         );
     }
 
