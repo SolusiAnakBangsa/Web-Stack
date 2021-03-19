@@ -165,7 +165,7 @@ export class RunScene extends Scene {
 
     dataListener(payload) {
         if ("exerciseType" in payload) {
-            if (payload.exerciseType == "jog" && this.currentWorkout == Workouts.JOG) {
+            if (payload.exerciseType == "jog") {
                 if (this.lastRunObject === undefined) {
                     this.lastRunObject = {step: payload.repAmount, time: payload.time}; // Set
                     return;

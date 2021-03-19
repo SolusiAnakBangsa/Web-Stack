@@ -49,6 +49,7 @@ export class GlobalController {
     }
 
     _toggleScenes() {
+        // Used to toggle scenes between running and gyming.
         this.transitioner.transition(
             () => {
                 // Remove the transitioner from current scene
@@ -66,9 +67,7 @@ export class GlobalController {
                 // Add the transitioner to the next scene.
                 this.appObj.scene.addObj(this.transitioner);
             },
-            () => {
-                console.log("Transition done.");
-            },
+            undefined,
             this.currentWorkout == Workouts.JOG ? this.transitioner._vsTransition : this.transitioner._basicTransition
         );
     }

@@ -38,7 +38,7 @@ export class GymScene extends Scene {
         
         this._updateScores();
         this._updatePose();
-        this._addOne(); // Testing Purposes
+        // this._addOne(); // Testing Purposes
     }
 
     _addOneRep() {
@@ -150,16 +150,23 @@ export class GymScene extends Scene {
         this._updatePose();
     }
 
-    _addOne() {
-        // TEST: Testing Purposes only
-        this._addOneRep();
-        console.log("Add one.");
-        setTimeout(this._addOne.bind(this), 2000);
-    }
+    // _addOne() {
+    //     // TEST: Testing Purposes only
+    //     this._addOneRep();
+    //     console.log("Add one.");
+    //     setTimeout(this._addOne.bind(this), 2000);
+    // }
 
     dataListener(payload) {
-        // Data listener. Will do events inside here when a new data has been received from phone.
-        // TODO
+
+        // TODO: Send start signal when starting a new exercise.
+        
+        // If a payload data that corresponds to the current workout is received, then increase rep by one.
+        if ("exerciseType" in payload) {
+            if (payload.exerciseType == this.workouts[this.workoutIndex].task && payload.status == "mid") {
+                this._addOneRep();
+            }
+        }
     }
 
     setup(pixiRef) {
