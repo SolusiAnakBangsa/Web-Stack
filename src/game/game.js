@@ -33,9 +33,9 @@ peer.connection.addReceiveHandler((payload) => {
                 const calories = document.getElementById("calstat");
                 const time = document.getElementById("timestat");
 
-                const mili = payload.totalTime === undefined ? 0 : payload.totalTime;
+                const mili = payload.meta.totalTime === undefined ? 0 : payload.meta.totalTime;
 
-                calories.innerText = payload.calories === undefined ? "Null" : payload.calories;
+                calories.innerText = payload.meta.calories === undefined ? "Null" : payload.meta.calories;
                 time.innerText = (new Date(mili)).toISOString().substr(11, 8);
             }
         }

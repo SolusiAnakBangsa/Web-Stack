@@ -138,11 +138,17 @@ export class GymScene extends Scene {
     _restBeforeNext(seconds) {
         // Create a countdown object that will callback
         // The next workout event.
+        // This will be called after the user have completed an exercise
+        // and there is still next exercise.
         this.prevRep = 0;
         this.currentReps = 0;
         this.restCountdown.setSeconds(seconds);
         this.restCountdown.start();
         this.resting = true;
+
+        // Damage the enemy here, do animations.
+        this.fightUI.enemy.state.setAnimation(0, 'fly', false);
+        this.fightUI.enemy.state.addAnimation(0, 'idle', true, 0);
 
         // Summon the buttons
         this.addObj(this.skipButton);

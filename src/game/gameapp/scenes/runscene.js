@@ -128,7 +128,7 @@ export class RunScene extends Scene {
         // Poll pace data
         this.paceDataCounter += delta;
 
-        if (this.runCounter > PACEDATAPOLL) {
+        if (this.paceDataCounter > PACEDATAPOLL) {
             this.paceData.push(this.paceCount);
             this.paceDataCounter -= PACEDATAPOLL;
         }

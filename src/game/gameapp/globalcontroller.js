@@ -31,10 +31,10 @@ export class GlobalController {
 
         // The workouts for this level.
         this.workouts = [
-        {
-            "freq": 30,
-            "task": "Jog"
-        },
+        // {
+        //     "freq": 30,
+        //     "task": "Jog"
+        // },
         {
             "freq": 3,
             "task": "Squat"
@@ -123,7 +123,7 @@ export class GlobalController {
 
     _pointerUp(event) {
         this.appObj.scene.tapCallback(event);
-
+        this.showSummary();
         // this._toggleScenes();
     }
 
@@ -287,6 +287,8 @@ export class GlobalController {
         // Detect if there is jogging in the workout, and display graph.
         // Gets all the pace data.
         const pace = this.runScene.paceData;
+
+        console.log(pace);
 
         // Draws the graph.
         var ctx = document.getElementById('pacechart').getContext('2d');
