@@ -54,3 +54,7 @@ export function propertyLength(obj) {
 export function clamp(num, min, max) {
   return num <= min ? min : num >= max ? max : num;
 }
+
+export function padZero(num, size) {
+  return ('000000000' + num).substr(-size);
+}

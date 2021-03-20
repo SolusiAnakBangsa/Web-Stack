@@ -104,6 +104,13 @@ export class GlobalController {
             peer.connection.sendData({"status" : "startgame"});
         };
         this.count.start();
+
+        // Updates the total steps has to be done.
+        var totalSteps = 0;
+        for (let workout of this.workouts) {
+            if (workout.task == "Jog") totalSteps += workout.freq;
+        }
+        this.runScene.pace.targetSteps = totalSteps;
     }
 
     setup() {
@@ -195,14 +202,6 @@ export class GlobalController {
         this.appObj.setScene(this.runScene);
         this.currentWorkout = Workouts.JOG;
 
-        // MINORFIX: can be done only once.
-        // Updates the total steps has to be done.
-        var totalSteps = 0;
-        for (let workout of this.workouts) {
-            if (workout.task == "Jog") totalSteps += workout.freq;
-        }
-        this.runScene.pace.targetSteps = totalSteps;
-
         // Update the targetSteps in the runScene thingy based on current workout index.
         var stepsUpUntil = 0;
         for (let work of this.workouts.slice(0, this.currentWorkoutIndex + 1)) {
@@ -211,7 +210,7 @@ export class GlobalController {
         this.runScene.targetSteps = stepsUpUntil;
 
         // Move the pause button
-        this.pauseButton.changePosition((sWidth) => sWidth - 100, (sHeight) => 256);
+        this.pauseButton.changePosition((sWidth) => sWidth - 100, (sHeight) => sHeight - 100);
     }
 
     start(pixiRef) {

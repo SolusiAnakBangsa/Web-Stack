@@ -1,5 +1,5 @@
 import { GameObject } from "./gameobject";
-import { clamp } from "./../../../script/util";
+import { clamp, padZero } from "./../../../script/util";
 
 // Length of the progress bar.
 const PROGRESSXOFFSET = 10 * 3;
@@ -76,6 +76,21 @@ export class Pace extends GameObject {
         this.runProgressBar = new PIXI.Graphics();
         this._redrawProgressBar();
         // ***************
+
+        // ***************
+        // Steps number
+        this.stepsCounterStyle = new PIXI.TextStyle({
+            fontFamily: "\"Orbitron\", \"Lucida Console\", Monaco, monospace",
+            fontSize: 36,
+            fontStyle: "italic",
+            fontWeight: 500,
+            padding: 32
+        });
+        this.stepsCounter = new PIXI.Text("00000", this.stepsCounterStyle);
+        this.stepsCounter.position.set(32, 84);
+        // ***************
+
+        this.mainContainer.addChild(this.stepsCounter);
 
         this.mainContainer.addChild(this.runProgress);
         this.mainContainer.addChild(this.runProgressBar);
@@ -198,6 +213,8 @@ export class Pace extends GameObject {
 
     setSteps(step) {
         this.steps = step;
+
+        this.stepsCounter.text = padZero(step, 5);
 
         // Redraw run bar
         this._redrawProgressBar();
