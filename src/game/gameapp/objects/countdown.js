@@ -36,7 +36,7 @@ export class Countdown extends GameObject {
     }
 
     loop(delta) {
-        if (this.started && this.counter > 1) {
+        if (this.started && this.counter >= 1) {
             this.counter -= delta/1000;
             this.mainContainer.text = String(this.counter << 0);
 

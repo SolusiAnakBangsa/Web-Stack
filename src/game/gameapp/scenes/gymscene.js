@@ -4,6 +4,7 @@ import { FightMan } from "./../objects/fightman";
 import { FightUI } from "./../objects/fightui";
 import { Countdown } from "./../objects/countdown";
 import { peer } from "./../../../script/webrtc";
+import { Button } from "./../objects/button";
 
 const RESTSECONDS = 15;
 const CALLBACKDELAY = 5000; // Callback delay to do doneCallback
@@ -143,6 +144,10 @@ export class GymScene extends Scene {
         this.restCountdown.start();
         this.resting = true;
 
+        // Summon the buttons
+        this.addObj(this.skipButton);
+        this.addObj(this.delayButton);
+
         // Update scores
         this.workoutIndex++;
         this._updateScores();
@@ -162,6 +167,10 @@ export class GymScene extends Scene {
         // After the countdown has completed, jump to the next workout.
         this.delObj(this.restCountdown);
         this.resting = false;
+
+        // Delete the buttons
+        this.delObj(this.skipButton);
+        this.delObj(this.delayButton);
 
         // If next exists in the text, then delete it.
         const textRef = this.fightUI.workoutText;
@@ -205,6 +214,32 @@ export class GymScene extends Scene {
         this.fightMan = new FightMan(pixiRef);
         this.fightUI = new FightUI(pixiRef);
         this.restCountdown = new Countdown(pixiRef, null, this._nextWorkoutCountdown.bind(this));
+
+        // Skip button.
+        this.skipButton = new Button(
+            pixiRef,
+            "skip_next",
+            () => {
+                this.restCountdown.counter = 1;
+            },
+            () => 32,
+            () => 96 + 16,
+            64,
+            0x00AAAA
+        );
+
+        // Delay 5 second button
+        this.delayButton = new Button(
+            pixiRef,
+            "forward_5",
+            () => {
+                this.restCountdown.counter += 5;
+            },
+            () => 32,
+            () => 160 + 32,
+            64,
+            0x00AAAA
+        );
 
         this.addObj(this.fightFloor);
         this.addObj(this.fightMan);
