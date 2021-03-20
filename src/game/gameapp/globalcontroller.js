@@ -31,10 +31,10 @@ export class GlobalController {
 
         // The workouts for this level.
         this.workouts = [
-        // {
-        //     "freq": 30,
-        //     "task": "Jog"
-        // },
+        {
+            "freq": 30,
+            "task": "Jog"
+        },
         {
             "freq": 3,
             "task": "Squat"
@@ -123,7 +123,6 @@ export class GlobalController {
 
     _pointerUp(event) {
         this.appObj.scene.tapCallback(event);
-        this.showSummary();
         // this._toggleScenes();
     }
 
@@ -250,6 +249,10 @@ export class GlobalController {
         // Start the scene and trigger on resize.
         this.appObj.scene.start();
         this.appObj.scene.onResize();
+
+        // Register unpause
+        const unpause = document.getElementById("unpause");
+        unpause.onclick = () => {this.pauseCallback(false)};
     }
 
     loop(delta) {
@@ -264,6 +267,25 @@ export class GlobalController {
         this.isPaused = isPaused;
 
         console.log("Paused: " + isPaused);
+
+        // Send the pause data
+        const data = {
+            status: isPaused ? "pause" : "unpause"
+        }
+        peer.connection.sendData(data);
+
+        // Pause the countdown
+        this.count.paused = isPaused;
+
+        // Make the overlay appear
+        const pauseOverlay = document.getElementById("pause");
+        if (isPaused) {
+            pauseOverlay.style.zIndex = 0;
+            pauseOverlay.style.opacity = 1;
+        } else {
+            setTimeout(() => {pauseOverlay.style.zIndex = -3;}, 0.5);
+            pauseOverlay.style.opacity = 0;
+        }
 
         // Call pause on the scenes
         this.appObj.scene.pauseCallback(isPaused);

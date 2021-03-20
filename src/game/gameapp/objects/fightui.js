@@ -163,7 +163,7 @@ export class FightUI extends GameObject {
         this.enemy = new PIXI.spine.Spine(en.res.spineData);
         this.enemy.scale.set(4);
         this.enemy.state.setAnimation(0, 'idle', true);
-        this.enemy.stateData.setMix('idle', 'fly', 0.2);
+        this.enemy.stateData.setMix('idle', 'fly', 0.05);
         this.enemy.stateData.setMix('fly', 'idle', 0.2);
     
         // Setup the shadows

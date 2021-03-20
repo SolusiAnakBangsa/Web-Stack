@@ -22,6 +22,9 @@ export class Countdown extends GameObject {
         this.callback = callback;
         this.started = false;
 
+        // Whether the countdown is paused.
+        this.paused = false;
+
         this.setup(pixiRef);
     }
 
@@ -36,7 +39,7 @@ export class Countdown extends GameObject {
     }
 
     loop(delta) {
-        if (this.started && this.counter >= 1) {
+        if (this.started && this.counter >= 1 && !this.paused) {
             this.counter -= delta/1000;
             this.mainContainer.text = String(this.counter << 0);
 

@@ -79,23 +79,11 @@ export class RunScene extends Scene {
 
         // New countdown object.
         // Once countdown is done, start the game.
-        // this.count = new Countdown(pixiRef, 5);
-        // this.count.callback = () => {
-        //     // Set text to go, then set a timer for 1 second to delete it.
-        //     this.count.mainContainer.text = "GO!";
-        //     this.count.textStyle.fontSize = 180;
-        //     // Timer to delete the count object.
-        //     setTimeout(() => {this.delObj(this.count);}, 2000);
-
-        //     // When all timing is done, send a startgame to the phone.
-        //     peer.connection.sendData({"status" : "startgame"});
-        // };
 
         this.addObj(this.floor);
         this.addObj(this.sky);
         this.addObj(this.runman);
         this.addObj(this.pace);
-        // this.addObj(this.count);
         this.onResize();
     }
 
@@ -105,60 +93,64 @@ export class RunScene extends Scene {
         // Set floorspeed according to delta.
         this.floor.setFloorSpeed(this.runSpeed*deltaS);
         
-        if (this.floatState) {
-            // Calculate offset
-            const curOffset = this.initYOffset * (this.lerpFunction((this.floatCounter + deltaS)/this.floatDuration) - this.lerpFunction(this.floatCounter/this.floatDuration));
+        // Only does it when paused.
+        if (!this.isPaused) {
 
-            // Increase the position
-            this.floor.mainContainer.y -= curOffset*2;
-            this.runman.mainContainer.y -= curOffset*2;
-            this.sky.mainContainer.y -= curOffset;
+            if (this.floatState) {
+                // Calculate offset
+                const curOffset = this.initYOffset * (this.lerpFunction((this.floatCounter + deltaS)/this.floatDuration) - this.lerpFunction(this.floatCounter/this.floatDuration));
 
-            // Increase the duration.
-            this.floatCounter += deltaS;
+                // Increase the position
+                this.floor.mainContainer.y -= curOffset*2;
+                this.runman.mainContainer.y -= curOffset*2;
+                this.sky.mainContainer.y -= curOffset;
 
-            // Stop the animation once it reaches floatDuration.
-            // and send a trigger that the animation is completed.
-            if (this.floatCounter > this.floatDuration) {
-                this.floatState = false;
-                this.animationDone();
+                // Increase the duration.
+                this.floatCounter += deltaS;
+
+                // Stop the animation once it reaches floatDuration.
+                // and send a trigger that the animation is completed.
+                if (this.floatCounter > this.floatDuration) {
+                    this.floatState = false;
+                    this.animationDone();
+                }
             }
-        }
 
-        // Poll pace data
-        this.paceDataCounter += delta;
+            // Poll pace data
+            this.paceDataCounter += delta;
 
-        if (this.paceDataCounter > PACEDATAPOLL) {
-            this.paceData.push(this.paceCount);
-            this.paceDataCounter -= PACEDATAPOLL;
-        }
-
-        // Run code
-        this.runCounter += delta;
-
-        // Update the running animation.
-        if (this.runCounter > RUNPOLL) {
-
-            // Update the array.
-            this.paceArray[this.paceArrayCounter] = this.runQueue;
-            this.paceArrayCounter = this.paceArrayCounter + 1 < RUNARRLEN ? this.paceArrayCounter + 1 : 0; // Add to the counter.
-            this.runQueue = 0; // Reset run queue
-
-            // Set the running speed to be the array average.
-            var avg = 0;
-            for (var i = 0; i < RUNARRLEN; i++) {
-                avg += this.paceArray[i];
+            if (this.paceDataCounter > PACEDATAPOLL) {
+                this.paceData.push(this.paceCount);
+                this.paceDataCounter -= PACEDATAPOLL;
             }
-            avg /= RUNARRLEN;
-            this.paceCount = clamp(avg, 0, 100);
-            this.setSpeed(this.paceCount); // Set the speed of the scene.
 
-            this.runCounter -= RUNPOLL;
+            // Run code
+            this.runCounter += delta;
+
+            // Update the running animation.
+            if (this.runCounter > RUNPOLL) {
+
+                // Update the array.
+                this.paceArray[this.paceArrayCounter] = this.runQueue;
+                this.paceArrayCounter = this.paceArrayCounter + 1 < RUNARRLEN ? this.paceArrayCounter + 1 : 0; // Add to the counter.
+                this.runQueue = 0; // Reset run queue
+
+                // Set the running speed to be the array average.
+                var avg = 0;
+                for (var i = 0; i < RUNARRLEN; i++) {
+                    avg += this.paceArray[i];
+                }
+                avg /= RUNARRLEN;
+                this.paceCount = clamp(avg, 0, 100);
+                this.setSpeed(this.paceCount); // Set the speed of the scene.
+
+                this.runCounter -= RUNPOLL;
+            }
         }
     }
 
     start() {
-        // this.count.start();
+
     }
 
     startRun() {
@@ -242,5 +234,11 @@ export class RunScene extends Scene {
 
     onResizeCode() {
         
+    }
+
+    pauseCallback(isPaused) {
+        super.pauseCallback(isPaused);
+        this.runman.paused = isPaused;
+        this.floor.paused = isPaused;
     }
 }

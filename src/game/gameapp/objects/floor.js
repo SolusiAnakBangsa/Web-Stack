@@ -35,6 +35,8 @@ export class Floor extends GameObject {
         this.counter = 0;
         this.counterBound = randomRange(...this.counterRange); // Check every 500ms
 
+        this.paused = false;
+
         this.setup(pixiRef);
     }
 
@@ -171,38 +173,40 @@ export class Floor extends GameObject {
     }
 
     loop(delta) {
-        // Move the floor decoration
-        for (let dec of this.floorDecorContainer.children) {
-            dec.y += this.floorSpeed;
-        }
-
-        this.counter += delta;
-        if (this.counter > this.counterBound) {
-
-            // Spawn a new floor decor at a random location.
-            this.floorDecorContainer.addChild(this.makeDecor());
-
-            // Delete all the floor decoration outside the bounds
+        if (!this.paused) {
+            // Move the floor decoration
             for (let dec of this.floorDecorContainer.children) {
-                if (dec.y > -100) {
-                    this.floorDecorContainer.removeChild(dec);
-                }
+                dec.y += this.floorSpeed;
             }
 
-            // Reset counter
-            this.counter -= this.counterBound;
-            this.counterBound = randomRange(...this.counterRange);
-        }
+            this.counter += delta;
+            if (this.counter > this.counterBound) {
 
+                // Spawn a new floor decor at a random location.
+                this.floorDecorContainer.addChild(this.makeDecor());
+
+                // Delete all the floor decoration outside the bounds
+                for (let dec of this.floorDecorContainer.children) {
+                    if (dec.y > -100) {
+                        this.floorDecorContainer.removeChild(dec);
+                    }
+                }
+
+                // Reset counter
+                this.counter -= this.counterBound;
+                this.counterBound = randomRange(...this.counterRange);
+            }
+
+            // Reverse the projPoint
+            this.bruhContainer.proj.setAxisY({x: -this.projPoint.x, y: -this.projPoint.y}, -this.factor);
+
+            // Make the floor move
+            this.road.tilePosition.y -= this.floorSpeed;
+            this.floor.tilePosition.y -= this.floorSpeed;
+        }
+        
         this.floor.tileProj.setAxisY(this.projPoint, this.factor);
         this.road.tileProj.setAxisY(this.projPoint, this.factor);
-
-        // Reverse the projPoint
-        this.bruhContainer.proj.setAxisY({x: -this.projPoint.x, y: -this.projPoint.y}, -this.factor);
-
-        // Make the floor move
-        this.road.tilePosition.y -= this.floorSpeed;
-        this.floor.tilePosition.y -= this.floorSpeed;
     }
 
     onResize() {

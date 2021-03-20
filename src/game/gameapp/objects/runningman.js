@@ -17,6 +17,8 @@ export class RunMan extends GameObject {
         this.runTex = [];
         this.idleTex = [];
 
+        this.paused = false;
+
         this.setup(pixiRef);
     }
 
@@ -72,6 +74,11 @@ export class RunMan extends GameObject {
         }
         if (this.speed != 0) {
             this.sprite.animationSpeed = this.speed;
+        }
+
+        // Pause
+        if (this.paused) {
+            this.sprite.animationSpeed = 0;
         }
 
         // Move shadow

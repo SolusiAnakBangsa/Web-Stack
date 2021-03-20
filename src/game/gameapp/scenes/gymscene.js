@@ -263,4 +263,8 @@ export class GymScene extends Scene {
     onResizeCode() {
         
     }
+
+    pauseCallback(isPaused) {
+        this.restCountdown.paused = isPaused;
+    }
 }

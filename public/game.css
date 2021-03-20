@@ -279,7 +279,7 @@ button:focus {
     animation-duration: 8s;
 }
 
-#summary{
+.blackoverlay {
     position: absolute;
     width: 100%;
     height: 100%;
@@ -295,6 +295,7 @@ button:focus {
     z-index: -3;
     opacity: 0;
     transition: opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+    font-family: 'Raleway';
 }
 
 #summarybox {
@@ -309,6 +310,13 @@ button:focus {
     font-size: 18pt;
     transform: scale(0, 0);
     transition: transform 0.5s cubic-bezier(0.020, 0.855, 0.830, 1.225);
+}
+
+.flcol {
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 #pacereport{
@@ -369,4 +377,14 @@ button:focus {
     color: rgb(65, 65, 65);
     font-family: 'Courier New', Courier, monospace;
     font-size: small;
+}
+
+.pausetext {
+    font-size: 50pt;
+    color: white;
+}
+
+.unpausebtn {
+    margin: 20px;
+    font-weight: normal;
 }
