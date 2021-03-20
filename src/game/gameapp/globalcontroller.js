@@ -31,10 +31,10 @@ export class GlobalController {
 
         // The workouts for this level.
         this.workouts = [
-        // {
-        //     "freq": 30,
-        //     "task": "Jog"
-        // },
+        {
+            "freq": 30,
+            "task": "Jog"
+        },
         {
             "freq": 3,
             "task": "Squat"
@@ -122,7 +122,7 @@ export class GlobalController {
 
     _toggleScenes() {
         if (this.currentWorkoutIndex >= this.workouts.length - 1) {
-            alert("You won ok...");
+            this.showSummary();
             return;
         }
         // Used to toggle scenes between running and gyming.
@@ -273,5 +273,90 @@ export class GlobalController {
     addMultiObject(obj) {
         this.appObj.scene.addObj(obj);
         this.multiObject.push(obj);
+    }
+
+    showSummary() {
+        const summary = document.getElementById("summary");
+        const summBox = document.getElementById("summarybox");
+
+        // Set up animations
+        summary.style.zIndex = 0;
+        summary.style.opacity = 1;
+
+        summBox.style.transform = "scale(1, 1)";
+
+        // Detect if there is jogging in the workout, and display graph.
+        // Gets all the pace data.
+        const pace = this.runScene.paceData;
+
+        // Draws the graph.
+        var ctx = document.getElementById('pacechart').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: Array(pace.length).fill(""),
+                datasets: [{
+                    label: 'Pace',
+                    data: pace,
+                    fill: false,
+                    borderColor: 'rgb(235, 129, 38)',
+                    pointBorderWidth: 0,
+                    borderWidth: 3,
+                    radius: 0
+                }]
+            },
+            options: {
+                legend: {
+                    // display: false
+                },
+                scales: {
+                    xAxes: [{
+                        display: false,
+                        gridLines: {
+                            display:false
+                        }
+                    }],
+                    yAxes: [{
+                        ticks: {
+                            autoSkip: true,
+                            maxTicksLimit: 3,
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+
+        // Gets all the workout, and insert it.
+        const workoutTable = document.getElementById("workouttable");
+        var column = 0; // Keep track the current table.
+        const columns = 2;
+        let tr;
+
+        for (let act of this.workouts) {
+            // Create a new row every column target.
+            if (column == 0) {
+                tr = document.createElement("tr");
+                workoutTable.appendChild(tr);
+            }
+            // Current data
+            const td = document.createElement("td");
+            const num = document.createElement("span");
+            num.classList.add("num");
+            const task = document.createElement("span");
+
+            num.innerText = act.freq + (act.task == "Jog" ? " steps" : "x ");
+            task.innerText = act.task + " ";
+            
+            td.appendChild(task);
+            td.appendChild(num);
+
+            tr.appendChild(td);
+
+            column++;
+
+            // Cycle between the columns.
+            if (column >= columns) column = 0
+        }
     }
 }

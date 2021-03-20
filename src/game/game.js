@@ -9,13 +9,36 @@ const game = new GameApp({
     resizeTo: window, // Resize to the size of the browser window once.
 });
 
+// Epic pixel look man!
+PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
+
 // Here, lets initialize the webrtc object with a custom peerID
 peer.init(Math.random().toString(36).slice(2).substr(0, 8));
 
 peer.connection.addReceiveHandler((payload) => {
-    // FIX: This can be better, i think.
+    // FIX: This should receive only once, then removes itself from the listener list.
+    // Adds a listener to listen for the workout data from phone.
     if ("workoutList" in payload) {
         GlobalController.levelData = payload;
+    }
+});
+
+peer.connection.addReceiveHandler((payload) => {
+    // Endgame listener
+    // Will update the end statistics.
+    if ("status" in payload) {
+        if (payload.status == "endgame") {
+            // Check if meta exist first.
+            if ("meta" in payload) {
+                const calories = document.getElementById("calstat");
+                const time = document.getElementById("timestat");
+
+                const mili = payload.totalTime === undefined ? 0 : payload.totalTime;
+
+                calories.innerText = payload.calories === undefined ? "Null" : payload.calories;
+                time.innerText = (new Date(mili)).toISOString().substr(11, 8);
+            }
+        }
     }
 });
 
@@ -55,9 +78,6 @@ peer.peer.on('error', function(err){
     notif.style.backgroundColor = "#f27963";
     notif.innerText = err;
 });
-
-// Epic pixel look man!
-PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
 
 class ExModule {
     static startGame() {

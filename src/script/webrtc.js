@@ -122,7 +122,7 @@ class ConnectionObj {
     }
 
     _onReceiveData(payload) {
-        console.log(payload);
+        console.log("Received: " + payload);
         for (let c of this.callbacks) {
             c(payload);
         }

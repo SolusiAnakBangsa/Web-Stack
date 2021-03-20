@@ -22,6 +22,9 @@ const RUNARRLEN = (RUNRETAIN/RUNPOLL) << 0;
 // Speed range running speed
 const SPEEDRANGE = [100, 700];
 
+// Time in second to poll pace data.
+const PACEDATAPOLL = 1000;
+
 export class RunScene extends Scene {
     
     constructor(pixiRef, controller) {
@@ -44,6 +47,12 @@ export class RunScene extends Scene {
 
         this.runSpeed = 0; // In pixel / second
         this.runSpeedToAnimSpeed = function () { return this.runSpeed/2700 };
+
+        // Variables to store historical data for pace.
+        this.paceDataCounter = 0;
+        this.paceData = [];
+
+        this.paceCount = 0;
     }
 
     setup(pixiRef) {
@@ -116,6 +125,14 @@ export class RunScene extends Scene {
             }
         }
 
+        // Poll pace data
+        this.paceDataCounter += delta;
+
+        if (this.runCounter > PACEDATAPOLL) {
+            this.paceData.push(this.paceCount);
+            this.paceDataCounter -= PACEDATAPOLL;
+        }
+
         // Run code
         this.runCounter += delta;
 
@@ -133,7 +150,9 @@ export class RunScene extends Scene {
                 avg += this.paceArray[i];
             }
             avg /= RUNARRLEN;
-            this.setSpeed(clamp(avg, 0, 100)); // Set the speed of the scene.
+            this.paceCount = clamp(avg, 0, 100);
+            this.setSpeed(this.paceCount); // Set the speed of the scene.
+
             this.runCounter -= RUNPOLL;
         }
     }
