@@ -37,6 +37,7 @@ export class FightMan extends GameObject {
             "Push Up": this.fightMan2,
             "Knee Push Up": this.fightMan2,
             "Forward Lunge": this.fightMan2,
+            "High Knee": this.fightMan2,
         }
 
         this.mainContainer.addChild(this.fightMan);

@@ -2,6 +2,7 @@ import { peer } from "./../../script/webrtc";
 import { RunScene } from "./scenes/runscene";
 import { GymScene } from "./scenes/gymscene";
 import { Transitioner } from "./transitioner";
+import { Countdown } from "./objects/countdown";
 import { Button } from "./objects/button";
 
 // Static enum to store all the workouts.
@@ -10,6 +11,9 @@ let Workouts = Object.freeze({
     JOG: 1, // Jog scene
     GYM: 2, // Gym scene
 });
+
+// How many seconds to wait before the activity starts.
+const COUNTDOWNTIMER = 5;
 
 export class GlobalController {
     
@@ -26,10 +30,12 @@ export class GlobalController {
         this.title;
 
         // The workouts for this level.
-        this.workouts = [{
-            "freq": 30,
-            "task": "Jog"
-        }, {
+        this.workouts = [
+        // {
+        //     "freq": 30,
+        //     "task": "Jog"
+        // },
+        {
             "freq": 3,
             "task": "Squat"
         }, {
@@ -48,28 +54,56 @@ export class GlobalController {
         // Index to keep track of the current workout.
         this.currentWorkoutIndex = 0;
 
+        // State of the game.
         this.isPaused = false;
+
+        // Begin countdown object
+        this.count;
     }
 
     _dataListener(payload) {
         // This function is used as what will be executed when the peer
         // Receives a data. This function will determine what to do with the data.
 
-
         // Do dataListener of current scene.
         this.appObj.scene.dataListener(payload);
     }
 
-    _updateWorkoutData() {
-        this.workouts = GlobalController.levelData["workoutList"]["tasks"];
-
-        console.log(this.workouts);
-
-        var totalSteps = 0;
-        for (let workout of this.workouts) {
-            if (workout.task == "Jog") totalSteps += workout.freq;
+    _initializeWorkout() {
+        // This will update the current workout list in this object, if the 
+        // peer connection object receives anything.
+        if (GlobalController.levelData !== undefined) {
+            this.workouts = GlobalController.levelData["workoutList"]["tasks"];
+        } else {
+            console.error("Phone did not send workout list, or data is received late.");
         }
-        this.runScene.pace.targetSteps = totalSteps;
+
+        // Looks at the first workout, and decide which scene to go.
+        if (this.workouts[0].task == "Jog") {
+            this.goToRun();
+            // Set to float down.
+            this.runScene.floatDown();
+        } else {
+            // FIX: This is kind of a jank fix, so maybe consider this in the future.
+            this.currentWorkoutIndex = -1;
+            this.goToGym();
+        }
+
+        // Add the count object to the current scene.
+        this.appObj.scene.addObj(this.count);
+
+        // Set the countdown callback and start it.
+        this.count.callback = () => {
+            // Set text to go, then set a timer for 1 second to delete it.
+            this.count.mainContainer.text = "GO!";
+            this.count.textStyle.fontSize = 200;
+            // Timer to delete the count object.
+            setTimeout(() => {this.appObj.scene.delObj(this.count);}, 1500);
+
+            // When all timing is done, send a startgame to the phone.
+            peer.connection.sendData({"status" : "startgame"});
+        };
+        this.count.start();
     }
 
     setup() {
@@ -99,31 +133,8 @@ export class GlobalController {
                     this.appObj.scene.delObj(obj);
                 }
 
-                switch (this.currentWorkout) {
-                    case Workouts.JOG:
-                        // Slice this.workout object to include only the gym games from the index.
-                        // First, discover which index is the next jog (or the end).
-                        let lastIndex;
-                        let foundJog = false;
-                        for (lastIndex = this.currentWorkoutIndex + 1; lastIndex < this.workouts.length; lastIndex++) {
-                            if (this.workouts[lastIndex].task == "Jog") {
-                                foundJog = true;
-                                break;
-                            }
-                        }
-
-                        // Slice it.
-                        // If the next jog exercise is not found, then send Everything up until the last point.
-                        let workoutSlice = this.workouts.slice(this.currentWorkoutIndex + 1, foundJog ? lastIndex : lastIndex + 1);
-
-                        // Change current workout index to last index.
-                        this.currentWorkoutIndex = lastIndex;
-                        this.goToGym(workoutSlice);
-                        break;
-                    case Workouts.GYM:
-                        this.goToRun();
-                        break;
-                }
+                // Do the function, to decide where to go.
+                this._transition();
 
                 // Add all multiObject instances to the next scene.
                 for (let obj of this.multiObject) {
@@ -137,9 +148,40 @@ export class GlobalController {
         );
     }
 
-    goToGym(workouts) {
+    _transition() {
+        switch (this.currentWorkout) {
+            case Workouts.JOG:
+                this.goToGym();
+                break;
+            case Workouts.GYM:
+                this.goToRun();
+                break;
+        }
+    }
+
+    goToGym() {
+
+        // Slice this.workout object to include only the gym games from the index.
+        // First, discover which index is the next jog (or the end).
+        let lastIndex;
+        let foundJog = false;
+        for (lastIndex = this.currentWorkoutIndex + 1; lastIndex < this.workouts.length; lastIndex++) {
+            if (this.workouts[lastIndex].task == "Jog") {
+                foundJog = true;
+                break;
+            }
+        }
+
+        // Slice it.
+        // If the next jog exercise is not found, then send Everything up until the last point.
+        // TODO BRUH BRUH BRUH THE + 1
+        let workoutSlice = this.workouts.slice(this.currentWorkoutIndex + 1, foundJog ? lastIndex : lastIndex + 1);
+
+        // Change current workout index to last index.
+        this.currentWorkoutIndex = lastIndex;
+
         // Send the workout data to the gym
-        this.gymScene.startNewWorkout(workouts);
+        this.gymScene.startNewWorkout(workoutSlice);
         this.currentWorkout = Workouts.GYM;
 
         // Set scene
@@ -152,6 +194,14 @@ export class GlobalController {
     goToRun() {
         this.appObj.setScene(this.runScene);
         this.currentWorkout = Workouts.JOG;
+
+        // MINORFIX: can be done only once.
+        // Updates the total steps has to be done.
+        var totalSteps = 0;
+        for (let workout of this.workouts) {
+            if (workout.task == "Jog") totalSteps += workout.freq;
+        }
+        this.runScene.pace.targetSteps = totalSteps;
 
         // Update the targetSteps in the runScene thingy based on current workout index.
         var stepsUpUntil = 0;
@@ -184,18 +234,14 @@ export class GlobalController {
         this.runScene = new RunScene(this.pixiRef, this);
         this.gymScene = new GymScene(this.pixiRef, this);
 
+        // Make countdown object
+        this.count = new Countdown(pixiRef, COUNTDOWNTIMER);
+
         // Add callback to be able to transition back from gym to run
         this.gymScene.doneCallback = () => {this._toggleScenes()};
         this.runScene.doneCallback = () => {this._toggleScenes()};
 
-        // MINORFIX: This is assumption that the workout data is received. which it should already be.
-        this._updateWorkoutData();
-
-        // this.goToGym(workouts);
-
-        // Set first scene to be running
-        // TODO: Might wanna change this later. so that it can detect what's the starting exercise.
-        this.goToRun();
+        this._initializeWorkout();
 
         // Add the transitioner and pause to the current scene
         // IMPORTANT NOTE: You can't add objects to two pixi containers. If done, then will not display.

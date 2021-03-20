@@ -163,13 +163,13 @@ export class Pace extends GameObject {
         const pX = this.runProgress.x;
         const pY = this.runProgress.y;
     
-        const progressXPos = this.steps/this.targetSteps * PROGRESSLENGTH;
+        const progressXPos = clamp(this.steps/this.targetSteps * PROGRESSLENGTH, 0, PROGRESSLENGTH);
 
         // Draws the progress bar.
         this.runProgressBar.drawRect(
             pX + PROGRESSXOFFSET,
             pY + PROGRESSYOFFSET,
-            clamp(progressXPos, 0, PROGRESSLENGTH),
+            progressXPos,
             PROGRESSHEIGHT
         );
         

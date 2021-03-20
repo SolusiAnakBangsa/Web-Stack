@@ -68,6 +68,7 @@ export class GymScene extends Scene {
             this.fightUI.workoutCounter.text = maxRep - this.currentReps;
             this.fightUI._redrawWorkoutBar();
 
+            // Check if this is the last rep in the workout.
             if (this.currentReps == maxRep) {
                 // When this is the last rep, enter resting mode and set timeout
                 // When animation finished to rest.

@@ -70,24 +70,24 @@ export class RunScene extends Scene {
 
         // New countdown object.
         // Once countdown is done, start the game.
-        this.count = new Countdown(pixiRef, 5);
-        this.count.callback = () => {
-            // Set text to go, then set a timer for 1 second to delete it.
-            this.count.mainContainer.text = "GO!";
-            this.count.textStyle.fontSize = 180;
-            // Timer to delete the count object.
-            setTimeout(() => {this.delObj(this.count);}, 2000);
+        // this.count = new Countdown(pixiRef, 5);
+        // this.count.callback = () => {
+        //     // Set text to go, then set a timer for 1 second to delete it.
+        //     this.count.mainContainer.text = "GO!";
+        //     this.count.textStyle.fontSize = 180;
+        //     // Timer to delete the count object.
+        //     setTimeout(() => {this.delObj(this.count);}, 2000);
 
-            // When all timing is done, send a startgame to the phone.
-            peer.connection.sendData({"status" : "startgame"});
-        };
+        //     // When all timing is done, send a startgame to the phone.
+        //     peer.connection.sendData({"status" : "startgame"});
+        // };
 
         this.addObj(this.floor);
         this.addObj(this.sky);
         this.addObj(this.runman);
         this.addObj(this.pace);
-        this.addObj(this.count);
-        this.setAbove();
+        // this.addObj(this.count);
+        this.onResize();
     }
 
     loopCode(delta) {
@@ -139,8 +139,7 @@ export class RunScene extends Scene {
     }
 
     start() {
-        this.floatDown();
-        this.count.start();
+        // this.count.start();
     }
 
     startRun() {
@@ -184,11 +183,13 @@ export class RunScene extends Scene {
                 // }
                 console.log("Bruh1");
                 console.log(payload.status);
-                if (payload.status == "mid") {
-                    // if (this.lastRunObject === undefined) {
-                    //     this.lastRunObject = {step: payload.repAmount, time: payload.time}; // Set
-                    //     return;
-                    // }
+
+                if (payload.status == "start") {
+                    this.lastRunObject = {step: payload.repAmount, time: payload.time}; // Sets
+                } else if (payload.status == "mid" || payload.status == "end") {
+                    if (this.lastRunObject === undefined) {
+                        this.lastRunObject = {step: payload.repAmount, time: payload.time}; // Set
+                    }
                     // Step per second in the data.
                     const dataDuration = (payload.time - this.lastRunObject.time); // Duration of data
                     const stepTimeframe = (payload.repAmount - this.lastRunObject.step) * (dataDuration/RUNPOLL) * 100;
@@ -201,11 +202,10 @@ export class RunScene extends Scene {
                     // Update steps in UI object
                     this.pace.setSteps(payload.repAmount);
 
-                } else if (payload.status == "start") {
-                    this.lastRunObject = {step: payload.repAmount, time: payload.time}; // Sets
-                } else if (payload.status == "end") {
-                    console.log("Bruh");
-                    this.doneCallback();
+                    if (payload.status == "end") {
+                        console.log("Bruh");
+                        this.doneCallback();
+                    }
                 }
             }
         }
@@ -218,6 +218,7 @@ export class RunScene extends Scene {
     floatDown() {
         // Function to pan down to the game, starting it.
         this.floatState = true;
+        this.setAbove();
     }
 
     onResizeCode() {
