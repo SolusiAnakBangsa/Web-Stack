@@ -253,6 +253,13 @@ export class GlobalController {
         // Register unpause
         const unpause = document.getElementById("unpause");
         unpause.onclick = () => {this.pauseCallback(false)};
+
+        // Pause the game on browser lose focus
+        document.addEventListener("visibilitychange", () => {
+            if (document.visibilityState === 'hidden' && this.isPaused == false) {
+                this.pauseCallback(true);
+            }
+        });
     }
 
     loop(delta) {
