@@ -292,7 +292,6 @@ export class FightUI extends GameObject {
             this.app.screen.width - ENEMYOFFSETX + this.enemyPosOffset.x,
             this.app.screen.height - ENEMYOFFSETY + this.enemyPosOffset.y,
         );
-        this.enemyShadow.uniforms.floorY = this.enemy.y + this.enemyPosOffset.y;
 
         this._redrawEnemyHealth();
         this._redrawWorkoutBar();

@@ -217,6 +217,12 @@ export class GymScene extends Scene {
     }
 
     setup(pixiRef) {
+        this.floatState = false; // The state whether to do the float down animation.
+        this.lerpFunction = (x) => 1 - Math.pow(1 - x, 3); // Interpolation function to use. (Ease out lerp)
+        this.initYOffset = pixiRef.app.screen.height; // Offset to place the objects in.
+        this.floatCounter = 0;
+        this.floatDuration = 5; // The amount of duration for floatDown.
+
         this.fightFloor = new FightFloor(pixiRef);
         this.fightMan = new FightMan(pixiRef);
         this.fightUI = new FightUI(pixiRef);
@@ -253,8 +259,49 @@ export class GymScene extends Scene {
         this.addObj(this.fightUI);
     }
 
-    loopCode(delta) {
+    floatDown() {
+        // Function to pan down to the game, starting it.
+        this.floatState = true;
+        this.setAbove();
+    }
 
+    setAbove() {
+        // Function to set every object to be at bottom.
+        this.fightFloor.mainContainer.y += this.initYOffset;
+        this.fightMan.mainContainer.y += this.initYOffset;
+        this.fightUI.enemyCont.y += this.initYOffset;
+    }
+
+    loopCode(delta) {
+        if (this.floatState) {
+
+            const deltaS = delta/1000;
+
+            // Calculate offset
+            const curOffset = this.initYOffset * (this.lerpFunction((this.floatCounter + deltaS)/this.floatDuration) - this.lerpFunction(this.floatCounter/this.floatDuration));
+
+            // Increase the position
+            this.fightFloor.mainContainer.y -= curOffset;
+            this.fightMan.mainContainer.y -= curOffset;
+            this.fightUI.enemyCont.y -= curOffset;
+
+            this.fightMan.manShadow.uniforms.floorY = this.fightMan.mainContainer.y  + this.fightMan.fightMan.y;
+            this.fightUI.enemyShadow.uniforms.floorY = this.fightUI.enemyCont.y + (this.fightUI.enemy.y + this.fightUI.enemyPosOffset.y);
+
+            // Increase the duration.
+            this.floatCounter += deltaS;
+
+            // Stop the animation once it reaches floatDuration.
+            // and send a trigger that the animation is completed.
+            if (this.floatCounter > this.floatDuration) {
+                this.floatState = false;
+                this.animationDone();
+            }
+        }
+    }
+
+    animationDone() {
+        this.onResize();
     }
 
     start() {

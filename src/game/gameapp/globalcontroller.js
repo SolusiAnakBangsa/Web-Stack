@@ -31,10 +31,10 @@ export class GlobalController {
 
         // The workouts for this level.
         this.workouts = [
-        {
-            "freq": 30,
-            "task": "Jog"
-        },
+        // {
+        //     "freq": 30,
+        //     "task": "Jog"
+        // },
         {
             "freq": 3,
             "task": "Squat"
@@ -88,6 +88,8 @@ export class GlobalController {
             this.runScene.floatDown();
         } else {
             this.goToGym();
+            // Set to float down.
+            this.gymScene.floatDown();
         }
 
         // Add the count object to the current scene.
@@ -311,7 +313,7 @@ export class GlobalController {
 
     showSummary() {
         // Set tag
-        this.finished = false;
+        this.finished = true;
 
         const summary = document.getElementById("summary");
         const summBox = document.getElementById("summarybox");
