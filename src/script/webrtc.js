@@ -122,7 +122,7 @@ class ConnectionObj {
     }
 
     _onReceiveData(payload) {
-        console.log("Received: " + payload);
+        console.log("Received: " + JSON.stringify(payload));
         for (let c of this.callbacks) {
             c(payload);
         }
@@ -132,7 +132,7 @@ class ConnectionObj {
         // Sends data to the established connection, prints error if connection is lost.
         try{
             this.connection.send(data);
-            console.log("Local sent: " + data);
+            console.log("Local sent: " + JSON.stringify(data));
         }
         catch(err) {
             console.log("Connection lost with " + this.connection);

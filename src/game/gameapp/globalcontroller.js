@@ -43,11 +43,11 @@ export class GlobalController {
             "task": "Squat"
         }, {
             "freq": 25,
-            "task": "Jog"
+            "task": "Squat"
         },
         {
-            "task": "Squat",
-            "freq": 15
+            "task": "Jog",
+            "freq": 50
         }
         ];
 
@@ -59,6 +59,9 @@ export class GlobalController {
 
         // Begin countdown object
         this.count;
+
+        // Whether all the workout is finished.
+        this.finished = false;
     }
 
     _dataListener(payload) {
@@ -84,8 +87,6 @@ export class GlobalController {
             // Set to float down.
             this.runScene.floatDown();
         } else {
-            // FIX: This is kind of a jank fix, so maybe consider this in the future.
-            this.currentWorkoutIndex = -1;
             this.goToGym();
         }
 
@@ -127,7 +128,7 @@ export class GlobalController {
     }
 
     _toggleScenes() {
-        if (this.currentWorkoutIndex >= this.workouts.length - 1) {
+        if (this.currentWorkoutIndex >= this.workouts.length) {
             this.showSummary();
             return;
         }
@@ -169,22 +170,23 @@ export class GlobalController {
 
         // Slice this.workout object to include only the gym games from the index.
         // First, discover which index is the next jog (or the end).
-        let lastIndex;
+
+        var ci = this.currentWorkoutIndex;
+        const workouts = this.workouts;
+
+        // Find the next jog, or go to the end.
+        var li;
         let foundJog = false;
-        for (lastIndex = this.currentWorkoutIndex + 1; lastIndex < this.workouts.length; lastIndex++) {
-            if (this.workouts[lastIndex].task == "Jog") {
+        for (li = ci; li < workouts.length; li++) {
+            if (workouts[li].task == "Jog") {
                 foundJog = true;
                 break;
             }
         }
 
-        // Slice it.
-        // If the next jog exercise is not found, then send Everything up until the last point.
-        // TODO BRUH BRUH BRUH THE + 1
-        let workoutSlice = this.workouts.slice(this.currentWorkoutIndex + 1, foundJog ? lastIndex : lastIndex + 1);
+        const workoutSlice = workouts.slice(ci, foundJog ? li : li+1);
 
-        // Change current workout index to last index.
-        this.currentWorkoutIndex = lastIndex;
+        this.currentWorkoutIndex = li;
 
         // Send the workout data to the gym
         this.gymScene.startNewWorkout(workoutSlice);
@@ -210,6 +212,9 @@ export class GlobalController {
 
         // Move the pause button
         this.pauseButton.changePosition((sWidth) => sWidth - 100, (sHeight) => sHeight - 100);
+
+        // Increase the workout index.
+        this.currentWorkoutIndex++;
     }
 
     start(pixiRef) {
@@ -270,10 +275,11 @@ export class GlobalController {
     }
 
     pauseCallback(isPaused) {
+        // If the game is already finished, don't pause.
+        if (this.finished) return;
+
         // Set variable
         this.isPaused = isPaused;
-
-        console.log("Paused: " + isPaused);
 
         // Send the pause data
         const data = {
@@ -304,6 +310,9 @@ export class GlobalController {
     }
 
     showSummary() {
+        // Set tag
+        this.finished = false;
+
         const summary = document.getElementById("summary");
         const summBox = document.getElementById("summarybox");
 
@@ -316,8 +325,6 @@ export class GlobalController {
         // Detect if there is jogging in the workout, and display graph.
         // Gets all the pace data.
         const pace = this.runScene.paceData;
-
-        console.log(pace);
 
         // Draws the graph.
         var ctx = document.getElementById('pacechart').getContext('2d');

@@ -53,6 +53,8 @@ export class RunScene extends Scene {
         this.paceData = [];
 
         this.paceCount = 0;
+
+        this.totalSteps = 0;
     }
 
     setup(pixiRef) {
@@ -192,8 +194,6 @@ export class RunScene extends Scene {
                 // if (payload.repAmount >= this.targetSteps) {
                 //     this.doneCallback();
                 // }
-                console.log("Bruh1");
-                console.log(payload.status);
 
                 if (payload.status == "start") {
                     this.lastRunObject = {step: payload.repAmount, time: payload.time}; // Sets
@@ -203,18 +203,20 @@ export class RunScene extends Scene {
                     }
                     // Step per second in the data.
                     const dataDuration = (payload.time - this.lastRunObject.time); // Duration of data
-                    const stepTimeframe = (payload.repAmount - this.lastRunObject.step) * (dataDuration/RUNPOLL) * 100;
+                    const deltaStep = payload.repAmount - this.lastRunObject.step;
+                    const stepTimeframe = deltaStep * (dataDuration/RUNPOLL) * 100;
         
                     // this.runQueue += clamp((stepPerS/MAXPACE) * 100 * dataDuration/RUNRETAIN, 0, 100);
                     this.runQueue += stepTimeframe/MAXPACE;
 
                     this.lastRunObject = {step: payload.repAmount, time: payload.time}; // Set before.
 
+                    this.totalSteps += deltaStep;
+
                     // Update steps in UI object
-                    this.pace.setSteps(payload.repAmount);
+                    this.pace.setSteps(this.totalSteps);
 
                     if (payload.status == "end") {
-                        console.log("Bruh");
                         this.doneCallback();
                     }
                 }

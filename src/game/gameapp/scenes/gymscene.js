@@ -38,9 +38,10 @@ export class GymScene extends Scene {
         this.workouts = workouts;
         this.workoutIndex = 0;
 
+        this.currentReps = 0;
+
         this.prevRep = 0;
 
-        console.log(workouts);
         this.resting = false;
 
         // Randomize enemy to spawn.
@@ -200,8 +201,8 @@ export class GymScene extends Scene {
 
     dataListener(payload) {
 
-        // TODO: Send start signal when starting a new exercise.
         // If a payload data that corresponds to the current workout is received, then increase rep by one.
+
         if ("exerciseType" in payload && this.workoutIndex < this.workouts.length) {
             if (payload.exerciseType == this.workouts[this.workoutIndex].task &&
                 payload.status == "mid" &&

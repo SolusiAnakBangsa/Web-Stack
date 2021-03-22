@@ -4,6 +4,8 @@ import { ShadowShader } from "./../shadowshader";
 const GUYOFFSETY = 120;
 const GUYOFFSETX = 270;
 
+const TIMESCALEGLOBAL = 1.1; // Speed up the animations globally.
+
 export class FightMan extends GameObject {
 
     constructor(pixiRef) {
@@ -49,6 +51,9 @@ export class FightMan extends GameObject {
 
         this.fightMan.scale.set(4);
         this.fightMan2.scale.set(4);
+
+        this.fightMan.state.timeScale = TIMESCALEGLOBAL;
+        this.fightMan2.state.timeScale = TIMESCALEGLOBAL;
 
         // play animation
         this.fightMan.state.setAnimation(0, 'Idle', false);
