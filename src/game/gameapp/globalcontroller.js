@@ -89,7 +89,7 @@ export class GlobalController {
         } else {
             this.goToGym();
             // Set to float down.
-            this.gymScene.floatDown();
+            // this.gymScene.floatDown();
         }
 
         // Add the count object to the current scene.

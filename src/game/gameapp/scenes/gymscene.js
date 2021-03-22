@@ -108,6 +108,7 @@ export class GymScene extends Scene {
             this.fightUI.setWorkoutText(this.workouts[this.workoutIndex].task);
             this.fightUI.workoutP = 0;
             this.fightUI._redrawWorkoutBar();
+            this.fightMan.fightManAnim.changePose(this.workouts[this.workoutIndex].task, true);
         } else {
             // Obliterate the enemy
             this.fightUI.flyEnemy();
@@ -130,9 +131,9 @@ export class GymScene extends Scene {
     _updatePose() {
         // Update pose depending on the current workout index
         if (this.workoutIndex < this.workouts.length) {
-            this.fightMan.changePose(this.workouts[this.workoutIndex].task, false);
+            this.fightMan.fightMan.changePose(this.workouts[this.workoutIndex].task, false);
         } else {
-            this.fightMan.changePose('Idle', true);
+            this.fightMan.fightMan.changePose('Idle', true);
         }
     }
 
@@ -167,6 +168,9 @@ export class GymScene extends Scene {
 
         // Set the person animation to be idle.
         this.fightMan.changePose('Idle', true);
+
+        // Display the instruction screen.
+        this.fightMan.setDisplayInstruction(true);
     }
 
     _nextWorkoutCountdown() {
@@ -190,6 +194,9 @@ export class GymScene extends Scene {
         
         // Change the pose
         this._updatePose();
+        
+        // Remove the display instruction
+        this.fightMan.setDisplayInstruction(false);
     }
 
     _addOne() {
@@ -228,6 +235,18 @@ export class GymScene extends Scene {
         this.fightUI = new FightUI(pixiRef);
         this.restCountdown = new Countdown(pixiRef, null, this._nextWorkoutCountdown.bind(this));
 
+        this.infoButton = new Button(
+            pixiRef,
+            "help_outline",
+            () => {
+                this.fightMan.setDisplayInstruction(!this.fightMan.displayInstruction);
+            },
+            () => 32,
+            () => 96 + 16,
+            64,
+            0x00AAAA
+        );
+
         // Skip button.
         this.skipButton = new Button(
             pixiRef,
@@ -236,7 +255,7 @@ export class GymScene extends Scene {
                 this.restCountdown.counter = 1;
             },
             () => 32,
-            () => 96 + 16,
+            () => 160 + 32,
             64,
             0x00AAAA
         );
@@ -249,7 +268,7 @@ export class GymScene extends Scene {
                 this.restCountdown.counter += 5;
             },
             () => 32,
-            () => 160 + 32,
+            () => 224 + 48,
             64,
             0x00AAAA
         );
@@ -257,6 +276,7 @@ export class GymScene extends Scene {
         this.addObj(this.fightFloor);
         this.addObj(this.fightMan);
         this.addObj(this.fightUI);
+        this.addObj(this.infoButton)
     }
 
     floatDown() {
@@ -274,7 +294,6 @@ export class GymScene extends Scene {
 
     loopCode(delta) {
         if (this.floatState) {
-
             const deltaS = delta/1000;
 
             // Calculate offset
@@ -285,7 +304,7 @@ export class GymScene extends Scene {
             this.fightMan.mainContainer.y -= curOffset;
             this.fightUI.enemyCont.y -= curOffset;
 
-            this.fightMan.manShadow.uniforms.floorY = this.fightMan.mainContainer.y  + this.fightMan.fightMan.y;
+            this.fightMan.manShadow.uniforms.floorY = this.fightMan.mainContainer.y + this.fightMan.fightMan.fightMan.y;
             this.fightUI.enemyShadow.uniforms.floorY = this.fightUI.enemyCont.y + (this.fightUI.enemy.y + this.fightUI.enemyPosOffset.y);
 
             // Increase the duration.
@@ -314,5 +333,9 @@ export class GymScene extends Scene {
 
     pauseCallback(isPaused) {
         this.restCountdown.paused = isPaused;
+    }
+
+    tapCallback(event) {
+
     }
 }

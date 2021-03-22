@@ -111,4 +111,4 @@ class ExModule {
 module.exports = ExModule;
 
 // For testing only
-ExModule.startGame();
+// ExModule.startGame();
