@@ -1,6 +1,7 @@
 import { GameObject } from "./gameobject";
 import { ShadowShader } from "./../shadowshader";
 import { propertyLength } from "./../../../script/util";
+import { CharacterSpine } from "./fightman";
 
 const HEALTHBARLENGTH = 174 * 3;
 const HEALTHBARHEIGHT = 9 * 3;
@@ -20,6 +21,9 @@ const COUNTERBARYPOS = 52;
 const COUNTERBARPADDING = 4;
 
 const WORKOUTFONTSIZE = 80;
+
+const INSTRUCTIONWIDTH = 700;
+const INSTRUCTIONHEIGHT = 450;
 
 export class FightUI extends GameObject {
 
@@ -41,6 +45,14 @@ export class FightUI extends GameObject {
             {name: "Absogus", res: pixiRef.resources.absogus},
             {name: "Armogus", res: pixiRef.resources.armogus},
         ];
+
+        // Instruction methods
+        this.displayInstruction = false;
+        this.instructionProgress = 0;
+        this.instructionLerp = (x) => x*x*x*x*x;
+
+        const ANIMATIONLENGTH = 1000; // ms
+        this.lerpPeriod = (1000/ANIMATIONLENGTH)/60;
 
         this.setup(pixiRef);
     }
@@ -80,6 +92,7 @@ export class FightUI extends GameObject {
         this.enemyProgressBar = new PIXI.Graphics();
 
         // Workout text
+        // ==================
         this.textContainer = new PIXI.Container();
         this.workoutStyle = new PIXI.TextStyle({
             dropShadow: true,
@@ -115,8 +128,57 @@ export class FightUI extends GameObject {
         this.workoutText.anchor.set(1, 1);
         this.workoutCounter.anchor.set(0.5, 0.5);
 
+        // ==================
+
         // Graphics for displaying counter
         this.workoutGraphic = new PIXI.Graphics();
+
+        // Make instruction graphics
+        // ==================
+        this.infoCont = new PIXI.Container();
+
+        this.instructionGraphics = new PIXI.Graphics();
+
+        this.fightManAnim = new CharacterSpine(pixiRef);
+        this.fightManAnim.fightMan.scale.set(2.15);
+        this.fightManAnim.fightMan2.scale.set(2.15);
+
+        this.fightManAnim.fightMan.position.set(
+            -180,
+            INSTRUCTIONHEIGHT/2 - 24
+        );
+        this.fightManAnim.fightMan2.position.set(
+            -180,
+            INSTRUCTIONHEIGHT/2 - 24
+        );
+
+        this.instructionContainer = new PIXI.Container();
+        this.instructionGraphics.clear();
+        this.instructionGraphics.beginFill(0xFFFFFF);
+        this.instructionGraphics.drawRoundedRect(
+            -INSTRUCTIONWIDTH/2,
+            -INSTRUCTIONHEIGHT/2,
+            INSTRUCTIONWIDTH,
+            INSTRUCTIONHEIGHT,
+            20
+        );
+        this.instructionGraphics.endFill();
+
+        // Create the description text
+        this.instructionStyle = new PIXI.TextStyle({
+            fontFamily: "Roboto, Arial",
+            wordWrap: true,
+            fontSize: 20,
+            wordWrapWidth: INSTRUCTIONWIDTH/2 - 32
+        });
+        this.instructionText = new PIXI.Text("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.", this.instructionStyle);
+
+        this.instructionText.position.set(16, -INSTRUCTIONHEIGHT/2 + 16);
+
+        this.instructionContainer.addChild(this.instructionGraphics);
+        this.instructionContainer.addChild(this.fightManAnim.container);
+        this.instructionContainer.addChild(this.instructionText);
+        // ==================
 
         this.enemyCont.addChild(this.enemy);
 
@@ -128,6 +190,7 @@ export class FightUI extends GameObject {
         this.mainContainer.addChild(this.enemyProgressBar);
         this.mainContainer.addChild(this.enemyHealth);
         this.mainContainer.addChild(this.textContainer);
+        this.mainContainer.addChild(this.infoCont);
 
         this._redrawEnemyHealth();
     }
@@ -250,6 +313,31 @@ export class FightUI extends GameObject {
         this.workoutGraphic.endFill();
     }
 
+    _redrawInstructionLoop() {
+        // Logic to redraw the instruction UI
+        // The third nested if statement here refers to the logic to stop rendering the container once gone.
+        let redrawInstruction = false;
+
+        if (this.displayInstruction) {
+            if (this.instructionProgress < 1) {
+                if (this.instructionProgress >= 0) {
+                    this.infoCont.addChild(this.instructionContainer);
+                }
+                this.instructionProgress += this.lerpPeriod;
+                redrawInstruction = true;
+            }
+        } else {
+            if (this.instructionProgress > 0) {
+                this.instructionProgress -= this.lerpPeriod;
+                redrawInstruction = true;
+                if (this.instructionProgress <= 0) {
+                    this.infoCont.removeChild(this.instructionContainer);
+                }
+            }
+        }
+        if (redrawInstruction) this._redrawInstruction();
+    }
+
     loop(delta) {
         const speed = 20;
         if (this.flying) {
@@ -263,6 +351,20 @@ export class FightUI extends GameObject {
                 this.flying = false;    
             }
         }
+        this._redrawInstructionLoop();
+    }
+
+    setDisplayInstruction(isDisplayed) {
+        this.displayInstruction = isDisplayed;
+    }
+
+    _redrawInstruction() {
+        const centerX = this.app.screen.width/2;
+        const centerY = this.app.screen.height/2;
+
+        const lerp = this.instructionLerp(this.instructionProgress);
+
+        this.instructionContainer.scale.set(lerp, lerp);
     }
 
     onResize() {
@@ -291,6 +393,11 @@ export class FightUI extends GameObject {
         this.enemy.position.set(
             this.app.screen.width - ENEMYOFFSETX + this.enemyPosOffset.x,
             this.app.screen.height - ENEMYOFFSETY + this.enemyPosOffset.y,
+        );
+
+        this.instructionContainer.position.set(
+            this.app.screen.width/2,
+            this.app.screen.height/2
         );
 
         this._redrawEnemyHealth();

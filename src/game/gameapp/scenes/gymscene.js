@@ -80,7 +80,7 @@ export class GymScene extends Scene {
 
                 // Check whether this is the last workout.
                 if (this.workoutIndex < this.workouts.length - 1) {
-                    callback = () => {this._restBeforeNext(RESTSECONDS);}
+                    callback = () => {this._restCountdown(RESTSECONDS);}
                 } else {
                     callback = () => {
                         this.workoutIndex++;
@@ -92,7 +92,7 @@ export class GymScene extends Scene {
                 // Wait for the duration of the last workout, and additional 500ms.
                 setTimeout(
                     callback,
-                    this.fightMan.currentSprite.state.getCurrent(0).animation.duration*1000 + 500
+                    this.fightMan.fightMan.currentSprite.state.getCurrent(0).animation.duration*1000 + 500
                 );
             }
         }
@@ -108,7 +108,7 @@ export class GymScene extends Scene {
             this.fightUI.setWorkoutText(this.workouts[this.workoutIndex].task);
             this.fightUI.workoutP = 0;
             this.fightUI._redrawWorkoutBar();
-            this.fightMan.fightManAnim.changePose(this.workouts[this.workoutIndex].task, true);
+            this.fightUI.fightManAnim.changePose(this.workouts[this.workoutIndex].task, true);
         } else {
             // Obliterate the enemy
             this.fightUI.flyEnemy();
@@ -137,7 +137,7 @@ export class GymScene extends Scene {
         }
     }
 
-    _restBeforeNext(seconds) {
+    _restCountdown(seconds) {
         // Create a countdown object that will callback
         // The next workout event.
         // This will be called after the user have completed an exercise
@@ -167,13 +167,13 @@ export class GymScene extends Scene {
         this.addObj(this.restCountdown);
 
         // Set the person animation to be idle.
-        this.fightMan.changePose('Idle', true);
+        this.fightMan.fightMan.changePose('Idle', true);
 
         // Display the instruction screen.
-        this.fightMan.setDisplayInstruction(true);
+        this.fightUI.setDisplayInstruction(true);
     }
 
-    _nextWorkoutCountdown() {
+    _goToNextWorkout() {
         // This event will be run after the resting countdown have been completed.
         // After the countdown has completed, jump to the next workout.
         this.delObj(this.restCountdown);
@@ -196,7 +196,7 @@ export class GymScene extends Scene {
         this._updatePose();
         
         // Remove the display instruction
-        this.fightMan.setDisplayInstruction(false);
+        this.fightUI.setDisplayInstruction(false);
     }
 
     _addOne() {
@@ -233,13 +233,13 @@ export class GymScene extends Scene {
         this.fightFloor = new FightFloor(pixiRef);
         this.fightMan = new FightMan(pixiRef);
         this.fightUI = new FightUI(pixiRef);
-        this.restCountdown = new Countdown(pixiRef, null, this._nextWorkoutCountdown.bind(this));
+        this.restCountdown = new Countdown(pixiRef, null, this._goToNextWorkout.bind(this));
 
         this.infoButton = new Button(
             pixiRef,
             "help_outline",
             () => {
-                this.fightMan.setDisplayInstruction(!this.fightMan.displayInstruction);
+                this.fightUI.setDisplayInstruction(!this.fightUI.displayInstruction);
             },
             () => 32,
             () => 96 + 16,

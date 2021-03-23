@@ -6,10 +6,7 @@ const GUYOFFSETX = 270;
 
 const TIMESCALEGLOBAL = 1.1; // Speed up the animations globally.
 
-const INSTRUCTIONWIDTH = 600;
-const INSTRUCTIONHEIGHT = 400;
-
-class CharacterSpine {
+export class CharacterSpine {
     constructor(pixiRef) {
 
         this.fightMan = new PIXI.spine.Spine(pixiRef.resources.fightman.spineData);
@@ -64,13 +61,6 @@ export class FightMan extends GameObject {
         this.currentSprite;
 
         this.setup(pixiRef);
-
-        this.displayInstruction = false;
-        this.instructionProgress = 0;
-        this.instructionLerp = (x) => x*x*x*x*x;
-
-        const ANIMATIONLENGTH = 1000; // ms
-        this.lerpPeriod = (1000/ANIMATIONLENGTH)/60;
     }
 
     start() {
@@ -93,67 +83,15 @@ export class FightMan extends GameObject {
 
         this.fightMan.fightMan.scale.set(4);
         this.fightMan.fightMan2.scale.set(4);
-
-        // Make instruction graphics
-        this.instructionGraphics = new PIXI.Graphics();
-
-        this.fightManAnim = new CharacterSpine(pixiRef);
-        this.fightManAnim.fightMan.scale.set(2.5);
-        this.fightManAnim.fightMan2.scale.set(2.5);
-
-        this.fightManAnim.fightMan.position.set(
-            -180,
-            INSTRUCTIONHEIGHT/2 - 24
-        );
-        this.fightManAnim.fightMan2.position.set(
-            -180,
-            INSTRUCTIONHEIGHT/2 - 24
-        );
-
-        this.instructionContainer = new PIXI.Container();
-        this.instructionGraphics.clear();
-        this.instructionGraphics.beginFill(0xFFFFFF);
-        this.instructionGraphics.drawRoundedRect(
-            -INSTRUCTIONWIDTH/2,
-            -INSTRUCTIONHEIGHT/2,
-            INSTRUCTIONWIDTH,
-            INSTRUCTIONHEIGHT,
-            20
-        );
-        this.instructionGraphics.endFill();
-
-        this.instructionContainer.addChild(this.instructionGraphics);
-        this.instructionContainer.addChild(this.fightManAnim.container);
-
         this.onResize();
     }
 
     loop(delta) {
-        let redrawInstruction = false;
-
-        if (this.displayInstruction) {
-            if (this.instructionProgress < 1) {
-                if (this.instructionProgress >= 0) {
-                    this.infoCont.addChild(this.instructionContainer);
-                }
-                this.instructionProgress += this.lerpPeriod;
-                redrawInstruction = true;
-            }
-        } else {
-            if (this.instructionProgress > 0) {
-                this.instructionProgress -= this.lerpPeriod;
-                redrawInstruction = true;
-                if (this.instructionProgress <= 0) {
-                    this.infoCont.removeChild(this.instructionContainer);
-                }
-            }
-        }
-        if (redrawInstruction) this._redrawInstruction();
     }
 
     repOnce() {
         // Does rep animation once.
-        this.fightMan.currentSprite.state.setAnimation(0, this.currentPose, false);
+        this.fightMan.currentSprite.state.setAnimation(0, this.fightMan.currentPose, false);
     }
 
     onResize() {
@@ -167,23 +105,5 @@ export class FightMan extends GameObject {
         );
 
         this.manShadow.uniforms.floorY = this.fightMan.fightMan.y;
-
-        this.instructionContainer.position.set(
-            this.app.screen.width/2,
-            this.app.screen.height/2
-        );
-    }
-
-    setDisplayInstruction(isDisplayed) {
-        this.displayInstruction = isDisplayed;
-    }
-
-    _redrawInstruction() {
-        const centerX = this.app.screen.width/2;
-        const centerY = this.app.screen.height/2;
-
-        const lerp = this.instructionLerp(this.instructionProgress);
-
-        this.instructionContainer.scale.set(lerp, lerp);
     }
 }
