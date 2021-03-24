@@ -108,7 +108,7 @@ export class GymScene extends Scene {
             this.fightUI.setWorkoutText(this.workouts[this.workoutIndex].task);
             this.fightUI.workoutP = 0;
             this.fightUI._redrawWorkoutBar();
-            this.fightUI.fightManAnim.changePose(this.workouts[this.workoutIndex].task, true);
+            this.fightUI.updateInstruction(this.workouts[this.workoutIndex].task)
         } else {
             // Obliterate the enemy
             this.fightUI.flyEnemy();

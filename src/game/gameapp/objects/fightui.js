@@ -1,7 +1,7 @@
 import { GameObject } from "./gameobject";
 import { ShadowShader } from "./../shadowshader";
-import { propertyLength } from "./../../../script/util";
 import { CharacterSpine } from "./fightman";
+import { FITINSTR } from "../workoutdictionary";
 
 const HEALTHBARLENGTH = 174 * 3;
 const HEALTHBARHEIGHT = 9 * 3;
@@ -356,6 +356,11 @@ export class FightUI extends GameObject {
 
     setDisplayInstruction(isDisplayed) {
         this.displayInstruction = isDisplayed;
+    }
+
+    updateInstruction(workout) {
+        this.fightManAnim.changePose(workout, true);
+        this.instructionText.text = FITINSTR[this.fightManAnim.currentPose];
     }
 
     _redrawInstruction() {

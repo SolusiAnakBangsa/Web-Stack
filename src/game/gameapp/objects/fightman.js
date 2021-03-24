@@ -20,16 +20,16 @@ export class CharacterSpine {
 
         this.poseDictionary = {
             "Idle": this.fightMan,
-            "Rhomboid Pull": this.fightMan2,
-            "Sit Up": this.fightMan2,
-            "Reclined Rhomboid Squeeze": this.fightMan2,
+            "RhomboidPull": this.fightMan2,
+            "SitUp": this.fightMan2,
+            "ReclinedRhomboidSqueeze": this.fightMan2,
             "Squat": this.fightMan2,
-            "Jumping Squat": this.fightMan2,
-            "Jumping Jack": this.fightMan,
-            "Push Up": this.fightMan2,
-            "Knee Push Up": this.fightMan2,
-            "Forward Lunge": this.fightMan2,
-            "High Knee": this.fightMan2,
+            "JumpingSquat": this.fightMan2,
+            "JumpingJack": this.fightMan,
+            "PushUp": this.fightMan2,
+            "KneePushUp": this.fightMan2,
+            "ForwardLunge": this.fightMan2,
+            "HighKnee": this.fightMan2,
         }
 
         this.fightMan.state.timeScale = TIMESCALEGLOBAL;
@@ -42,8 +42,8 @@ export class CharacterSpine {
         // Get the corresponding sprite
         this.container.removeChildren();
 
-        this.currentSprite = this.poseDictionary[pose];
         this.currentPose = pose.replace(/\s+/g, '');
+        this.currentSprite = this.poseDictionary[this.currentPose];
 
         this.container.addChild(this.currentSprite);
 

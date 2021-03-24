@@ -37,7 +37,7 @@ export class GlobalController {
         // },
         {
             "freq": 3,
-            "task": "Squat"
+            "task": "Push Up"
         }, {
             "freq": 4,
             "task": "Squat"
