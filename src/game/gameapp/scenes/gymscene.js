@@ -69,33 +69,33 @@ export class GymScene extends Scene {
             this.fightUI.workoutP = this.currentReps/maxRep;
             this.fightUI.workoutCounter.text = maxRep - this.currentReps;
             this.fightUI._redrawWorkoutBar();
-
-            // Check if this is the last rep in the workout.
-            if (this.currentReps == maxRep) {
-                // When this is the last rep, enter resting mode and set timeout
-                // When animation finished to rest.
-                this.resting = true;
-
-                let callback;
-
-                // Check whether this is the last workout.
-                if (this.workoutIndex < this.workouts.length - 1) {
-                    callback = () => {this._restCountdown(RESTSECONDS);}
-                } else {
-                    callback = () => {
-                        this.workoutIndex++;
-                        this._updateScores();
-                        this._updatePose();
-                    };
-                }
-
-                // Wait for the duration of the last workout, and additional 500ms.
-                setTimeout(
-                    callback,
-                    this.fightMan.fightMan.currentSprite.state.getCurrent(0).animation.duration*1000 + 500
-                );
-            }
         }
+    }
+
+    _lastRep() {
+        // Will be called if in the last rep.
+        // When this is the last rep, enter resting mode and set timeout
+        // When animation finished to rest.
+        this.resting = true;
+
+        let callback;
+
+        // Check whether this is the last workout.
+        if (this.workoutIndex < this.workouts.length - 1) {
+            callback = () => {this._restCountdown(RESTSECONDS);}
+        } else {
+            callback = () => {
+                this.workoutIndex++;
+                this._updateScores();
+                this._updatePose();
+            };
+        }
+
+        // Wait for the duration of the last workout, and additional 500ms.
+        setTimeout(
+            callback,
+            this.fightMan.fightMan.currentSprite.state.getCurrent(0).animation.duration*1000 + 500
+        );
     }
 
     _updateScores() {
@@ -212,13 +212,19 @@ export class GymScene extends Scene {
 
         if ("exerciseType" in payload && this.workoutIndex < this.workouts.length) {
             if (payload.exerciseType == this.workouts[this.workoutIndex].task &&
-                payload.status == "mid" &&
+                (payload.status == "mid" ||
+                payload.status == "end") &&
                 this.prevRep < payload.repAmount)
             {
+                
                 const repAmount = payload.repAmount - this.prevRep;
                 this.prevRep = payload.repAmount;
                 for (var i = 0; i < repAmount; i++)
                     this._addOneRep();
+
+                if (payload.status == "end") {
+                    this._lastRep();
+                }
             }
         }
     }

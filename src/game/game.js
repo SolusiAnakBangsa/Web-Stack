@@ -77,6 +77,9 @@ peer.peer.on('error', function(err){
     notif.style.display = "block";
     notif.style.backgroundColor = "#f27963";
     notif.innerText = err;
+
+    console.error("Peer Error: " + err);
+    window.alert("Phone is disconnected from browser. Activity will not be saved.")
 });
 
 class ExModule {
@@ -111,4 +114,4 @@ class ExModule {
 module.exports = ExModule;
 
 // For testing only
-ExModule.startGame();
+// ExModule.startGame();
