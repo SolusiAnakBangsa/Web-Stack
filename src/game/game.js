@@ -2,6 +2,9 @@ import { GameApp } from "./gameapp/app";
 import { peer } from "./../script/webrtc";
 import { GlobalController } from "./gameapp/globalcontroller"
 
+// Audio when connected.
+const audioObj = new Audio("audio/atmospheric.mp3");
+
 // Game object
 const game = new GameApp({
     resolution: 1,
@@ -68,6 +71,9 @@ peer.connection.addEvents('open', () => {
         ExModule.startGame();
         peerForm.style.display = "none";
     }, 8200);
+
+    // Play connected sound
+    audioObj.play();
 });
 
 peer.peer.on('error', function(err){

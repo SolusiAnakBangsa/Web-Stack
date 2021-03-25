@@ -105,6 +105,9 @@ export class GlobalController {
 
             // When all timing is done, send a startgame to the phone.
             peer.connection.sendData({"status" : "startgame"});
+
+            // Play the start sound
+            this.startSound.play();
         };
         this.count.start();
 
@@ -134,6 +137,10 @@ export class GlobalController {
             this.showSummary();
             return;
         }
+
+        // Play the next sound
+        this.nextWorkoutSound.play();
+
         // Used to toggle scenes between running and gyming.
         this.transitioner.transition(
             () => {
@@ -267,6 +274,10 @@ export class GlobalController {
                 this.pauseCallback(true);
             }
         });
+
+        // Load sounds needed
+        this.nextWorkoutSound = pixiRef.resources.nextsound.sound;
+        this.startSound = pixiRef.resources.startsound.sound;
     }
 
     loop(delta) {

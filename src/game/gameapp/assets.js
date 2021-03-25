@@ -20,5 +20,6 @@ export const assets = {
 
     repsound: "audio/rep.wav",
     nextsound: "audio/dingbell.mp3",
-    connectedsound: "audio/atmospheric.mp3",
+    startsound: "audio/start.mp3",
+    // connectedsound: "audio/atmospheric.mp3",
 };

@@ -53,7 +53,6 @@ export class GymScene extends Scene {
     }
 
     _addOneRep() {
-
         // Only adds one rep if there is still workout to do.
         if (this.resting || this.workoutIndex >= this.workouts.length) return
 
@@ -70,6 +69,8 @@ export class GymScene extends Scene {
             this.fightUI.workoutCounter.text = maxRep - this.currentReps;
             this.fightUI._redrawWorkoutBar();
         }
+
+        this.repSound.play();
     }
 
     _lastRep() {
@@ -171,6 +172,9 @@ export class GymScene extends Scene {
 
         // Display the instruction screen.
         this.fightUI.setDisplayInstruction(true);
+
+        // Play sound.
+        this.nextWorkoutSound.play();
     }
 
     _goToNextWorkout() {
@@ -197,6 +201,9 @@ export class GymScene extends Scene {
         
         // Remove the display instruction
         this.fightUI.setDisplayInstruction(false);
+
+        // Play sound.
+        this.nextWorkoutSound.play();
     }
 
     _addOne() {
@@ -282,7 +289,10 @@ export class GymScene extends Scene {
         this.addObj(this.fightFloor);
         this.addObj(this.fightMan);
         this.addObj(this.fightUI);
-        this.addObj(this.infoButton)
+        this.addObj(this.infoButton);
+
+        this.nextWorkoutSound = pixiRef.resources.nextsound.sound;
+        this.repSound = pixiRef.resources.repsound.sound;
     }
 
     floatDown() {
