@@ -59,6 +59,12 @@
                 })
             </script>
         </div>
+        <div class="bottom">
+        <div class="bottombox">
+            <div>Download the app <a href="https://github.com/SolusiAnakBangsa/Game-Your-Fit/releases" target="_blank">here</a>!</div>
+            <a href="javascript:void(0);" onclick="attributionToggle(true);">Attribution</a>
+        </div>
+        </div>
     </div>
 </div>
 <div id="summary" class="blackoverlay">
@@ -100,6 +106,26 @@
         </button>
     </div>
 </div>
+<div id="attrib" class="blackoverlay">
+    <div class="cleanbox flcol">
+        <iframe src="attribution.html" title="Attribution" frameBorder="0"></iframe>
+        <button onclick="attributionToggle(false);">
+            <span class="material-icons" style="transform: translateY(4px);">close</span> Close
+        </button>
+    </div>
+</div>
 <script src="../src/game/game.js"></script>
+<script>
+    function attributionToggle(isShown) {
+        const attrib = document.getElementById("attrib");
+        if (isShown) {
+            attrib.style.opacity = 1;
+            attrib.style.zIndex = 10;
+        } else {
+            attrib.style.opacity = 0;
+            setTimeout(() => {attrib.style.zIndex = -3;}, 500)
+        }
+    }
+</script>
 </body>
 </html>

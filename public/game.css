@@ -5,6 +5,13 @@
 html, body {
     height: 100%;
     background-color: rgb(143,235,218);
+    font-family: 'Roboto', 'Raleway', 'Helvetica', 'Arial';
+}
+iframe {
+    display: block;
+    width: 480px;
+    height: 300px;
+    padding: 12px;
 }
 .tl {
     text-align: left;
@@ -38,9 +45,20 @@ html, body {
     text-align: center;
     display: flex;
     flex-direction: column;
-    /* justify-content: center; */
     align-items: center;
     height: 100%;
+}
+.bottombox {
+    display: flex;
+    flex-direction: column;
+    margin: 12px;
+    text-align: left;
+}
+.bottom {
+    position: absolute;
+    width: 100%;
+    bottom: 0px;
+    /* background-color: rgba(255, 255, 255, 0.5); */
 }
 .spacecolor {
     background: rgb(143,235,218);
@@ -89,7 +107,7 @@ html, body {
     display: none;
 }
 .cleanbox {
-    width: 320px;
+    min-width: 320px;
     border-radius: 8px;
     box-shadow: 0px 3px 5px rgba(0,0,0,0.2);
     background-color: white;
@@ -164,7 +182,7 @@ button {
     letter-spacing: 0.05em;
     background-color: #ffa726;
     margin-bottom: 0px;
-    transition: 0.3s;
+    transition: 0.1s;
     box-shadow: 0px 2px 1px rgba(0,0,0,0.15);
 }
 button:hover {
@@ -176,7 +194,6 @@ button:active {
 }
 button:focus {
     outline: none;
-    border-radius: 10px 50px;
 }
 
 .stars{
