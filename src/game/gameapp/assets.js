@@ -22,4 +22,7 @@ export const assets = {
     nextsound: "audio/dingbell.mp3",
     startsound: "audio/start.mp3",
     // connectedsound: "audio/atmospheric.mp3",
+
+    gymmusic: "audio/ouroboros-by-kevin-macleod-from-filmmusic-io.mp3",
+    runmusic: "audio/your-call-by-kevin-macleod-from-filmmusic-io.mp3",
 };

@@ -4,6 +4,7 @@ import { GymScene } from "./scenes/gymscene";
 import { Transitioner } from "./transitioner";
 import { Countdown } from "./objects/countdown";
 import { Button } from "./objects/button";
+import { MusicPlayer } from "./musicplayer";
 
 // Static enum to store all the workouts.
 let Workouts = Object.freeze({
@@ -176,7 +177,6 @@ export class GlobalController {
     }
 
     goToGym() {
-
         // Slice this.workout object to include only the gym games from the index.
         // First, discover which index is the next jog (or the end).
 
@@ -206,6 +206,9 @@ export class GlobalController {
 
         // Move pause button
         this.pauseButton.changePosition((sWidth) => 32, (sHeight) => 32);
+
+        // Play gym music
+        this.musicPlayer.play("gym", true);
     }
 
     goToRun() {
@@ -224,6 +227,9 @@ export class GlobalController {
 
         // Increase the workout index.
         this.currentWorkoutIndex++;
+
+        // Play the music
+        this.musicPlayer.play("run", true);
     }
 
     start(pixiRef) {
@@ -253,17 +259,6 @@ export class GlobalController {
         this.gymScene.doneCallback = () => {this._toggleScenes()};
         this.runScene.doneCallback = () => {this._toggleScenes()};
 
-        this._initializeWorkout();
-
-        // Add the transitioner and pause to the current scene
-        // IMPORTANT NOTE: You can't add objects to two pixi containers. If done, then will not display.
-        this.addMultiObject(this.pauseButton);
-        this.addMultiObject(this.transitioner);
-
-        // Start the scene and trigger on resize.
-        this.appObj.scene.start();
-        this.appObj.scene.onResize();
-
         // Register unpause
         const unpause = document.getElementById("unpause");
         unpause.onclick = () => {this.pauseCallback(false)};
@@ -278,9 +273,26 @@ export class GlobalController {
         // Load sounds needed
         this.nextWorkoutSound = pixiRef.resources.nextsound.sound;
         this.startSound = pixiRef.resources.startsound.sound;
+
+        // Add some music to the player
+        this.musicPlayer = new MusicPlayer();
+        this.musicPlayer.addMusic("run", pixiRef.resources.runmusic.sound);
+        this.musicPlayer.addMusic("gym", pixiRef.resources.gymmusic.sound);
+
+        this._initializeWorkout();
+
+        // Add the transitioner and pause to the current scene
+        // IMPORTANT NOTE: You can't add objects to two pixi containers. If done, then will not display.
+        this.addMultiObject(this.pauseButton);
+        this.addMultiObject(this.transitioner);
+
+        // Start the scene and trigger on resize.
+        this.appObj.scene.start();
+        this.appObj.scene.onResize();
     }
 
     loop(delta) {
+        this.musicPlayer.loop(delta);
     }
 
     onResize() {
