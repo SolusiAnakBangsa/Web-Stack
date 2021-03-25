@@ -163,13 +163,13 @@ export class GymScene extends Scene {
         this.addObj(this.skipButton);
         this.addObj(this.delayButton);
 
-        // Update scores
-        this.workoutIndex++;
-        this._updateScores();
-
         // Add next workout text
         const textRef = this.fightUI.workoutText;
         textRef.text = "Next up:\n" + textRef.text;
+
+        // Update scores
+        this.workoutIndex++;
+        this._updateScores();
 
         this.addObj(this.restCountdown);
 
@@ -258,7 +258,8 @@ export class GymScene extends Scene {
         this.restCountdown = new Countdown(pixiRef, null, this._goToNextWorkout.bind(this));
 
         // Set the position of the countdown.
-        this.restCountdown.yPos = () => 160;
+        this.restCountdown.xPos = (scr) => scr.width/2 - 175;
+        this.restCountdown.yPos = (scr) => scr.height/2 - 113;
 
         this.infoButton = new Button(
             pixiRef,

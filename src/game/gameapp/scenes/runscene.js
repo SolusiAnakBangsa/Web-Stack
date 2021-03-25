@@ -154,12 +154,6 @@ export class RunScene extends Scene {
 
     }
 
-    startRun() {
-        // Will be called every time jogging is called.
-        // TODO: send start to phone
-        peer.connection.sendData({"status" : "startnext"});
-    }
-
     setAbove() {
         // Function to set every object to be at bottom.
         this.floor.mainContainer.y += this.initYOffset*2;
@@ -183,9 +177,6 @@ export class RunScene extends Scene {
     switchCallback() {
         // Reset the pace array.
         this.paceArray = Array(RUNARRLEN).fill(0);
-
-        // Send signal to the phone to start.
-        peer.connection.sendData({"status" : "startnext"});
     }
 
     dataListener(payload) {
@@ -244,5 +235,10 @@ export class RunScene extends Scene {
         super.pauseCallback(isPaused);
         this.runman.paused = isPaused;
         this.floor.paused = isPaused;
+    }
+
+    transitionCallback() {
+        // Send signal to the phone to start.
+        peer.connection.sendData({"status" : "startnext"});
     }
 }

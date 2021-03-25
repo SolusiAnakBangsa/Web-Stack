@@ -87,30 +87,34 @@ export class GlobalController {
             this.goToRun();
             // Set to float down.
             this.runScene.floatDown();
+
+            // Add the count object to the current scene.
+            this.appObj.scene.addObj(this.count);
+
+            // Set the countdown callback and start it.
+            this.count.callback = () => {
+                // Set text to go, then set a timer for 1 second to delete it.
+                this.count.mainContainer.text = "GO!";
+                this.count.textStyle.fontSize = 200;
+                // Timer to delete the count object.
+                setTimeout(() => {this.appObj.scene.delObj(this.count);}, 1500);
+
+                // When all timing is done, send a startgame to the phone.
+                peer.connection.sendData({"status" : "startnext"});
+
+                // Play the start sound
+                this.startSound.play();
+            };
+            
+            this.count.start();
+
         } else {
             this.goToGym();
             // Set to float down.
-            // this.gymScene.floatDown();
+            this.gymScene.floatDown();
+            // Change the rest countdown to be 5 seconds.
+            this.gymScene.restCountdown.setSeconds(5);
         }
-
-        // Add the count object to the current scene.
-        this.appObj.scene.addObj(this.count);
-
-        // Set the countdown callback and start it.
-        this.count.callback = () => {
-            // Set text to go, then set a timer for 1 second to delete it.
-            this.count.mainContainer.text = "GO!";
-            this.count.textStyle.fontSize = 200;
-            // Timer to delete the count object.
-            setTimeout(() => {this.appObj.scene.delObj(this.count);}, 1500);
-
-            // When all timing is done, send a startgame to the phone.
-            peer.connection.sendData({"status" : "startgame"});
-
-            // Play the start sound
-            this.startSound.play();
-        };
-        this.count.start();
 
         // Updates the total steps has to be done.
         var totalSteps = 0;
@@ -159,7 +163,7 @@ export class GlobalController {
                 }
             },
             () => {
-                
+
             },
             this.currentWorkout == Workouts.JOG ? this.transitioner._vsTransition : this.transitioner._basicTransition
         );
@@ -174,6 +178,8 @@ export class GlobalController {
                 this.goToRun();
                 break;
         }
+        // Call the callback function in the scene.
+        this.appObj.scene.transitionCallback();
     }
 
     goToGym() {

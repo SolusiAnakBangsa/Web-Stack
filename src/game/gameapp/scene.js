@@ -100,4 +100,8 @@ export class Scene {
         // This will be called if the game is paused.
         this.isPaused = isPaused;
     }
+
+    transitionCallback() {
+        // Will be called when this scene is transitioned.
+    }
 }

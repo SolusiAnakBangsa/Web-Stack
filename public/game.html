@@ -116,7 +116,7 @@
 </div>
 <script src="../src/game/game.js"></script>
 <script>
-    function attributionToggle(isShown) {
+    window.attributionToggle = function attributionToggle(isShown) {
         const attrib = document.getElementById("attrib");
         if (isShown) {
             attrib.style.opacity = 1;
