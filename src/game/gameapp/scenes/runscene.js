@@ -3,7 +3,6 @@ import { Floor } from "./../objects/floor";
 import { Sky } from "./../objects/sky";
 import { RunMan } from "./../objects/runningman";
 import { Pace } from "./../objects/pace";
-import { Countdown } from "./../objects/countdown";
 import { peer } from "./../../../script/webrtc";
 import { clamp } from "./../../../script/util";
 
@@ -184,6 +183,9 @@ export class RunScene extends Scene {
     switchCallback() {
         // Reset the pace array.
         this.paceArray = Array(RUNARRLEN).fill(0);
+
+        // Send signal to the phone to start.
+        peer.connection.sendData({"status" : "startnext"});
     }
 
     dataListener(payload) {

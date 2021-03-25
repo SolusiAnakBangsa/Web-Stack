@@ -25,6 +25,10 @@ export class Countdown extends GameObject {
         // Whether the countdown is paused.
         this.paused = false;
 
+        // Default position of the countdown.
+        this.xPos = (scr) => scr.width/2;
+        this.yPos = (scr) => scr.height/2;
+
         this.setup(pixiRef);
     }
 
@@ -53,7 +57,8 @@ export class Countdown extends GameObject {
     }
 
     onResize() {
-        this.mainContainer.position.set(this.app.screen.width/2, this.app.screen.height/2);
+        const screen = this.app.screen;
+        this.mainContainer.position.set(this.xPos(screen), this.yPos(screen));
     }
 
     setSeconds(seconds) {

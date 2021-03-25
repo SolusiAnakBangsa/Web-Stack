@@ -33,16 +33,22 @@ export class GymScene extends Scene {
     }
 
     startNewWorkout(workouts) {
+        // TODO: This can be inside transition callback
         // Set a new workout routine that will be done in this stage.
         // This should reset every value, so that the gym cycle can begin anew.
         this.workouts = workouts;
-        this.workoutIndex = 0;
+        this.workoutIndex = -1;
 
         this.currentReps = 0;
 
         this.prevRep = 0;
 
-        this.resting = false;
+        // Set resting to be true.
+        this.resting = true;
+
+        // Set the first workout in x seconds.
+        // Show the countdown too.
+        this._restCountdown(20);
 
         // Randomize enemy to spawn.
         this.fightUI.changeEnemy();
@@ -193,7 +199,6 @@ export class GymScene extends Scene {
             textRef.text = textRef.text.split("\n")[1];
         }
 
-        // TODO: Send peer start command
         peer.connection.sendData({"status" : "startnext"});
         
         // Change the pose
@@ -236,6 +241,10 @@ export class GymScene extends Scene {
         }
     }
 
+    switchCallback() {
+
+    }
+
     setup(pixiRef) {
         this.floatState = false; // The state whether to do the float down animation.
         this.lerpFunction = (x) => 1 - Math.pow(1 - x, 3); // Interpolation function to use. (Ease out lerp)
@@ -247,6 +256,9 @@ export class GymScene extends Scene {
         this.fightMan = new FightMan(pixiRef);
         this.fightUI = new FightUI(pixiRef);
         this.restCountdown = new Countdown(pixiRef, null, this._goToNextWorkout.bind(this));
+
+        // Set the position of the countdown.
+        this.restCountdown.yPos = () => 160;
 
         this.infoButton = new Button(
             pixiRef,

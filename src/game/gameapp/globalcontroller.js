@@ -159,7 +159,7 @@ export class GlobalController {
                 }
             },
             () => {
-                peer.connection.sendData({"status" : "startnext"});
+                
             },
             this.currentWorkout == Workouts.JOG ? this.transitioner._vsTransition : this.transitioner._basicTransition
         );
