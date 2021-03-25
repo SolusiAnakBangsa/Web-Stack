@@ -1,7 +1,6 @@
 import { assets } from "./assets";
 import { Resizer } from "./resizer";
 import { GlobalController } from "./globalcontroller";
-import { peer } from "../../script/webrtc";
 
 export class GameApp {
 
