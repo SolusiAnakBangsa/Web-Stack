@@ -18,6 +18,9 @@ PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
 // Here, lets initialize the webrtc object with a custom peerID
 peer.init(Math.random().toString(36).slice(2).substr(0, 8));
 
+// Initialize no sleep feature
+const noSleep = new NoSleep();
+
 peer.connection.addReceiveHandler((payload) => {
     // FIX: This should receive only once, then removes itself from the listener list.
     // Adds a listener to listen for the workout data from phone.
@@ -64,6 +67,9 @@ peer.connection.addEvents('open', () => {
     playb.style.display = "none";
 
     flavor.innerText = "Let's go! Entering game...";
+
+    // Enable no sleep mode
+    noSleep.enable();
 
     setTimeout(() => {screenItem.style.opacity = 0;}, 2000);
     setTimeout(() => {peerForm.style.bottom = "100%";}, 4000);
