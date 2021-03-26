@@ -258,8 +258,7 @@ export class GymScene extends Scene {
         this.restCountdown = new Countdown(pixiRef, null, this._goToNextWorkout.bind(this));
 
         // Set the position of the countdown.
-        this.restCountdown.xPos = (scr) => scr.width/2 - 175;
-        this.restCountdown.yPos = (scr) => scr.height/2 - 113;
+        this.restCountdown.yPos = () => 100;
 
         this.infoButton = new Button(
             pixiRef,

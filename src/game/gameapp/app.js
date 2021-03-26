@@ -10,13 +10,9 @@ export class GameApp {
         this.scene;
         this.loaded = false; // Whether the resources have been loaded.
         this.loadCallback = []; // When game is loaded, run everything here.
-    }
 
-    load() {
-        for (let ast in assets) {
-            this.loader.add(ast, assets[ast]);
-        }
-        this.loader.load(this.setup.bind(this));
+        // Loader variables
+        this.loadBar; // Graphics object.
     }
 
     setup(loader, resources) {
@@ -47,6 +43,9 @@ export class GameApp {
         for (let c of this.loadCallback) {
             c();
         }
+
+        // Delete loading bar.
+        this.app.stage.removeChild(this.loadBar);
     }
 
     start() {
@@ -64,8 +63,13 @@ export class GameApp {
         // Add the renderer to the browser.
         document.body.appendChild(this.app.view);
 
+        // Create a new pixi graphics, to show loading bar.
+        this.loadBar = new PIXI.Graphics();
+
+        this.app.stage.addChild(this.loadBar);
+
         // Loads all the game data. When done, start the game.
-        this.load();
+        this._load();
     }
 
     setScene(scene) {
@@ -101,5 +105,33 @@ export class GameApp {
 
         if (this.scene !== undefined)
         this.scene.onResize();
+    }
+
+    _updateLoading() {
+        const bar = this.loadBar;
+        const screen = this.app.screen;
+
+        bar.clear();
+        bar.lineStyle(50, 0xF77D08, 1);
+        bar.arc(
+            screen.width/2,
+            screen.height/2,
+            160,
+            -Math.PI/2,
+            -Math.PI/2 + (2 * Math.PI * (this.loader.progress/100))
+        );
+
+        console.log(this.loader.progress/100);
+    }
+
+    _load() {
+        const loader = this.loader;
+
+        for (let ast in assets) {
+            loader.add(ast, assets[ast]);
+        }
+        console.log(loader);
+        loader.load(this.setup.bind(this));
+        loader.onLoad.add(this._updateLoading.bind(this));
     }
 }

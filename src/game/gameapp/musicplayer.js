@@ -33,7 +33,9 @@ export class MusicPlayer {
 
         // Set volume to be 0, and play it.
         this.currentMusic.volume = 0;
-        this.currentMusic.play();
+        this.currentMusic.play({
+            loop: true
+        });
         
         // Set flag to be true.
         this._transitioning = true;
