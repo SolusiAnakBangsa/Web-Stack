@@ -120,8 +120,6 @@ export class GameApp {
             -Math.PI/2,
             -Math.PI/2 + (2 * Math.PI * (this.loader.progress/100))
         );
-
-        console.log(this.loader.progress/100);
     }
 
     _load() {
