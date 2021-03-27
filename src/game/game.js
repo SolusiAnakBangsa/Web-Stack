@@ -71,6 +71,16 @@ peer.connection.addEvents('open', () => {
     // Enable no sleep mode
     noSleep.enable();
 
+    // Remove the attribution screen.
+    window.attributionToggle(false);
+
+    // Undisplay the below part.
+    const below = document.getElementById("below");
+    below.style.display = "none";
+
+    // Scroll the website to topmost
+    window.scrollTo(0, 0);
+
     setTimeout(() => {screenItem.style.opacity = 0;}, 2000);
     setTimeout(() => {peerForm.style.bottom = "100%";}, 4000);
     setTimeout(() => {
@@ -91,12 +101,12 @@ peer.peer.on('error', function(err){
     notif.innerText = err;
 
     console.error("Peer Error: " + err);
-    window.alert("Phone is disconnected from browser. Activity will not be saved.")
+    window.alert("Phone is disconnected from browser. Activity will not be saved.");
 });
 
 class ExModule {
     static startGame() {
-        var peerText = document.getElementById("peer_form");
+        var peerText = document.getElementById("top");
         peerText.style.display = "none";
 
         game.start();

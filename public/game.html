@@ -16,6 +16,8 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/pixi-sound@3.0.5/dist/pixi-sound.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/nosleep/0.12.0/NoSleep.min.js" integrity="sha512-DSzvYfxJWRi3E6vfcGQfL5CqOlApxYrrdqRP3hRCnoiZ0oM6+ccYjbtdzQFUrAOI/ehKk0VKFuKs5GseGPkVjQ==" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@2.4.21/dist/js/splide.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@2.4.21/dist/css/themes/splide-default.min.css">
     <link href="game.css" rel="stylesheet">
     <script>
         WebFont.load({
@@ -27,6 +29,7 @@
     </script>
     <style>*{padding: 0; margin: 0}</style>
 <body>
+<div id="top">
 <div id="peer_form" class="box spacecolor">
     <div class="stars" id="stars">
     </div>
@@ -54,7 +57,9 @@
                 <input type="text" class="form-control" id="gamecode" required>
                 <label>Game Code</label>
             </div>
-            <button onclick="gameModule.initMobileConnection();" id="playbutton" style="transform: translateY(-20px);">PLAY!</button>
+            <button onclick="gameModule.initMobileConnection();" id="playbutton" style="transform: translateY(-20px);">
+                <span class="material-icons" style="transform: translateY(4px);">local_fire_department</span> PLAY!
+            </button>
             <script>
                 document.getElementById("gamecode").addEventListener("keyup", () => {
                     event.preventDefault();
@@ -67,10 +72,12 @@
         <div class="bottom">
         <div class="bottombox">
             <div>Download the app <a href="https://drive.google.com/file/d/1ys1rLWm3kYJthSzgLa9ELQ2BQ4zEV3fY/view?usp=sharing" target="_blank">here</a>!</div>
-            <a href="javascript:void(0);" onclick="attributionToggle(true);">Attribution</a>
+            <div><a href="javascript:void(0);" onclick="attributionToggle(true);">Attribution</a></div>
         </div>
         </div>
+        <a href="#below" id="pointdown">expand_more</a>
     </div>
+</div>
 </div>
 <div id="summary" class="blackoverlay">
     <div id="summarybox" class="cleanbox">
@@ -119,10 +126,41 @@
         </button>
     </div>
 </div>
-<script src="../src/game/gallery.js"></script>
+<div id="below">
+<div class="xlvertsep"></div>
+<h1 class="tc">
+    Gallery
+</h1>
+<div class="flcol spcl">
+<div class="splide">
+    <div class="splide__track">
+        <ul class="splide__list">
+            <li class="splide__slide"><img src="gallery/1.png"></li>
+            <li class="splide__slide"><img src="gallery/2.png"></li>
+            <li class="splide__slide"><img src="gallery/3.png"></li>
+            <li class="splide__slide"><img src="gallery/4.png"></li>
+        </ul>
+    </div>
+</div>
+</div>
+</div>
 <script src="../src/game/game.js"></script>
 <script>
-    console.log(gameModule);
+    // Loads all the image from gallery folder.
+    document.addEventListener( 'DOMContentLoaded', function () {
+        new Splide( '.splide', {
+            type: 'loop',
+            height: "56.25%",
+            width: "100%",
+            focus: 'center',
+            trimSpace: false,
+            gap: "5vw",
+            autoplay: true,
+            cover: true,
+        } ).mount();
+    });
+
+    // Attribution toggle
     window.attributionToggle = function attributionToggle(isShown) {
         const attrib = document.getElementById("attrib");
         if (isShown) {
