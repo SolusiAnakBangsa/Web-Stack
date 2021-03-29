@@ -6,11 +6,11 @@ html, body {
     height: 100%;
     scroll-behavior: smooth;
     font-family: 'Roboto', 'Helvetica', 'Arial';
-    -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: none;  /* Firefox */
+    -ms-overflow-style: none;
+    scrollbar-width: none;
     background-color: rgb(143,235,218);
 }
-.body::-webkit-scrollbar {
+body::-webkit-scrollbar {
     display: none;
 }
 iframe {
@@ -342,8 +342,8 @@ button:focus {
 .blackoverlay {
     position: absolute;
     top: 0px;
-    width: 100vw;
-    height: 100vh;
+    width: 100%;
+    height: 100%;
     background: rgb(0,0,0);
     background: -moz-linear-gradient(0deg, rgba(10,10,10,0.7) 0%, rgba(0,0,0,0.7) 100%);
     background: -webkit-linear-gradient(0deg, rgba(10,10,10,0.7) 0%, rgba(0,0,0,0.7) 100%);
