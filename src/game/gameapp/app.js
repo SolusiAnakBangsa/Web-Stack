@@ -128,7 +128,6 @@ export class GameApp {
         for (let ast in assets) {
             loader.add(ast, assets[ast]);
         }
-        console.log(loader);
         loader.load(this.setup.bind(this));
         loader.onLoad.add(this._updateLoading.bind(this));
     }

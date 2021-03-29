@@ -17,6 +17,7 @@ export const assets = {
     absogus: "graphics/absogus.json",
     enemyhealth: "graphics/enemyhealth.png",
     enemypack: "graphics/enemypack.png",
+    factguy: "graphics/factguy.png",
 
     repsound: "audio/rep.wav",
     nextsound: "audio/dingbell.mp3",

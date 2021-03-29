@@ -58,3 +58,7 @@ export function clamp(num, min, max) {
 export function padZero(num, size) {
   return ('000000000' + num).substr(-size);
 }
+
+export function randomArray(arr) {
+  return arr[Math.floor(Math.random() * arr.length)]
+}

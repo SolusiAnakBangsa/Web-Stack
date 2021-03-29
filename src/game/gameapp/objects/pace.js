@@ -1,11 +1,26 @@
 import { GameObject } from "./gameobject";
-import { clamp, padZero } from "./../../../script/util";
+import { clamp, padZero, randomArray, randomRange } from "./../../../script/util";
 
 // Length of the progress bar.
 const PROGRESSXOFFSET = 10 * 3;
 const PROGRESSYOFFSET = 4 * 3;
 const PROGRESSLENGTH = 121 * 3;
 const PROGRESSHEIGHT = 3 * 3;
+
+const FACTWIDTH = 600;
+const FACTHEIGHT = 200;
+
+const FACTDURATION = 10000;
+const FACTSPAWNRANGE = [20000, 50000];
+
+const WORKOUTFUNFACTS = [
+    "Exercising is important in daily life! According to Dr. Edward from Mayo Clinic, it's important to keep at least 30 minutes of moderate physical activities everyday!", // https://www.mayoclinic.org/healthy-lifestyle/fitness/expert-answers/exercise/faq-20057916
+    "Reducing sitting time is important! Sitting too much for long period of times can impact your health negatively. Try to stand up and move once in every while. Don't forget to check your sitting posture too while you're at it!",
+    "Not only beneficial for you physical health, many mental health benefits can be earned through an exercise. It relaxes your mind, and can help you to think more clearly after!",
+    "A good sweaty workout burns fat, and increases your muscle fitness. It's as simple as that!",
+    "Exercising regularly makes you able to do daily physical activities with ease. It also increases your immune system so that you get sick less!",
+    "Working out leads to good posture and body, boosting your self-confidence by much!",
+]
 
 export class Pace extends GameObject {
     /*
@@ -21,6 +36,18 @@ export class Pace extends GameObject {
         this.steps = 0;
 
         this.padding = 100;
+
+        // Instruction methods
+        this.displayFact = false;
+        this.progressFact = 0;
+        this.instructionLerp = (x) => x*x*x*x*x;
+
+        const ANIMATIONLENGTH = 1000; // ms
+        this.lerpPeriod = (1000/ANIMATIONLENGTH)/60;
+        this.factCounter = 0;
+
+        this.factTimer = 0;
+        this.factTimerBound = randomRange(FACTSPAWNRANGE[0], FACTSPAWNRANGE[1]);
 
         this.setup(pixiRef);
     }
@@ -90,6 +117,57 @@ export class Pace extends GameObject {
         this.stepsCounter.position.set(32, 84);
         // ***************
 
+        // ***************
+        // Fun fact zone
+        // TODO: This can defnitely made into a class.
+        this.frontContainer = new PIXI.Container();
+
+        this.factContainer = new PIXI.Container();
+
+        // Spawn stuff to the container.
+        // Make background graphics
+        const backGraphics = new PIXI.Graphics();
+        backGraphics.beginFill(0xFFFFFF);
+        backGraphics.drawRoundedRect(
+            -FACTWIDTH/2,
+            -FACTHEIGHT/2,
+            FACTWIDTH,
+            FACTHEIGHT,
+            30
+        );
+        backGraphics.endFill();
+        backGraphics.alpha = 0.65;
+
+        // Draw guy portrait
+        this.factGuy = new PIXI.Sprite(pixiRef.resources.factguy.texture);
+        this.factGuy.scale.set(3);
+        this.factGuy.anchor.set(0.5);
+        this.factGuy.position.set(-FACTWIDTH/2 + 65, 0);
+
+        // Draw title text
+        const titleText = new PIXI.Text("Armogus says...", new PIXI.TextStyle({
+            fontSize: 24,
+            fontStyle: "italic",
+            fontWeight: "bold",
+            padding: 8,
+        }));
+        titleText.position.set(-FACTWIDTH/2 + 130, -FACTHEIGHT/2 + 20);
+
+        // Draw the actual text contents.
+        this.factText = new PIXI.Text(WORKOUTFUNFACTS[0], new PIXI.TextStyle({
+            fontSize: 20,
+            padding: 8,
+            wordWrap: true,
+            wordWrapWidth: FACTWIDTH*3/4
+        }));
+        this.factText.position.set(-FACTWIDTH/2 + 130, -FACTHEIGHT/2 + 60);
+
+        this.factContainer.addChild(backGraphics);
+        this.factContainer.addChild(this.factGuy);
+        this.factContainer.addChild(titleText);
+        this.factContainer.addChild(this.factText);
+        // ***************
+
         this.mainContainer.addChild(this.stepsCounter);
 
         this.mainContainer.addChild(this.runProgress);
@@ -99,9 +177,68 @@ export class Pace extends GameObject {
         this.mainContainer.addChild(this.graphic);
         this.mainContainer.addChild(this.paceSprite);
         this.mainContainer.addChild(this.paceText);
+        this.mainContainer.addChild(this.frontContainer);
 
         // Call onresize
         this.onResize();
+    }
+
+    _redrawFactLoop(delta) {
+        // Logic to redraw the fact UI
+        // The third nested if statement here refers to the logic to stop rendering the container once gone.
+        let redrawInstruction = false;
+
+        // Increase fact timer
+        this.factTimer += delta;
+        // Display fact when timer is already met.
+        if (this.factTimer >= this.factTimerBound) {
+            this._displayFact();
+        }
+
+        if (this.displayFact) {
+
+            // Timer for the fact showing
+            // Add fact counter
+            this.factCounter += delta;
+
+            // Make the fact disappear
+            if (this.factCounter >= FACTDURATION) {
+                this.displayFact = false;
+            }
+
+            if (this.progressFact < 1) {
+                if (this.progressFact >= 0) {
+                    this.frontContainer.addChild(this.factContainer);
+                }
+                this.progressFact += this.lerpPeriod;
+                redrawInstruction = true;
+            }
+        } else {
+            if (this.progressFact > 0) {
+                this.progressFact -= this.lerpPeriod;
+                redrawInstruction = true;
+                if (this.progressFact <= 0) {
+                    this.frontContainer.removeChild(this.factContainer);
+                }
+            }
+        }
+        if (redrawInstruction) this._redrawInstruction();
+    }
+
+    _redrawInstruction() {
+        const lerp = this.instructionLerp(this.progressFact);
+
+        this.factContainer.scale.set(lerp, 1);
+    }
+
+    _displayFact() {
+        this.factCounter = 0;
+        this.displayFact = true;
+        this.factText.text = randomArray(WORKOUTFUNFACTS);
+
+        // Reset timer
+        this.factTimer = 0;
+        this.factTimerBound = randomRange(FACTSPAWNRANGE[0], FACTSPAWNRANGE[1]);
     }
 
     _updatePace() {
@@ -226,13 +363,20 @@ export class Pace extends GameObject {
             this._updatePace();
         }
         this._prevPace = this.pace;
+
+        // Redraw fact loop here.
+        this._redrawFactLoop(delta);
     }
 
     onResize() {
-        this.paceSprite.position.set(this.pixiRef.app.screen.width - 100, 100);
-        this.outerPace.position.set(this.pixiRef.app.screen.width - 100, 100);
-        this.paceText.position.set(this.pixiRef.app.screen.width - 100, 210);
+
+        const width = this.pixiRef.app.screen.width;
+
+        this.paceSprite.position.set(width - 100, 100);
+        this.outerPace.position.set(width - 100, 100);
+        this.paceText.position.set(width - 100, 210);
         this._redrawCircleMask();
+        this.factContainer.position.set(width/2, 150);
     }
 
 }
