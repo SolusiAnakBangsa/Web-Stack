@@ -19,6 +19,13 @@ iframe {
     height: 400px;
     padding: 12px;
 }
+a {
+    color: rgb(15, 61, 146);
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
+}
 .tl {
     text-align: left;
 }
@@ -452,6 +459,8 @@ button:focus {
     user-select: none; /* Standard */
     opacity: 0.5;
     color: #ffffff;
+}
+#pointdown a:hover {
     text-decoration: none;
 }
 #pointdown:hover {
