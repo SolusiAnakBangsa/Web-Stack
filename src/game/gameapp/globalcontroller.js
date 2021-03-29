@@ -282,6 +282,7 @@ export class GlobalController {
 
         // Add some music to the player
         this.musicPlayer = new MusicPlayer();
+        this.musicPlayer.addSlider(document.getElementById("volumeslider"));
         this.musicPlayer.addMusic("run", pixiRef.resources.runmusic.sound);
         this.musicPlayer.addMusic("gym", pixiRef.resources.gymmusic.sound);
 

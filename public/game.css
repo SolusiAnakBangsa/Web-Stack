@@ -471,3 +471,47 @@ button:focus {
         transform: translateY(-10px);
     }
 }
+#voldiv {
+    position: absolute;
+    color: #FFF;
+    right: 0px;
+    bottom: 0px;
+    text-align: right;
+    font-size: 32pt;
+    margin: 16px;
+}
+#volumeslider {
+    -webkit-appearance: none;
+    width: 25vw;
+    height: 30px;
+    border-radius: 30px;
+    background: #ebe0b2;
+    outline: none;
+    opacity: 0.8;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+  }
+  
+#volumeslider:hover {
+    opacity: 1;
+}
+
+#volumeslider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 23px;
+    height: 40px;
+    border: 0;
+    background-color: #f05a09;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+#volumeslider::-moz-range-thumb {
+    width: 23px;
+    height: 40px;
+    border: 0;
+    background-color: #f05a09;
+    cursor: pointer;
+    border-radius: 5px;
+}
