@@ -12,10 +12,11 @@ Includes:
 - Game resources for android and web client
 - Game code for web frontend
 - Static HTML files for the website
+- Assets
 
 # Usage
 Have Node and NPM (Node Package Manager) installed.
-This uses NPM to manage all the dependencies needed for development and deploymen.
+This uses NPM to manage all the dependencies needed for development and deployment.
 
 Clone repository and go to the directory
 ```bash
