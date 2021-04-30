@@ -4,7 +4,6 @@ const QLERP = (x) => Math.pow(x, 5);
 const SLERP = (x) => Math.pow(x, 2);
 
 export class Transitioner extends GameObject {
-
     constructor(pixiRef, duration) {
         super(pixiRef);
 
@@ -34,8 +33,10 @@ export class Transitioner extends GameObject {
         this._vsStaticDuration = 5;
         this._vsStaticDurationCounter = 0;
 
-        this.fightMan = new PIXI.spine.Spine(pixiRef.resources.fightman.spineData);
-        this.fightMan.state.timeScale = 0.1
+        this.fightMan = new PIXI.spine.Spine(
+            pixiRef.resources.fightman.spineData
+        );
+        this.fightMan.state.timeScale = 0.1;
 
         this.enemySprite = new PIXI.Sprite(pixiRef.resources.enemypack.texture);
         this.enemySprite.anchor.set(0, 1);
@@ -52,7 +53,7 @@ export class Transitioner extends GameObject {
             letterSpacing: 18,
             lineHeight: 36,
             padding: 32,
-            strokeThickness: 10
+            strokeThickness: 10,
         });
         this.vsText = new PIXI.Text("V\n S", vsStyle);
         this.vsText.alpha = 0;
@@ -61,17 +62,18 @@ export class Transitioner extends GameObject {
         this.setup(pixiRef);
     }
 
-
     _basicTransition() {
         this.transitionGraphic.clear();
 
-        this.transitionGraphic.beginFill(0xF77D08);
+        this.transitionGraphic.beginFill(0xf77d08);
 
         this._goingDirection;
 
         this.transitionGraphic.drawRect(
             0,
-            this._goingDirection ? 0 : this.app.screen.height * (1 - QLERP(this._progress)),
+            this._goingDirection
+                ? 0
+                : this.app.screen.height * (1 - QLERP(this._progress)),
             this.app.screen.width,
             this.app.screen.height * QLERP(this._progress) * 1.2
         );
@@ -82,7 +84,7 @@ export class Transitioner extends GameObject {
     _vsInit() {
         this._vsGoing = true;
         this.fightMan.scale.set(6);
-        this.fightMan.state.setAnimation(0, 'Idle', true);
+        this.fightMan.state.setAnimation(0, "Idle", true);
         this.fightMan.x = -300;
 
         this.enemySprite.scale.set(3);
@@ -99,14 +101,14 @@ export class Transitioner extends GameObject {
         this.transitionGraphic.clear();
 
         // Sliding main transition
-        this.transitionGraphic.beginFill(0xF77D08);
+        this.transitionGraphic.beginFill(0xf77d08);
         this.transitionGraphic.drawRect(
-            this._goingDirection ? 0 : swidth * (1-QLERP(this._progress)),
+            this._goingDirection ? 0 : swidth * (1 - QLERP(this._progress)),
             0,
             swidth * QLERP(this._progress) * 1.2,
             sheight
         );
-        
+
         // 2 different durations are used here.
         // normal duration and static duration.
         // When progress mid, then add the vs duration counter.
@@ -115,42 +117,53 @@ export class Transitioner extends GameObject {
             this._progress = 1.5;
 
             // Get the ratio
-            let tProgress = this._vsDurationCounter/this._vsDuration;
+            let tProgress = this._vsDurationCounter / this._vsDuration;
 
             // Add the vs duration counter
-            if (tProgress < 0.5 || this._vsStaticDurationCounter > this._vsStaticDuration) {
-                this._vsDurationCounter += delta/1000;
+            if (
+                tProgress < 0.5 ||
+                this._vsStaticDurationCounter > this._vsStaticDuration
+            ) {
+                this._vsDurationCounter += delta / 1000;
             } else if (tProgress >= 0.5) {
                 // Add the vs duration static counter
-                this._vsStaticDurationCounter += delta/1000;
+                this._vsStaticDurationCounter += delta / 1000;
             }
 
-            tProgress = tProgress > 0.5 ? (1-tProgress)*2 : tProgress*2;
+            tProgress = tProgress > 0.5 ? (1 - tProgress) * 2 : tProgress * 2;
 
             // Draws the frames
             const path1 = [
-                0, sheight/2,
-                swidth/2*SLERP(tProgress)*0.8, sheight/2,
-                swidth/2*QLERP(tProgress)*1.2, sheight,
-                0, sheight,
+                0,
+                sheight / 2,
+                (swidth / 2) * SLERP(tProgress) * 0.8,
+                sheight / 2,
+                (swidth / 2) * QLERP(tProgress) * 1.2,
+                sheight,
+                0,
+                sheight,
             ];
             const path2 = [
-                swidth, 0,
-                swidth-swidth/2*QLERP(tProgress)*1.2, 0,
-                swidth-swidth/2*SLERP(tProgress)*0.8, sheight/2,
-                swidth, sheight/2,
+                swidth,
+                0,
+                swidth - (swidth / 2) * QLERP(tProgress) * 1.2,
+                0,
+                swidth - (swidth / 2) * SLERP(tProgress) * 0.8,
+                sheight / 2,
+                swidth,
+                sheight / 2,
             ];
-            this.transitionGraphic.beginFill(0xFFFFFF);
+            this.transitionGraphic.beginFill(0xffffff);
             this.transitionGraphic.drawPolygon(path1);
             this.transitionGraphic.drawPolygon(path2);
 
             // Man positioning
-            this.fightMan.x = swidth/2*QLERP(tProgress)*0.65 - 200;
-            this.enemySprite.x = swidth - swidth/2*QLERP(tProgress);
+            this.fightMan.x = (swidth / 2) * QLERP(tProgress) * 0.65 - 200;
+            this.enemySprite.x = swidth - (swidth / 2) * QLERP(tProgress);
 
             // Text opacity
             this.vsText.alpha = QLERP(tProgress);
-            
+
             // When the whole transition is done, this will be done.
             if (this._vsDurationCounter >= this._vsDuration) {
                 this._vsDurationCounter = 0;
@@ -166,8 +179,7 @@ export class Transitioner extends GameObject {
         this.transitionGraphic.endFill();
     }
 
-    setup(pixiRef) {
-
+    setup() {
         // Transition graphic.
         this.transitionGraphic = new PIXI.Graphics();
 
@@ -191,14 +203,12 @@ export class Transitioner extends GameObject {
 
                 if (this._progress >= 1) {
                     // If _pauseMid is true, then pause the animation.
-                    if (this._pauseMid)
-                        this._going = false;
+                    if (this._pauseMid) this._going = false;
 
                     // Turnback the direction, and do the callback.
                     this._goingDirection = false;
                     if (this._callbackMid !== undefined) this._callbackMid();
                 }
-
             } else {
                 // Decrease the progress
                 this._progress -= progressIncrement;
@@ -216,9 +226,12 @@ export class Transitioner extends GameObject {
     }
 
     onResize() {
-        this.fightMan.y = this.app.screen.height+300;
-        this.enemySprite.y = this.app.screen.height/2 + 200;
-        this.vsText.position.set(this.app.screen.width/2, this.app.screen.height/2);
+        this.fightMan.y = this.app.screen.height + 300;
+        this.enemySprite.y = this.app.screen.height / 2 + 200;
+        this.vsText.position.set(
+            this.app.screen.width / 2,
+            this.app.screen.height / 2
+        );
     }
 
     resume() {
@@ -227,7 +240,12 @@ export class Transitioner extends GameObject {
             this._going = true;
     }
 
-    transition(callbackMid, callbackDone, transitionType=this._basicTransition, pauseMid=false) {
+    transition(
+        callbackMid,
+        callbackDone,
+        transitionType = this._basicTransition,
+        pauseMid = false
+    ) {
         /*
         Does the transition.
         callbackMid will be called after the transition have covered the whole screen.
@@ -236,7 +254,7 @@ export class Transitioner extends GameObject {
         pauseMid if true, transition will be paused when it has reached the mid point. resume() can be called to continue.
         */
 
-       // Does the transition only if the transition has not begun.
+        // Does the transition only if the transition has not begun.
         if (!this._going && this._progress <= 0) {
             this._going = true;
             this._goingDirection = true;

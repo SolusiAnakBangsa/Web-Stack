@@ -8,7 +8,8 @@ const HEALTHBARHEIGHT = 9 * 3;
 const HEALTHBARXOFFSET = 31 * 3;
 const HEALTHBARYOFFSET = 6 * 3;
 
-const ACUALHEALTHBARLENGTH = (app) => Math.min(HEALTHBARLENGTH, app.screen.width - 150);
+const ACUALHEALTHBARLENGTH = (app) =>
+    Math.min(HEALTHBARLENGTH, app.screen.width - 150);
 
 const ENEMYOFFSETY = 120;
 const ENEMYOFFSETX = 270;
@@ -16,7 +17,8 @@ const ENEMYOFFSETX = 270;
 const TEXTOFFSETY = 56;
 
 const COUNTERBARLENGTH = 800;
-const ACTUALCOUNTERBARLENGTH = (app) => Math.min(COUNTERBARLENGTH, app.screen.width - 100);
+const ACTUALCOUNTERBARLENGTH = (app) =>
+    Math.min(COUNTERBARLENGTH, app.screen.width - 100);
 const COUNTERBARYPOS = 52;
 const COUNTERBARPADDING = 4;
 
@@ -26,7 +28,6 @@ const INSTRUCTIONWIDTH = 700;
 const INSTRUCTIONHEIGHT = 450;
 
 export class FightUI extends GameObject {
-
     constructor(pixiRef) {
         super(pixiRef);
         this.enemyHealthP = 0.8;
@@ -37,22 +38,22 @@ export class FightUI extends GameObject {
         this.workoutText;
         this.workoutCounter;
 
-        this.enemyPosOffset = {x: 0, y: 0};
+        this.enemyPosOffset = { x: 0, y: 0 };
         this.flying = false;
 
         this.enemyList = [
-            {name: "Legolus", res: pixiRef.resources.legolus},
-            {name: "Absogus", res: pixiRef.resources.absogus},
-            {name: "Armogus", res: pixiRef.resources.armogus},
+            { name: "Legolus", res: pixiRef.resources.legolus },
+            { name: "Absogus", res: pixiRef.resources.absogus },
+            { name: "Armogus", res: pixiRef.resources.armogus },
         ];
 
         // Instruction methods
         this.displayInstruction = false;
         this.instructionProgress = 0;
-        this.instructionLerp = (x) => x*x*x*x*x;
+        this.instructionLerp = (x) => x * x * x * x * x;
 
         const ANIMATIONLENGTH = 1000; // ms
-        this.lerpPeriod = (1000/ANIMATIONLENGTH)/60;
+        this.lerpPeriod = 1000 / ANIMATIONLENGTH / 60;
 
         this.setup(pixiRef);
     }
@@ -65,7 +66,7 @@ export class FightUI extends GameObject {
         // Enemy sprite
         this.enemy = new PIXI.spine.Spine(pixiRef.resources.legolus.spineData);
         this.enemy.scale.set(4);
-    
+
         // Setup the shadows
         this.enemyShadow = new ShadowShader([-0.6, -0.6], 0, 0.15);
         this.enemy.filters = [this.enemyShadow];
@@ -84,7 +85,9 @@ export class FightUI extends GameObject {
         this.nameText.anchor.set(1, 0);
 
         // Make enemy health
-        this.enemyHealth = new PIXI.Sprite(pixiRef.resources.enemyhealth.texture);
+        this.enemyHealth = new PIXI.Sprite(
+            pixiRef.resources.enemyhealth.texture
+        );
         this.enemyHealth.anchor.set(1, 0);
         this.enemyHealth.scale.set(3, 3);
 
@@ -100,12 +103,8 @@ export class FightUI extends GameObject {
             dropShadowColor: "#55b0fb",
             dropShadowDistance: 14,
             letterSpacing: -5,
-            align: "center",
-            fill: [
-                "#fb9b0b",
-                "#f46200"
-            ],
-            fontFamily: "\"Arial Black\", Gadget, sans-serif",
+            fill: ["#fb9b0b", "#f46200"],
+            fontFamily: '"Arial Black", Gadget, sans-serif',
             fontSize: WORKOUTFONTSIZE,
             fontStyle: "italic",
             fontVariant: "small-caps",
@@ -119,7 +118,7 @@ export class FightUI extends GameObject {
             fill: "white",
             fontFamily: "Verdana",
             fontWeight: "bold",
-            fontSize: 40
+            fontSize: 40,
         });
 
         this.workoutText = new PIXI.Text("Push up", this.workoutStyle); // Displaying workout text
@@ -145,19 +144,19 @@ export class FightUI extends GameObject {
 
         this.fightManAnim.fightMan.position.set(
             -180,
-            INSTRUCTIONHEIGHT/2 - 24
+            INSTRUCTIONHEIGHT / 2 - 24
         );
         this.fightManAnim.fightMan2.position.set(
             -180,
-            INSTRUCTIONHEIGHT/2 - 24
+            INSTRUCTIONHEIGHT / 2 - 24
         );
 
         this.instructionContainer = new PIXI.Container();
         this.instructionGraphics.clear();
-        this.instructionGraphics.beginFill(0xFFFFFF);
+        this.instructionGraphics.beginFill(0xffffff);
         this.instructionGraphics.drawRoundedRect(
-            -INSTRUCTIONWIDTH/2,
-            -INSTRUCTIONHEIGHT/2,
+            -INSTRUCTIONWIDTH / 2,
+            -INSTRUCTIONHEIGHT / 2,
             INSTRUCTIONWIDTH,
             INSTRUCTIONHEIGHT,
             20
@@ -169,11 +168,14 @@ export class FightUI extends GameObject {
             fontFamily: "Roboto, Arial",
             wordWrap: true,
             fontSize: 20,
-            wordWrapWidth: INSTRUCTIONWIDTH/2 - 32
+            wordWrapWidth: INSTRUCTIONWIDTH / 2 - 32,
         });
-        this.instructionText = new PIXI.Text("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.", this.instructionStyle);
+        this.instructionText = new PIXI.Text(
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+            this.instructionStyle
+        );
 
-        this.instructionText.position.set(16, -INSTRUCTIONHEIGHT/2 + 16);
+        this.instructionText.position.set(16, -INSTRUCTIONHEIGHT / 2 + 16);
 
         this.instructionContainer.addChild(this.instructionGraphics);
         this.instructionContainer.addChild(this.fightManAnim.container);
@@ -202,33 +204,35 @@ export class FightUI extends GameObject {
         const targetWidth = ACTUALCOUNTERBARLENGTH(this.app) - 50;
 
         if (textWidth > targetWidth) {
-            const ratio = targetWidth/textWidth;
+            const ratio = targetWidth / textWidth;
             // Scales the text by modyfing the fontSize
-            this.workoutStyle.fontSize = WORKOUTFONTSIZE*ratio;
+            this.workoutStyle.fontSize = WORKOUTFONTSIZE * ratio;
         } else {
             this.workoutStyle.fontSize = WORKOUTFONTSIZE;
         }
     }
 
     changeEnemy() {
-        const en = this.enemyList[Math.floor(Math.random()*this.enemyList.length)];
+        const en = this.enemyList[
+            Math.floor(Math.random() * this.enemyList.length)
+        ];
         this.nameText.text = en.name;
 
         // Remove from main container.
         this.enemyCont.removeChild(this.enemy);
 
         // Reset enemy offset
-        this.enemyPosOffset = {x: 0, y: 0};
+        this.enemyPosOffset = { x: 0, y: 0 };
         this.flying = false;
-        
+
         // FIX: Kinda jank, maybe can just change the spinedata in the enemy object.
         // Enemy sprite
         this.enemy = new PIXI.spine.Spine(en.res.spineData);
         this.enemy.scale.set(4);
-        this.enemy.state.setAnimation(0, 'idle', true);
-        this.enemy.stateData.setMix('idle', 'fly', 0.05);
-        this.enemy.stateData.setMix('fly', 'idle', 0.2);
-    
+        this.enemy.state.setAnimation(0, "idle", true);
+        this.enemy.stateData.setMix("idle", "fly", 0.05);
+        this.enemy.stateData.setMix("fly", "idle", 0.2);
+
         // Setup the shadows
         this.enemy.filters = [this.enemyShadow];
         this.onResize();
@@ -239,7 +243,7 @@ export class FightUI extends GameObject {
     flyEnemy() {
         // Knock enemy to the right.
         this.flying = true;
-        this.enemy.state.setAnimation(0, 'fly', true, 0);
+        this.enemy.state.setAnimation(0, "fly", true, 0);
     }
 
     _redrawEnemyHealth() {
@@ -282,31 +286,35 @@ export class FightUI extends GameObject {
         this.workoutGraphic.beginFill(0x26274d);
         this.workoutGraphic.drawRoundedRect(
             this.workoutCounter.x,
-            this.workoutCounter.y - BARHEIGHT/2,
+            this.workoutCounter.y - BARHEIGHT / 2,
             ACTUALLENGTH,
             BARHEIGHT,
             20
         );
 
         const BARVERTICALPADDING = 3;
-        
+
         // Draw actual progress
-        this.workoutGraphic.beginFill(0xFC9E23);
+        this.workoutGraphic.beginFill(0xfc9e23);
         this.workoutGraphic.drawRoundedRect(
             this.workoutCounter.x,
-            this.workoutCounter.y - BARHEIGHT/2 + BARVERTICALPADDING,
+            this.workoutCounter.y - BARHEIGHT / 2 + BARVERTICALPADDING,
             ACTUALLENGTH * this.workoutP - BARVERTICALPADDING,
-            BARHEIGHT - BARVERTICALPADDING*2,
+            BARHEIGHT - BARVERTICALPADDING * 2,
             20
         );
 
         this.workoutGraphic.beginFill(0x2e256b);
         // Draw text border box
         this.workoutGraphic.drawRoundedRect(
-            this.workoutCounter.x - this.workoutCounter.width/2 - COUNTERBARPADDING*4,
-            this.workoutCounter.y - this.workoutCounter.height/2 - COUNTERBARPADDING,
-            this.workoutCounter.width + COUNTERBARPADDING*8,
-            this.workoutCounter.height + COUNTERBARPADDING*2,
+            this.workoutCounter.x -
+                this.workoutCounter.width / 2 -
+                COUNTERBARPADDING * 4,
+            this.workoutCounter.y -
+                this.workoutCounter.height / 2 -
+                COUNTERBARPADDING,
+            this.workoutCounter.width + COUNTERBARPADDING * 8,
+            this.workoutCounter.height + COUNTERBARPADDING * 2,
             20
         );
 
@@ -338,17 +346,17 @@ export class FightUI extends GameObject {
         if (redrawInstruction) this._redrawInstruction();
     }
 
-    loop(delta) {
+    loop() {
         const speed = 20;
         if (this.flying) {
             this.enemyPosOffset.x += speed;
-            this.enemyPosOffset.y -= speed/2;
+            this.enemyPosOffset.y -= speed / 2;
             this.enemy.x += speed;
-            this.enemy.y -= speed/2;
-            this.enemyShadow.uniforms.floorY += speed/2;
+            this.enemy.y -= speed / 2;
+            this.enemyShadow.uniforms.floorY += speed / 2;
 
             if (this.enemyPosOffset.x > 1000) {
-                this.flying = false;    
+                this.flying = false;
             }
         }
         this._redrawInstructionLoop();
@@ -364,8 +372,6 @@ export class FightUI extends GameObject {
     }
 
     _redrawInstruction() {
-        const centerX = this.app.screen.width/2;
-        const centerY = this.app.screen.height/2;
 
         const lerp = this.instructionLerp(this.instructionProgress);
 
@@ -373,36 +379,30 @@ export class FightUI extends GameObject {
     }
 
     onResize() {
-        this.enemyHealth.position.set(
-            this.app.screen.width - 8,
-            8
-        );
+        this.enemyHealth.position.set(this.app.screen.width - 8, 8);
 
-        this.nameText.position.set(
-            this.app.screen.width - 120,
-            40
-        );
+        this.nameText.position.set(this.app.screen.width - 120, 40);
 
         // Texts
         // Calculate actual length based on screen width
         const ACTUALLENGTH = ACTUALCOUNTERBARLENGTH(this.app);
         this.workoutText.position.set(
-            this.app.screen.width/2 + ACTUALLENGTH/2,
-            this.app.screen.height - TEXTOFFSETY,
+            this.app.screen.width / 2 + ACTUALLENGTH / 2,
+            this.app.screen.height - TEXTOFFSETY
         );
         this.workoutCounter.position.set(
-            this.app.screen.width/2 - ACTUALLENGTH/2,
-            this.app.screen.height - COUNTERBARYPOS,
+            this.app.screen.width / 2 - ACTUALLENGTH / 2,
+            this.app.screen.height - COUNTERBARYPOS
         );
 
         this.enemy.position.set(
             this.app.screen.width - ENEMYOFFSETX + this.enemyPosOffset.x,
-            this.app.screen.height - ENEMYOFFSETY + this.enemyPosOffset.y,
+            this.app.screen.height - ENEMYOFFSETY + this.enemyPosOffset.y
         );
 
         this.instructionContainer.position.set(
-            this.app.screen.width/2,
-            this.app.screen.height/2
+            this.app.screen.width / 2,
+            this.app.screen.height / 2
         );
 
         this._redrawEnemyHealth();

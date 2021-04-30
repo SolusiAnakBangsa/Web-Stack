@@ -1,5 +1,10 @@
 import { GameObject } from "./gameobject";
-import { clamp, padZero, randomArray, randomRange } from "./../../../script/util";
+import {
+    clamp,
+    padZero,
+    randomArray,
+    randomRange,
+} from "./../../../script/util";
 
 // Length of the progress bar.
 const PROGRESSXOFFSET = 10 * 3;
@@ -20,7 +25,7 @@ const WORKOUTFUNFACTS = [
     "A good sweaty workout burns fat, and increases your muscle fitness. It's as simple as that!",
     "Exercising regularly makes you able to do daily physical activities with ease. It also increases your immune system so that you get sick less!",
     "Working out leads to good posture and body, boosting your self-confidence by much!",
-]
+];
 
 export class Pace extends GameObject {
     /*
@@ -40,10 +45,10 @@ export class Pace extends GameObject {
         // Instruction methods
         this.displayFact = false;
         this.progressFact = 0;
-        this.instructionLerp = (x) => x*x*x*x*x;
+        this.instructionLerp = (x) => x * x * x * x * x;
 
         const ANIMATIONLENGTH = 1000; // ms
-        this.lerpPeriod = (1000/ANIMATIONLENGTH)/60;
+        this.lerpPeriod = 1000 / ANIMATIONLENGTH / 60;
         this.factCounter = 0;
 
         this.factTimer = 0;
@@ -63,7 +68,9 @@ export class Pace extends GameObject {
         // Load all the texture.
         const texture = [];
         for (let tex in pixiRef.resources.pacesprite.spritesheet.textures) {
-            texture.push(pixiRef.resources.pacesprite.spritesheet.textures[tex]);
+            texture.push(
+                pixiRef.resources.pacesprite.spritesheet.textures[tex]
+            );
         }
 
         this.graphic = new PIXI.Graphics();
@@ -77,28 +84,28 @@ export class Pace extends GameObject {
         this.outerPace = new PIXI.Sprite(pixiRef.resources.outerpace.texture);
         this.outerPace.anchor.set(0.5, 0.5);
         this.outerPace.scale.set(3, 3);
-        
+
         // Apply the mask
         this.outerPace.mask = this.graphic;
 
         // Create the text for the pace.
-        this.paceText = new PIXI.Text(
-            String(this.pace << 0),
-            {fontFamily: 'Thoughts', fontSize: 16, fill: 'black'}
-        );
+        this.paceText = new PIXI.Text(String(this.pace << 0), {
+            fontFamily: "Thoughts",
+            fontSize: 16,
+            fill: "black",
+        });
         this.paceText.anchor.set(0.5, 0.5);
         this.paceText.scale.set(4, 4);
         // ***************
 
         // ***************
         // Run progress bar.
-        this.runProgress = new PIXI.Sprite(pixiRef.resources.runprogress.texture);
+        this.runProgress = new PIXI.Sprite(
+            pixiRef.resources.runprogress.texture
+        );
         // this.runProgress.anchor.set(0.5, 0.5);
         this.runProgress.scale.set(3, 3);
-        this.runProgress.position.set(
-            32,
-            32
-        );
+        this.runProgress.position.set(32, 32);
 
         this.runProgressBar = new PIXI.Graphics();
         this._redrawProgressBar();
@@ -107,11 +114,11 @@ export class Pace extends GameObject {
         // ***************
         // Steps number
         this.stepsCounterStyle = new PIXI.TextStyle({
-            fontFamily: "\"Orbitron\", \"Lucida Console\", Monaco, monospace",
+            fontFamily: '"Orbitron", "Lucida Console", Monaco, monospace',
             fontSize: 36,
             fontStyle: "italic",
             fontWeight: 500,
-            padding: 32
+            padding: 32,
         });
         this.stepsCounter = new PIXI.Text("00000", this.stepsCounterStyle);
         this.stepsCounter.position.set(32, 84);
@@ -127,10 +134,10 @@ export class Pace extends GameObject {
         // Spawn stuff to the container.
         // Make background graphics
         const backGraphics = new PIXI.Graphics();
-        backGraphics.beginFill(0xFFFFFF);
+        backGraphics.beginFill(0xffffff);
         backGraphics.drawRoundedRect(
-            -FACTWIDTH/2,
-            -FACTHEIGHT/2,
+            -FACTWIDTH / 2,
+            -FACTHEIGHT / 2,
             FACTWIDTH,
             FACTHEIGHT,
             30
@@ -142,25 +149,31 @@ export class Pace extends GameObject {
         this.factGuy = new PIXI.Sprite(pixiRef.resources.factguy.texture);
         this.factGuy.scale.set(3);
         this.factGuy.anchor.set(0.5);
-        this.factGuy.position.set(-FACTWIDTH/2 + 65, 0);
+        this.factGuy.position.set(-FACTWIDTH / 2 + 65, 0);
 
         // Draw title text
-        const titleText = new PIXI.Text("Armogus says...", new PIXI.TextStyle({
-            fontSize: 24,
-            fontStyle: "italic",
-            fontWeight: "bold",
-            padding: 8,
-        }));
-        titleText.position.set(-FACTWIDTH/2 + 130, -FACTHEIGHT/2 + 20);
+        const titleText = new PIXI.Text(
+            "Armogus says...",
+            new PIXI.TextStyle({
+                fontSize: 24,
+                fontStyle: "italic",
+                fontWeight: "bold",
+                padding: 8,
+            })
+        );
+        titleText.position.set(-FACTWIDTH / 2 + 130, -FACTHEIGHT / 2 + 20);
 
         // Draw the actual text contents.
-        this.factText = new PIXI.Text(WORKOUTFUNFACTS[0], new PIXI.TextStyle({
-            fontSize: 20,
-            padding: 8,
-            wordWrap: true,
-            wordWrapWidth: FACTWIDTH*3/4
-        }));
-        this.factText.position.set(-FACTWIDTH/2 + 130, -FACTHEIGHT/2 + 60);
+        this.factText = new PIXI.Text(
+            WORKOUTFUNFACTS[0],
+            new PIXI.TextStyle({
+                fontSize: 20,
+                padding: 8,
+                wordWrap: true,
+                wordWrapWidth: (FACTWIDTH * 3) / 4,
+            })
+        );
+        this.factText.position.set(-FACTWIDTH / 2 + 130, -FACTHEIGHT / 2 + 60);
 
         this.factContainer.addChild(backGraphics);
         this.factContainer.addChild(this.factGuy);
@@ -196,7 +209,6 @@ export class Pace extends GameObject {
         }
 
         if (this.displayFact) {
-
             // Timer for the fact showing
             // Add fact counter
             this.factCounter += delta;
@@ -263,8 +275,8 @@ export class Pace extends GameObject {
     _redrawCircleMask() {
         // Center coordinates
         const cx = this.pixiRef.app.screen.width - 100;
-        const cy = 100
-        const r = this.outerPace.width/2; // Radius of the circle.
+        const cy = 100;
+        const r = this.outerPace.width / 2; // Radius of the circle.
 
         // Radius from the circle to make a 90 degree triangle,
         // so that the nearest point from the triangle to the circle center is still outside of the circle.
@@ -280,7 +292,7 @@ export class Pace extends GameObject {
         // Make the actual circle mask.
         this.graphic.moveTo(cx, cy); // Center of the circle
         this.graphic.lineTo(cx, cy - rpm); // Top of the circle
-        
+
         // Here, we calculate the "Fullness of the pace, then convert it to a circle."
         // In this nested if statements, we will make the circle in quarters.
         if (this.pace >= 25) {
@@ -291,21 +303,18 @@ export class Pace extends GameObject {
                 if (this.pace >= 75) {
                     this.graphic.lineTo(cx - rpm, cy); // Left of circle.
                     if (this.pace >= 100) {
-                        this.graphic.lineTo(cx, cy - rpm);// Full circle.
+                        this.graphic.lineTo(cx, cy - rpm); // Full circle.
                     }
                 }
             }
         }
 
         // Define the degrees based on the pace.
-        const rad = Math.PI * this.pace/50;
+        const rad = (Math.PI * this.pace) / 50;
 
         // Here, draw the line with precision.
-        this.graphic.lineTo(
-            cx + Math.sin(rad) * rpm,
-            cy - Math.cos(rad) * rpm
-        ); // Full circle.
-        
+        this.graphic.lineTo(cx + Math.sin(rad) * rpm, cy - Math.cos(rad) * rpm); // Full circle.
+
         this.graphic.endFill();
     }
 
@@ -314,8 +323,12 @@ export class Pace extends GameObject {
         this.runProgressBar.beginFill(0xf9ad3f);
         const pX = this.runProgress.x;
         const pY = this.runProgress.y;
-    
-        const progressXPos = clamp(this.steps/this.targetSteps * PROGRESSLENGTH, 0, PROGRESSLENGTH);
+
+        const progressXPos = clamp(
+            (this.steps / this.targetSteps) * PROGRESSLENGTH,
+            0,
+            PROGRESSLENGTH
+        );
 
         // Draws the progress bar.
         this.runProgressBar.drawRect(
@@ -324,26 +337,17 @@ export class Pace extends GameObject {
             progressXPos,
             PROGRESSHEIGHT
         );
-        
+
         // Draws the arrow
         const progressX = pX + PROGRESSXOFFSET + progressXPos;
         const progressY = pY + PROGRESSYOFFSET + 20;
 
-        this.runProgressBar.lineStyle(5, 0xF85A12, 1);
+        this.runProgressBar.lineStyle(5, 0xf85a12, 1);
         this.runProgressBar.endFill();
 
-        this.runProgressBar.moveTo(
-            progressX - 7,
-            progressY + 6
-        );
-        this.runProgressBar.lineTo(
-            progressX,
-            progressY
-        );
-        this.runProgressBar.lineTo(
-            progressX + 7,
-            progressY + 6
-        );
+        this.runProgressBar.moveTo(progressX - 7, progressY + 6);
+        this.runProgressBar.lineTo(progressX, progressY);
+        this.runProgressBar.lineTo(progressX + 7, progressY + 6);
 
         this.runProgressBar.lineStyle(0);
     }
@@ -369,14 +373,12 @@ export class Pace extends GameObject {
     }
 
     onResize() {
-
         const width = this.pixiRef.app.screen.width;
 
         this.paceSprite.position.set(width - 100, 100);
         this.outerPace.position.set(width - 100, 100);
         this.paceText.position.set(width - 100, 210);
         this._redrawCircleMask();
-        this.factContainer.position.set(width/2, 150);
+        this.factContainer.position.set(width / 2, 150);
     }
-
 }

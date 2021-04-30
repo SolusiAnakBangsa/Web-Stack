@@ -1,10 +1,8 @@
-
 export class MusicPlayer {
-
     constructor() {
         // Stores all the music with their name.
-        this.musicList = {}
-        
+        this.musicList = {};
+
         // The duration to crossfade between the songs.
         this.fadeDuration = 3;
 
@@ -20,11 +18,9 @@ export class MusicPlayer {
         this.currentMusic;
     }
 
-    play(music, isFade) {
+    play(music) {
         // Plays the selected music.
         // If a song is already playing, then it will crossfade to the target song.
-        // if isFade is true, then the songs will crossfade.
-
 
         if (this.currentMusic !== undefined) {
             // If there is a song currently playing, set that song to be the previous.
@@ -38,9 +34,9 @@ export class MusicPlayer {
         this._internalVolume = 0;
         this.currentMusic.volume = 0;
         this.currentMusic.play({
-            loop: true
+            loop: true,
         });
-        
+
         // Set flag to be true.
         this._transitioning = true;
     }
@@ -54,7 +50,7 @@ export class MusicPlayer {
             const prevMusic = this._prevMusic;
 
             // Add the volume.
-            this._internalVolume += delta/(1000 * this.fadeDuration);
+            this._internalVolume += delta / (1000 * this.fadeDuration);
             curMusic.volume = this._internalVolume * this.volume;
 
             // Sets the previous music volume, if there is one.
@@ -65,7 +61,7 @@ export class MusicPlayer {
             if (curMusic.volume >= this.volume) {
                 curMusic.volume = this.volume;
                 this._transitioning = false;
-                
+
                 // Stop the previous music if it exists, and sets it to undefined.
                 if (prevMusic !== undefined) {
                     prevMusic.volume = 0;
@@ -89,13 +85,9 @@ export class MusicPlayer {
         element.oninput();
     }
 
-    stop() {
+    stop() {}
 
-    }
-
-    pause() {
-
-    }
+    pause() {}
 
     _handleVolume() {
         const curMusic = this.currentMusic;
@@ -107,5 +99,4 @@ export class MusicPlayer {
         if (prevMusic !== undefined)
             prevMusic.volume = this.volume - curMusic.volume;
     }
-
 }

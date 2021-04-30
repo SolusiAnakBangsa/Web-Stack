@@ -1,7 +1,6 @@
 import { getHeight, getWidth } from "./../../script/util";
 
 export class Resizer {
-
     constructor() {
         // object is the object browser will call on the resize event (window.onresize)
         // This variable is to store all the functions that will be run after

@@ -15,11 +15,9 @@ let Workouts = Object.freeze({
 
 // How many seconds to wait before the activity starts.
 const COUNTDOWNTIMER = 5;
+export var levelData = {};
 
 export class GlobalController {
-    
-    static levelData;
-
     constructor(app) {
         // App object (not pixi app)
         this.appObj = app;
@@ -32,24 +30,26 @@ export class GlobalController {
 
         // The workouts for this level.
         this.workouts = [
-        {
-            "freq": 100,
-            "task": "Jog"
-        },
-        {
-            "freq": 3,
-            "task": "Push Up"
-        }, {
-            "freq": 4,
-            "task": "Squat"
-        }, {
-            "freq": 25,
-            "task": "Squat"
-        },
-        {
-            "task": "Jog",
-            "freq": 50
-        }
+            {
+                freq: 100,
+                task: "Jog",
+            },
+            {
+                freq: 3,
+                task: "Push Up",
+            },
+            {
+                freq: 4,
+                task: "Squat",
+            },
+            {
+                freq: 25,
+                task: "Squat",
+            },
+            {
+                task: "Jog",
+                freq: 50,
+            },
         ];
 
         // Index to keep track of the current workout.
@@ -74,12 +74,14 @@ export class GlobalController {
     }
 
     _initializeWorkout() {
-        // This will update the current workout list in this object, if the 
+        // This will update the current workout list in this object, if the
         // peer connection object receives anything.
-        if (GlobalController.levelData !== undefined) {
-            this.workouts = GlobalController.levelData["workoutList"]["tasks"];
+        if (levelData.data !== undefined) {
+            this.workouts = levelData.data["workoutList"]["tasks"];
         } else {
-            console.error("Phone did not send workout list, or data is received late.");
+            console.error(
+                "Phone did not send workout list, or data is received late."
+            );
         }
 
         // Looks at the first workout, and decide which scene to go.
@@ -97,17 +99,18 @@ export class GlobalController {
                 this.count.mainContainer.text = "GO!";
                 this.count.textStyle.fontSize = 200;
                 // Timer to delete the count object.
-                setTimeout(() => {this.appObj.scene.delObj(this.count);}, 1500);
+                setTimeout(() => {
+                    this.appObj.scene.delObj(this.count);
+                }, 1500);
 
                 // When all timing is done, send a startgame to the phone.
-                peer.connection.sendData({"status" : "startnext"});
+                peer.connection.sendData({ status: "startnext" });
 
                 // Play the start sound
                 this.startSound.play();
             };
-            
-            this.count.start();
 
+            this.count.start();
         } else {
             this.goToGym();
             // Set to float down.
@@ -122,14 +125,6 @@ export class GlobalController {
             if (workout.task == "Jog") totalSteps += workout.freq;
         }
         this.runScene.pace.targetSteps = totalSteps;
-    }
-
-    setup() {
-        // Register _dataListener
-        peer.connection.addReceiveHandler(this._dataListener.bind(this));
-
-        // Set up simple mouse clicker
-        this.appObj.app.stage.on('pointerup', this._pointerUp.bind(this));
     }
 
     _pointerUp(event) {
@@ -162,10 +157,10 @@ export class GlobalController {
                     this.appObj.scene.addObj(obj);
                 }
             },
-            () => {
-
-            },
-            this.currentWorkout == Workouts.JOG ? this.transitioner._vsTransition : this.transitioner._basicTransition
+            () => {},
+            this.currentWorkout == Workouts.JOG
+                ? this.transitioner._vsTransition
+                : this.transitioner._basicTransition
         );
     }
 
@@ -182,62 +177,6 @@ export class GlobalController {
         this.appObj.scene.transitionCallback();
     }
 
-    goToGym() {
-        // Slice this.workout object to include only the gym games from the index.
-        // First, discover which index is the next jog (or the end).
-
-        var ci = this.currentWorkoutIndex;
-        const workouts = this.workouts;
-
-        // Find the next jog, or go to the end.
-        var li;
-        let foundJog = false;
-        for (li = ci; li < workouts.length; li++) {
-            if (workouts[li].task == "Jog") {
-                foundJog = true;
-                break;
-            }
-        }
-
-        const workoutSlice = workouts.slice(ci, foundJog ? li : li+1);
-
-        this.currentWorkoutIndex = li;
-
-        // Send the workout data to the gym
-        this.gymScene.startNewWorkout(workoutSlice);
-        this.currentWorkout = Workouts.GYM;
-
-        // Set scene
-        this.appObj.setScene(this.gymScene);
-
-        // Move pause button
-        this.pauseButton.changePosition((sWidth) => 32, (sHeight) => 32);
-
-        // Play gym music
-        this.musicPlayer.play("gym", true);
-    }
-
-    goToRun() {
-        this.appObj.setScene(this.runScene);
-        this.currentWorkout = Workouts.JOG;
-
-        // Update the targetSteps in the runScene thingy based on current workout index.
-        var stepsUpUntil = 0;
-        for (let work of this.workouts.slice(0, this.currentWorkoutIndex + 1)) {
-            if (work.task == "Jog") stepsUpUntil += work.freq;
-        }
-        this.runScene.targetSteps = stepsUpUntil;
-
-        // Move the pause button
-        this.pauseButton.changePosition((sWidth) => sWidth - 100, (sHeight) => sHeight - 100);
-
-        // Increase the workout index.
-        this.currentWorkoutIndex++;
-
-        // Play the music
-        this.musicPlayer.play("run", true);
-    }
-
     start(pixiRef) {
         this.pixiRef = pixiRef;
         // Makes the transitioner object.
@@ -247,7 +186,9 @@ export class GlobalController {
         this.pauseButton = new Button(
             pixiRef,
             "pause",
-            () => {this.pauseCallback(!this.isPaused)},
+            () => {
+                this.pauseCallback(!this.isPaused);
+            },
             null,
             null,
             64,
@@ -262,16 +203,25 @@ export class GlobalController {
         this.count = new Countdown(pixiRef, COUNTDOWNTIMER);
 
         // Add callback to be able to transition back from gym to run
-        this.gymScene.doneCallback = () => {this._toggleScenes()};
-        this.runScene.doneCallback = () => {this._toggleScenes()};
+        this.gymScene.doneCallback = () => {
+            this._toggleScenes();
+        };
+        this.runScene.doneCallback = () => {
+            this._toggleScenes();
+        };
 
         // Register unpause
         const unpause = document.getElementById("unpause");
-        unpause.onclick = () => {this.pauseCallback(false)};
+        unpause.onclick = () => {
+            this.pauseCallback(false);
+        };
 
         // Pause the game on browser lose focus
         document.addEventListener("visibilitychange", () => {
-            if (document.visibilityState === 'hidden' && this.isPaused == false) {
+            if (
+                document.visibilityState === "hidden" &&
+                this.isPaused == false
+            ) {
                 this.pauseCallback(true);
             }
         });
@@ -298,12 +248,80 @@ export class GlobalController {
         this.appObj.scene.onResize();
     }
 
+    setup() {
+        // Register _dataListener
+        peer.connection.addReceiveHandler(this._dataListener.bind(this));
+
+        // Set up simple mouse clicker
+        this.appObj.app.stage.on("pointerup", this._pointerUp.bind(this));
+    }
+
     loop(delta) {
         this.musicPlayer.loop(delta);
     }
 
-    onResize() {
-        
+    onResize() {}
+
+    goToGym() {
+        // Slice this.workout object to include only the gym games from the index.
+        // First, discover which index is the next jog (or the end).
+
+        var ci = this.currentWorkoutIndex;
+        const workouts = this.workouts;
+
+        // Find the next jog, or go to the end.
+        var li;
+        let foundJog = false;
+        for (li = ci; li < workouts.length; li++) {
+            if (workouts[li].task == "Jog") {
+                foundJog = true;
+                break;
+            }
+        }
+
+        const workoutSlice = workouts.slice(ci, foundJog ? li : li + 1);
+
+        this.currentWorkoutIndex = li;
+
+        // Send the workout data to the gym
+        this.gymScene.startNewWorkout(workoutSlice);
+        this.currentWorkout = Workouts.GYM;
+
+        // Set scene
+        this.appObj.setScene(this.gymScene);
+
+        // Move pause button
+        this.pauseButton.changePosition(
+            () => 32,
+            () => 32
+        );
+
+        // Play gym music
+        this.musicPlayer.play("gym", true);
+    }
+
+    goToRun() {
+        this.appObj.setScene(this.runScene);
+        this.currentWorkout = Workouts.JOG;
+
+        // Update the targetSteps in the runScene thingy based on current workout index.
+        var stepsUpUntil = 0;
+        for (let work of this.workouts.slice(0, this.currentWorkoutIndex + 1)) {
+            if (work.task == "Jog") stepsUpUntil += work.freq;
+        }
+        this.runScene.targetSteps = stepsUpUntil;
+
+        // Move the pause button
+        this.pauseButton.changePosition(
+            (sWidth) => sWidth - 100,
+            (sHeight) => sHeight - 100
+        );
+
+        // Increase the workout index.
+        this.currentWorkoutIndex++;
+
+        // Play the music
+        this.musicPlayer.play("run", true);
     }
 
     pauseCallback(isPaused) {
@@ -315,8 +333,8 @@ export class GlobalController {
 
         // Send the pause data
         const data = {
-            status: isPaused ? "pause" : "unpause"
-        }
+            status: isPaused ? "pause" : "unpause",
+        };
         peer.connection.sendData(data);
 
         // Pause the countdown
@@ -328,7 +346,9 @@ export class GlobalController {
             pauseOverlay.style.zIndex = 0;
             pauseOverlay.style.opacity = 1;
         } else {
-            setTimeout(() => {pauseOverlay.style.zIndex = -3;}, 0.5);
+            setTimeout(() => {
+                pauseOverlay.style.zIndex = -3;
+            }, 0.5);
             pauseOverlay.style.opacity = 0;
         }
 
@@ -359,41 +379,47 @@ export class GlobalController {
         const pace = this.runScene.paceData;
 
         // Draws the graph.
-        var ctx = document.getElementById('pacechart').getContext('2d');
-        var myChart = new Chart(ctx, {
-            type: 'line',
+        var ctx = document.getElementById("pacechart").getContext("2d");
+        new Chart(ctx, {
+            type: "line",
             data: {
                 labels: Array(pace.length).fill(""),
-                datasets: [{
-                    label: 'Pace',
-                    data: pace,
-                    fill: false,
-                    borderColor: 'rgb(235, 129, 38)',
-                    pointBorderWidth: 0,
-                    borderWidth: 3,
-                    radius: 0
-                }]
+                datasets: [
+                    {
+                        label: "Pace",
+                        data: pace,
+                        fill: false,
+                        borderColor: "rgb(235, 129, 38)",
+                        pointBorderWidth: 0,
+                        borderWidth: 3,
+                        radius: 0,
+                    },
+                ],
             },
             options: {
                 legend: {
                     // display: false
                 },
                 scales: {
-                    xAxes: [{
-                        display: false,
-                        gridLines: {
-                            display:false
-                        }
-                    }],
-                    yAxes: [{
-                        ticks: {
-                            autoSkip: true,
-                            maxTicksLimit: 3,
-                            beginAtZero: true
-                        }
-                    }]
-                }
-            }
+                    xAxes: [
+                        {
+                            display: false,
+                            gridLines: {
+                                display: false,
+                            },
+                        },
+                    ],
+                    yAxes: [
+                        {
+                            ticks: {
+                                autoSkip: true,
+                                maxTicksLimit: 3,
+                                beginAtZero: true,
+                            },
+                        },
+                    ],
+                },
+            },
         });
 
         // Gets all the workout, and insert it.
@@ -416,7 +442,7 @@ export class GlobalController {
 
             num.innerText = act.freq + (act.task == "Jog" ? " steps" : "x ");
             task.innerText = act.task + " ";
-            
+
             td.appendChild(task);
             td.appendChild(num);
 
@@ -425,7 +451,7 @@ export class GlobalController {
             column++;
 
             // Cycle between the columns.
-            if (column >= columns) column = 0
+            if (column >= columns) column = 0;
         }
     }
 }

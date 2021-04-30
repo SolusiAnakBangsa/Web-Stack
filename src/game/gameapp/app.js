@@ -2,8 +2,10 @@ import { assets } from "./assets";
 import { Resizer } from "./resizer";
 import { GlobalController } from "./globalcontroller";
 
+/*
+    Main controller for the application
+*/
 export class GameApp {
-
     constructor(options) {
         // Creates the app according to the options
         this.options = options;
@@ -50,7 +52,7 @@ export class GameApp {
 
     start() {
         // Everything in this function will be run, once the game is started.
-        
+
         // Initializes the PIXI game instance with options.
         this.app = new PIXI.Application(this.options);
         this.loader = new PIXI.Loader(); // PIXI loader.
@@ -96,15 +98,13 @@ export class GameApp {
         this.controller.loop(delta);
 
         // Scene too
-        if (this.scene !== undefined)
-        this.scene.loop(delta);
+        if (this.scene !== undefined) this.scene.loop(delta);
     }
 
     onResize() {
         this.controller.onResize();
 
-        if (this.scene !== undefined)
-        this.scene.onResize();
+        if (this.scene !== undefined) this.scene.onResize();
     }
 
     _updateLoading() {
@@ -112,13 +112,13 @@ export class GameApp {
         const screen = this.app.screen;
 
         bar.clear();
-        bar.lineStyle(50, 0xF77D08, 1);
+        bar.lineStyle(50, 0xf77d08, 1);
         bar.arc(
-            screen.width/2,
-            screen.height/2,
+            screen.width / 2,
+            screen.height / 2,
             160,
-            -Math.PI/2,
-            -Math.PI/2 + (2 * Math.PI * (this.loader.progress/100))
+            -Math.PI / 2,
+            -Math.PI / 2 + 2 * Math.PI * (this.loader.progress / 100)
         );
     }
 

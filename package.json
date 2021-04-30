@@ -9,7 +9,7 @@
     "game-build": "npm run clean && parcel build public/game.html --global gameModule --no-content-hash --out-dir dist --public-url ./",
     "clean": "npm run clean-extra && rimraf dist",
     "clean-dev": "npm run clean-extra && rimraf development",
-	  "clean-extra": "rimraf .cache && rimraf .firebase",
+    "clean-extra": "rimraf .cache && rimraf .firebase",
     "build-deploy": "npm run build && firebase deploy"
   },
   "staticFiles": {
@@ -29,11 +29,16 @@
   },
   "homepage": "https://github.com/SolusiAnakBangsa/Web-Stack#readme",
   "devDependencies": {
+    "eslint": "^7.25.0",
     "parcel-bundler": "^1.12.4",
     "parcel-plugin-static-files-copy": "^2.5.1",
     "rimraf": "^3.0.2"
   },
   "dependencies": {
-    "assets": "^3.0.1"
+    "assets": "^3.0.1",
+    "eslint-config-prettier": "^8.3.0",
+    "prettier": "^2.2.1",
+    "prettier-eslint": "^12.0.0",
+    "prettier-eslint-cli": "^5.0.1"
   }
 }

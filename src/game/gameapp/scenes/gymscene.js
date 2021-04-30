@@ -52,7 +52,7 @@ export class GymScene extends Scene {
 
         // Randomize enemy to spawn.
         this.fightUI.changeEnemy();
-        
+
         this._updateScores();
         this._updatePose();
         // this._addOne(); // Testing Purposes
@@ -60,7 +60,7 @@ export class GymScene extends Scene {
 
     _addOneRep() {
         // Only adds one rep if there is still workout to do.
-        if (this.resting || this.workoutIndex >= this.workouts.length) return
+        if (this.resting || this.workoutIndex >= this.workouts.length) return;
 
         const maxRep = this.workouts[this.workoutIndex].freq;
 
@@ -71,7 +71,7 @@ export class GymScene extends Scene {
 
             // Increase the progress bar
             this.currentReps++;
-            this.fightUI.workoutP = this.currentReps/maxRep;
+            this.fightUI.workoutP = this.currentReps / maxRep;
             this.fightUI.workoutCounter.text = maxRep - this.currentReps;
             this.fightUI._redrawWorkoutBar();
         }
@@ -89,7 +89,9 @@ export class GymScene extends Scene {
 
         // Check whether this is the last workout.
         if (this.workoutIndex < this.workouts.length - 1) {
-            callback = () => {this._restCountdown(RESTSECONDS);}
+            callback = () => {
+                this._restCountdown(RESTSECONDS);
+            };
         } else {
             callback = () => {
                 this.workoutIndex++;
@@ -101,7 +103,10 @@ export class GymScene extends Scene {
         // Wait for the duration of the last workout, and additional 500ms.
         setTimeout(
             callback,
-            this.fightMan.fightMan.currentSprite.state.getCurrent(0).animation.duration*1000 + 500
+            this.fightMan.fightMan.currentSprite.state.getCurrent(0).animation
+                .duration *
+                1000 +
+                500
         );
     }
 
@@ -109,13 +114,18 @@ export class GymScene extends Scene {
         // Updates some of the UI elements in the game
         // (Health, Workout text, Counter)
 
+        // FIX
         if (this.workoutIndex < this.workouts.length) {
             // Update the texts
-            this.fightUI.workoutCounter.text = this.workouts[this.workoutIndex].freq;
+            this.fightUI.workoutCounter.text = this.workouts[
+                this.workoutIndex
+            ].freq;
             this.fightUI.setWorkoutText(this.workouts[this.workoutIndex].task);
             this.fightUI.workoutP = 0;
             this.fightUI._redrawWorkoutBar();
-            this.fightUI.updateInstruction(this.workouts[this.workoutIndex].task)
+            this.fightUI.updateInstruction(
+                this.workouts[this.workoutIndex].task
+            );
         } else {
             // Obliterate the enemy
             this.fightUI.flyEnemy();
@@ -127,20 +137,25 @@ export class GymScene extends Scene {
             this.fightUI._redrawWorkoutBar();
 
             // Do callback if done.
-            if (this.doneCallback !== undefined) setTimeout(this.doneCallback, CALLBACKDELAY);
+            if (this.doneCallback !== undefined)
+                setTimeout(this.doneCallback, CALLBACKDELAY);
         }
 
         // Update enemy health
-        this.fightUI.enemyHealthP = (this.workouts.length - this.workoutIndex)/this.workouts.length;
+        this.fightUI.enemyHealthP =
+            (this.workouts.length - this.workoutIndex) / this.workouts.length;
         this.fightUI._redrawEnemyHealth();
     }
 
     _updatePose() {
         // Update pose depending on the current workout index
         if (this.workoutIndex < this.workouts.length) {
-            this.fightMan.fightMan.changePose(this.workouts[this.workoutIndex].task, false);
+            this.fightMan.fightMan.changePose(
+                this.workouts[this.workoutIndex].task,
+                false
+            );
         } else {
-            this.fightMan.fightMan.changePose('Idle', true);
+            this.fightMan.fightMan.changePose("Idle", true);
         }
     }
 
@@ -156,8 +171,8 @@ export class GymScene extends Scene {
         this.resting = true;
 
         // Damage the enemy here, do animations.
-        this.fightUI.enemy.state.setAnimation(0, 'fly', false);
-        this.fightUI.enemy.state.addAnimation(0, 'idle', true, 0);
+        this.fightUI.enemy.state.setAnimation(0, "fly", false);
+        this.fightUI.enemy.state.addAnimation(0, "idle", true, 0);
 
         // Summon the buttons
         this.addObj(this.skipButton);
@@ -174,7 +189,7 @@ export class GymScene extends Scene {
         this.addObj(this.restCountdown);
 
         // Set the person animation to be idle.
-        this.fightMan.fightMan.changePose('Idle', true);
+        this.fightMan.fightMan.changePose("Idle", true);
 
         // Display the instruction screen.
         this.fightUI.setDisplayInstruction(true);
@@ -199,11 +214,11 @@ export class GymScene extends Scene {
             textRef.text = textRef.text.split("\n")[1];
         }
 
-        peer.connection.sendData({"status" : "startnext"});
-        
+        peer.connection.sendData({ status: "startnext" });
+
         // Change the pose
         this._updatePose();
-        
+
         // Remove the display instruction
         this.fightUI.setDisplayInstruction(false);
 
@@ -219,20 +234,20 @@ export class GymScene extends Scene {
     }
 
     dataListener(payload) {
-
         // If a payload data that corresponds to the current workout is received, then increase rep by one.
 
-        if ("exerciseType" in payload && this.workoutIndex < this.workouts.length) {
-            if (payload.exerciseType == this.workouts[this.workoutIndex].task &&
-                (payload.status == "mid" ||
-                payload.status == "end") &&
-                this.prevRep < payload.repAmount)
-            {
-                
+        if (
+            "exerciseType" in payload &&
+            this.workoutIndex < this.workouts.length
+        ) {
+            if (
+                payload.exerciseType == this.workouts[this.workoutIndex].task &&
+                (payload.status == "mid" || payload.status == "end") &&
+                this.prevRep < payload.repAmount
+            ) {
                 const repAmount = payload.repAmount - this.prevRep;
                 this.prevRep = payload.repAmount;
-                for (var i = 0; i < repAmount; i++)
-                    this._addOneRep();
+                for (var i = 0; i < repAmount; i++) this._addOneRep();
 
                 if (payload.status == "end") {
                     this._lastRep();
@@ -241,9 +256,7 @@ export class GymScene extends Scene {
         }
     }
 
-    switchCallback() {
-
-    }
+    switchCallback() {}
 
     setup(pixiRef) {
         this.floatState = false; // The state whether to do the float down animation.
@@ -255,7 +268,11 @@ export class GymScene extends Scene {
         this.fightFloor = new FightFloor(pixiRef);
         this.fightMan = new FightMan(pixiRef);
         this.fightUI = new FightUI(pixiRef);
-        this.restCountdown = new Countdown(pixiRef, null, this._goToNextWorkout.bind(this));
+        this.restCountdown = new Countdown(
+            pixiRef,
+            null,
+            this._goToNextWorkout.bind(this)
+        );
 
         // Set the position of the countdown.
         this.restCountdown.yPos = () => 100;
@@ -264,12 +281,14 @@ export class GymScene extends Scene {
             pixiRef,
             "help_outline",
             () => {
-                this.fightUI.setDisplayInstruction(!this.fightUI.displayInstruction);
+                this.fightUI.setDisplayInstruction(
+                    !this.fightUI.displayInstruction
+                );
             },
             () => 32,
             () => 96 + 16,
             64,
-            0x00AAAA
+            0x00aaaa
         );
 
         // Skip button.
@@ -282,7 +301,7 @@ export class GymScene extends Scene {
             () => 32,
             () => 160 + 32,
             64,
-            0x00AAAA
+            0x00aaaa
         );
 
         // Delay 5 second button
@@ -295,7 +314,7 @@ export class GymScene extends Scene {
             () => 32,
             () => 224 + 48,
             64,
-            0x00AAAA
+            0x00aaaa
         );
 
         this.addObj(this.fightFloor);
@@ -322,18 +341,28 @@ export class GymScene extends Scene {
 
     loopCode(delta) {
         if (this.floatState) {
-            const deltaS = delta/1000;
+            const deltaS = delta / 1000;
 
             // Calculate offset
-            const curOffset = this.initYOffset * (this.lerpFunction((this.floatCounter + deltaS)/this.floatDuration) - this.lerpFunction(this.floatCounter/this.floatDuration));
+            const curOffset =
+                this.initYOffset *
+                (this.lerpFunction(
+                    (this.floatCounter + deltaS) / this.floatDuration
+                ) -
+                    this.lerpFunction(this.floatCounter / this.floatDuration));
 
             // Increase the position
             this.fightFloor.mainContainer.y -= curOffset;
             this.fightMan.mainContainer.y -= curOffset;
             this.fightUI.enemyCont.y -= curOffset;
 
-            this.fightMan.manShadow.uniforms.floorY = this.fightMan.mainContainer.y + this.fightMan.fightMan.fightMan.y;
-            this.fightUI.enemyShadow.uniforms.floorY = this.fightUI.enemyCont.y + (this.fightUI.enemy.y + this.fightUI.enemyPosOffset.y);
+            this.fightMan.manShadow.uniforms.floorY =
+                this.fightMan.mainContainer.y +
+                this.fightMan.fightMan.fightMan.y;
+            
+            this.fightUI.enemyShadow.uniforms.floorY =
+                this.fightUI.enemyCont.y +
+                (this.fightUI.enemy.y + this.fightUI.enemyPosOffset.y);
 
             // Increase the duration.
             this.floatCounter += deltaS;
@@ -351,19 +380,13 @@ export class GymScene extends Scene {
         this.onResize();
     }
 
-    start() {
-        
-    }
+    start() {}
 
-    onResizeCode() {
-        
-    }
+    onResizeCode() {}
 
     pauseCallback(isPaused) {
         this.restCountdown.paused = isPaused;
     }
 
-    tapCallback(event) {
-
-    }
+    tapCallback() {}
 }

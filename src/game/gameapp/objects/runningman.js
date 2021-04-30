@@ -1,10 +1,8 @@
 import { GameObject } from "./gameobject";
 import { ShadowShader } from "./../shadowshader";
-import { propertyLength } from "./../../../script/util";
 // import { randomRange, randomProperty } from "./../../../script/util";
 
 export class RunMan extends GameObject {
-
     constructor(pixiRef, drawTo) {
         super(pixiRef, drawTo);
 
@@ -25,14 +23,20 @@ export class RunMan extends GameObject {
     setup(pixiRef) {
         super.setup(pixiRef);
 
-        // Load all of the textures from the json file        
+        // Load all of the textures from the json file
         // The rule is, the first and second index in the spritesheet is the idle animation.
-        const frames = Object.keys(pixiRef.resources.runman.spritesheet.textures);
+        const frames = Object.keys(
+            pixiRef.resources.runman.spritesheet.textures
+        );
         for (var i = 0; i < frames.length; i++) {
             if (i < 2) {
-                this.idleTex.push(pixiRef.resources.runman.spritesheet.textures[frames[i]]);
+                this.idleTex.push(
+                    pixiRef.resources.runman.spritesheet.textures[frames[i]]
+                );
             } else {
-                this.runTex.push(pixiRef.resources.runman.spritesheet.textures[frames[i]]);
+                this.runTex.push(
+                    pixiRef.resources.runman.spritesheet.textures[frames[i]]
+                );
             }
         }
 
@@ -40,15 +44,19 @@ export class RunMan extends GameObject {
         this.sprite = new PIXI.AnimatedSprite(this.idleTex);
         this.sprite.anchor.set(0.5, 1);
         this.sprite.scale.set(3.5, 3.5);
-        
+
         // Animation
         this.sprite.gotoAndPlay(0);
         this.sprite.animationSpeed = 0.01;
 
         // Create a shadow filter
-        this.manShadow = new ShadowShader([-0.6, -0.6], (this.sprite.y - 15) << 0, 0.25);
-        this.sprite.filters = [ this.manShadow ];
-        
+        this.manShadow = new ShadowShader(
+            [-0.6, -0.6],
+            (this.sprite.y - 15) << 0,
+            0.25
+        );
+        this.sprite.filters = [this.manShadow];
+
         this.mainContainer = new PIXI.Container();
         this.mainContainer.addChild(this.sprite);
 
@@ -65,9 +73,7 @@ export class RunMan extends GameObject {
             this.sprite.gotoAndPlay(0);
             this.sprite.animationSpeed = 0.01;
             this._state = 0;
-
         } else if (this.speed > 0 && this._state == 0) {
-
             this.sprite.textures = this.runTex;
             this.sprite.gotoAndPlay(0);
             this._state = 1;
@@ -82,12 +88,13 @@ export class RunMan extends GameObject {
         }
 
         // Move shadow
-        this.manShadow.uniforms.floorY = (this.mainContainer.y + this.sprite.y - 15) << 0;
+        this.manShadow.uniforms.floorY =
+            (this.mainContainer.y + this.sprite.y - 15) << 0;
     }
 
     onResize() {
         this.sprite.position.set(
-            this.app.screen.width/2,
+            this.app.screen.width / 2,
             this.app.screen.height - this.manHeight
         );
     }

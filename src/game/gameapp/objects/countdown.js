@@ -1,8 +1,7 @@
 import { GameObject } from "./gameobject";
 
 export class Countdown extends GameObject {
-
-    constructor(pixiRef, seconds=null, callback=null) {
+    constructor(pixiRef, seconds = null, callback = null) {
         super(pixiRef);
 
         this.counter = seconds + 0.999;
@@ -16,9 +15,12 @@ export class Countdown extends GameObject {
             fontWeight: "bold",
             padding: 64,
             fontSize: 140,
-            strokeThickness: 5
+            strokeThickness: 5,
         });
-        this.mainContainer = new PIXI.Text(String(seconds << 0), this.textStyle);
+        this.mainContainer = new PIXI.Text(
+            String(seconds << 0),
+            this.textStyle
+        );
         this.callback = callback;
         this.started = false;
 
@@ -26,8 +28,8 @@ export class Countdown extends GameObject {
         this.paused = false;
 
         // Default position of the countdown.
-        this.xPos = (scr) => scr.width/2;
-        this.yPos = (scr) => scr.height/2;
+        this.xPos = (scr) => scr.width / 2;
+        this.yPos = (scr) => scr.height / 2;
 
         this.setup(pixiRef);
     }
@@ -36,7 +38,7 @@ export class Countdown extends GameObject {
         this.started = true;
     }
 
-    setup(pixiRef) {
+    setup() {
         this.mainContainer.anchor.set(0.5, 0.5);
 
         this.onResize();
@@ -44,14 +46,13 @@ export class Countdown extends GameObject {
 
     loop(delta) {
         if (this.started && this.counter >= 1 && !this.paused) {
-            this.counter -= delta/1000;
+            this.counter -= delta / 1000;
             this.mainContainer.text = String(this.counter << 0);
 
             // If limit have been reached
             if (this.counter < 1) {
                 this.started = false;
-                if (this.callback != null)
-                    this.callback();
+                if (this.callback != null) this.callback();
             }
         }
     }

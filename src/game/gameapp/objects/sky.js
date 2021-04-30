@@ -2,7 +2,6 @@ import { GameObject } from "./gameobject";
 import { randomRange, randomProperty } from "./../../../script/util";
 
 export class Sky extends GameObject {
-
     constructor(pixiRef, drawTo) {
         super(pixiRef, drawTo);
 
@@ -12,7 +11,7 @@ export class Sky extends GameObject {
         */
 
         // Projection point for the sky
-        this.projPoint = new PIXI.Point(0, this.app.screen.height/3);
+        this.projPoint = new PIXI.Point(0, this.app.screen.height / 3);
         this.factor = 0.875;
 
         this.speedRange = [0.5, 2.5];
@@ -48,7 +47,9 @@ export class Sky extends GameObject {
 
         // Here, we can spawn some clouds to fill the sky initially.
         for (var i = 0; i < this.initialClouds; i++) {
-            let cloud = this.makeCloud(randomRange(-this.app.screen.width, this.app.screen.width));
+            let cloud = this.makeCloud(
+                randomRange(-this.app.screen.width, this.app.screen.width)
+            );
             this.skyProj.addChild(cloud);
         }
 
@@ -56,17 +57,19 @@ export class Sky extends GameObject {
         this.onResize();
     }
 
-    makeCloud(x=null, y=null) {
+    makeCloud(x = null, y = null) {
         // Coordinates are overridable.
         // If not specified, then x will be on the left bound of the screen
         // y will be random.
 
         // Will generate a cloud in a random location on the left bound of the screen.
-        let cloud = new PIXI.projection.Sprite2d(randomProperty(this.cloudsTex.textures));
+        let cloud = new PIXI.projection.Sprite2d(
+            randomProperty(this.cloudsTex.textures)
+        );
 
         // Randomize the y axis
         cloud.y = y == null ? randomRange(...this.cloudYRange) : y;
-        cloud.x = x == null ? -this.app.screen.width - cloud.y*2 : x;
+        cloud.x = x == null ? -this.app.screen.width - cloud.y * 2 : x;
         cloud.vx = randomRange(...this.speedRange, false);
 
         cloud.anchor.set(0.5, 0.5);
@@ -77,7 +80,7 @@ export class Sky extends GameObject {
 
     loop(delta) {
         this.skyContainer.proj.setAxisY(this.projPoint, this.factor);
-        
+
         // Move all the clouds
         for (let cloud of this.skyProj.children) {
             cloud.x += cloud.vx;
@@ -91,10 +94,10 @@ export class Sky extends GameObject {
             // Spawn a cloud
             let cloud = this.makeCloud();
             this.skyProj.addChild(cloud);
-            
+
             // Detects and deletes in the same interval cloud outside the screen
             for (let cl of this.skyProj.children) {
-                if (cl.x > (this.app.screen.width + cl.y*2)) {
+                if (cl.x > this.app.screen.width + cl.y * 2) {
                     this.skyProj.removeChild(cl);
                 }
             }
@@ -107,7 +110,7 @@ export class Sky extends GameObject {
 
     onResize() {
         // Reconfigure values
-        this.projPoint = new PIXI.Point(0, this.app.screen.height/3);
-        this.skyContainer.position.set(this.app.screen.width/2, 0);
+        this.projPoint = new PIXI.Point(0, this.app.screen.height / 3);
+        this.skyContainer.position.set(this.app.screen.width / 2, 0);
     }
 }

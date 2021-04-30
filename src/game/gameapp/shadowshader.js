@@ -1,20 +1,18 @@
-export class ShadowShader extends PIXI.Filter {
+const myVertex = `
+attribute vec2 aVertexPosition;
+attribute vec2 aTextureCoord;
 
-    static myVertex = `
-    attribute vec2 aVertexPosition;
-    attribute vec2 aTextureCoord;
+uniform mat3 projectionMatrix;
 
-    uniform mat3 projectionMatrix;
+varying vec2 vTextureCoord;
 
-    varying vec2 vTextureCoord;
+void main(void) {
+    gl_Position = vec4((projectionMatrix * vec3(aVertexPosition, 1.0)).xy, 0.0, 1.0);
+    vTextureCoord = aTextureCoord;
+}
+`;
 
-    void main(void) {
-        gl_Position = vec4((projectionMatrix * vec3(aVertexPosition, 1.0)).xy, 0.0, 1.0);
-        vTextureCoord = aTextureCoord;
-    }
-    `;
-
-    static myFragment = `
+const myFragment = `
     varying vec2 vTextureCoord;
 
     uniform sampler2D uSampler;
@@ -45,10 +43,11 @@ export class ShadowShader extends PIXI.Filter {
         // shadow is destination (backdrop), original is source
         gl_FragColor = originalColor + shadowColor * (1.0 - originalColor.a);
     }
-    `
+    `;
 
-    constructor(shadowDirection, floorY, opacity=0.2) {
-        super(ShadowShader.myVertex, ShadowShader.myFragment);
+export class ShadowShader extends PIXI.Filter {
+    constructor(shadowDirection, floorY, opacity = 0.2) {
+        super(myVertex, myFragment);
 
         this.uniforms.shadowDirection = shadowDirection;
         this.uniforms.floorY = floorY;

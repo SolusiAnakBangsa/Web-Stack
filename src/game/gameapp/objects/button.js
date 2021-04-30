@@ -3,8 +3,15 @@ import { GameObject } from "./gameobject";
 const BUTTONRATIO = 0.8;
 
 export class Button extends GameObject {
-
-    constructor(pixiRef, icon, clickCallback, xFunction, yFunction, buttonSize, color) {
+    constructor(
+        pixiRef,
+        icon,
+        clickCallback,
+        xFunction,
+        yFunction,
+        buttonSize,
+        color
+    ) {
         super(pixiRef);
 
         this.xFunction = xFunction ? xFunction : () => 0;
@@ -24,7 +31,7 @@ export class Button extends GameObject {
         this.iconStyle = new PIXI.TextStyle({
             fill: "white",
             fontFamily: "Material Icons",
-            fontSize: buttonSize * BUTTONRATIO
+            fontSize: buttonSize * BUTTONRATIO,
         });
 
         this.yOffset = buttonSize * 0.16 * BUTTONRATIO; // Weird google icon offset.
@@ -35,23 +42,20 @@ export class Button extends GameObject {
         this.setup(pixiRef);
     }
 
-    start() {
-    }
+    start() {}
 
-    setup(pixiRef) {
-
+    setup() {
         // Makes the button interactive
         this.mainContainer.interactive = true;
         this.mainContainer.buttonMode = true;
-        
+
         this.mainContainer.addChild(this.buttonGraphic);
         this.mainContainer.addChild(this.iconText);
 
         this.onResize();
     }
 
-    loop(delta) {
-    }
+    loop() {}
 
     onResize() {
         const screenRef = this.app.screen;
@@ -61,8 +65,8 @@ export class Button extends GameObject {
         // Move all
         this.buttonGraphic.position.set(x, y);
         this.iconText.position.set(
-            x + this.buttonSize/2,
-            y + this.buttonSize/2 + this.yOffset
+            x + this.buttonSize / 2,
+            y + this.buttonSize / 2 + this.yOffset
         );
     }
 

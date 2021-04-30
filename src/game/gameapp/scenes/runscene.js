@@ -13,10 +13,10 @@ const RUNPOLL = 250; // Time in ms to update the running animation.
 const RUNRETAIN = 5000;
 
 // Baseline for 100 Pace.
-const MAXPACE = 4 // (4 steps/s) jj baseline
+const MAXPACE = 4; // (4 steps/s) jj baseline
 
 // Length of the buffer running
-const RUNARRLEN = (RUNRETAIN/RUNPOLL) << 0;
+const RUNARRLEN = (RUNRETAIN / RUNPOLL) << 0;
 
 // Speed range running speed
 const SPEEDRANGE = [100, 700];
@@ -25,7 +25,6 @@ const SPEEDRANGE = [100, 700];
 const PACEDATAPOLL = 1000;
 
 export class RunScene extends Scene {
-    
     constructor(pixiRef, controller) {
         super(pixiRef, controller);
         // The formula of runSpeed to animSpeed is runSpeed/2400
@@ -45,7 +44,9 @@ export class RunScene extends Scene {
         // ******
 
         this.runSpeed = 0; // In pixel / second
-        this.runSpeedToAnimSpeed = function () { return this.runSpeed/2700 };
+        this.runSpeedToAnimSpeed = function () {
+            return this.runSpeed / 2700;
+        };
 
         // Variables to store historical data for pace.
         this.paceDataCounter = 0;
@@ -89,21 +90,27 @@ export class RunScene extends Scene {
     }
 
     loopCode(delta) {
-        const deltaS = delta/1000;
+        const deltaS = delta / 1000;
 
         // Set floorspeed according to delta.
-        this.floor.setFloorSpeed(this.runSpeed*deltaS);
-        
+        this.floor.setFloorSpeed(this.runSpeed * deltaS);
+
         // Only does it when paused.
         if (!this.isPaused) {
-
             if (this.floatState) {
                 // Calculate offset
-                const curOffset = this.initYOffset * (this.lerpFunction((this.floatCounter + deltaS)/this.floatDuration) - this.lerpFunction(this.floatCounter/this.floatDuration));
+                const curOffset =
+                    this.initYOffset *
+                    (this.lerpFunction(
+                        (this.floatCounter + deltaS) / this.floatDuration
+                    ) -
+                        this.lerpFunction(
+                            this.floatCounter / this.floatDuration
+                        ));
 
                 // Increase the position
-                this.floor.mainContainer.y -= curOffset*2;
-                this.runman.mainContainer.y -= curOffset*2;
+                this.floor.mainContainer.y -= curOffset * 2;
+                this.runman.mainContainer.y -= curOffset * 2;
                 this.sky.mainContainer.y -= curOffset;
 
                 // Increase the duration.
@@ -130,10 +137,12 @@ export class RunScene extends Scene {
 
             // Update the running animation.
             if (this.runCounter > RUNPOLL) {
-
                 // Update the array.
                 this.paceArray[this.paceArrayCounter] = this.runQueue;
-                this.paceArrayCounter = this.paceArrayCounter + 1 < RUNARRLEN ? this.paceArrayCounter + 1 : 0; // Add to the counter.
+                this.paceArrayCounter =
+                    this.paceArrayCounter + 1 < RUNARRLEN
+                        ? this.paceArrayCounter + 1
+                        : 0; // Add to the counter.
                 this.runQueue = 0; // Reset run queue
 
                 // Set the running speed to be the array average.
@@ -150,21 +159,20 @@ export class RunScene extends Scene {
         }
     }
 
-    start() {
-
-    }
+    start() {}
 
     setAbove() {
         // Function to set every object to be at bottom.
-        this.floor.mainContainer.y += this.initYOffset*2;
-        this.runman.mainContainer.y += this.initYOffset*2;
+        this.floor.mainContainer.y += this.initYOffset * 2;
+        this.runman.mainContainer.y += this.initYOffset * 2;
         this.sky.mainContainer.y += this.initYOffset;
     }
 
     setSpeed(speed) {
         // 0-100
         if (speed > 10) {
-            this.runSpeed = SPEEDRANGE[0] + ((speed / 100) * (SPEEDRANGE[1] - SPEEDRANGE[0]));
+            this.runSpeed =
+                SPEEDRANGE[0] + (speed / 100) * (SPEEDRANGE[1] - SPEEDRANGE[0]);
             this.runman.speed = this.runSpeedToAnimSpeed();
             this.pace.pace = speed;
         } else {
@@ -182,27 +190,38 @@ export class RunScene extends Scene {
     dataListener(payload) {
         if ("exerciseType" in payload) {
             if (payload.exerciseType == "Jog") {
-
                 // // Check if current step is more than the target to call the callback to gym.
                 // if (payload.repAmount >= this.targetSteps) {
                 //     this.doneCallback();
                 // }
 
                 if (payload.status == "start") {
-                    this.lastRunObject = {step: payload.repAmount, time: payload.time}; // Sets
+                    this.lastRunObject = {
+                        step: payload.repAmount,
+                        time: payload.time,
+                    }; // Sets
                 } else if (payload.status == "mid" || payload.status == "end") {
                     if (this.lastRunObject === undefined) {
-                        this.lastRunObject = {step: payload.repAmount, time: payload.time}; // Set
+                        this.lastRunObject = {
+                            step: payload.repAmount,
+                            time: payload.time,
+                        }; // Set
                     }
                     // Step per second in the data.
-                    const dataDuration = (payload.time - this.lastRunObject.time); // Duration of data
-                    const deltaStep = payload.repAmount - this.lastRunObject.step;
-                    const stepTimeframe = deltaStep * (dataDuration/RUNPOLL) * 100;
-        
-                    // this.runQueue += clamp((stepPerS/MAXPACE) * 100 * dataDuration/RUNRETAIN, 0, 100);
-                    this.runQueue += stepTimeframe/MAXPACE;
+                    const dataDuration = payload.time - this.lastRunObject.time; // Duration of data
+                    const deltaStep =
+                        payload.repAmount - this.lastRunObject.step;
+                        
+                    const stepTimeframe =
+                        deltaStep * (dataDuration / RUNPOLL) * 100;
 
-                    this.lastRunObject = {step: payload.repAmount, time: payload.time}; // Set before.
+                    // this.runQueue += clamp((stepPerS/MAXPACE) * 100 * dataDuration/RUNRETAIN, 0, 100);
+                    this.runQueue += stepTimeframe / MAXPACE;
+
+                    this.lastRunObject = {
+                        step: payload.repAmount,
+                        time: payload.time,
+                    }; // Set before.
 
                     this.totalSteps += deltaStep;
 
@@ -227,9 +246,7 @@ export class RunScene extends Scene {
         this.setAbove();
     }
 
-    onResizeCode() {
-        
-    }
+    onResizeCode() {}
 
     pauseCallback(isPaused) {
         super.pauseCallback(isPaused);
@@ -239,6 +256,6 @@ export class RunScene extends Scene {
 
     transitionCallback() {
         // Send signal to the phone to start.
-        peer.connection.sendData({"status" : "startnext"});
+        peer.connection.sendData({ status: "startnext" });
     }
 }

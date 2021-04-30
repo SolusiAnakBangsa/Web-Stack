@@ -22,7 +22,7 @@ export class Scene {
         this.setup(pixiRef);
     }
 
-    setup(pixiRef) {
+    setup() {
         // Override this
     }
 
@@ -53,11 +53,11 @@ export class Scene {
         }
     }
 
-    dataListener(payload) {
+    dataListener() {
         // Data listener. Will do events inside here when a new data has been received from phone.
     }
 
-    loopCode(delta) {
+    loopCode() {
         // Override this
         // You put the actual code that you want to loop of the scene here.
     }
@@ -92,7 +92,7 @@ export class Scene {
         }
     }
 
-    tapCallback(event) {
+    tapCallback() {
         // This will be called once the screen is clicked.
     }
 
