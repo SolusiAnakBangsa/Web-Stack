@@ -1,7 +1,5 @@
-@import url('https://fonts.googleapis.com/css?family=Raleway');
-@import url('https://fonts.googleapis.com/css?family=Roboto');
-@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap');
+@import url("./general.css");
+
 *{padding: 0; margin: 0}
 html, body {
     height: 100%;
@@ -74,14 +72,6 @@ a:hover {
     transition: bottom 4s cubic-bezier(0.550, 0.055, 0.675, 0.190);
     bottom: 0%;
 }
-.ctrflex {
-    z-index: 10;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    height: 100%;
-}
 #bottombox {
     display: flex;
     flex-direction: column;
@@ -113,7 +103,7 @@ a:hover {
 }
 .logo {
     z-index: 5;
-    background-image: url("logo.png");
+    background-image: url("../logo.png");
     background-color: rgba(109, 56, 110, 0.6);
     min-width: 240px;
     min-height: 240px;
@@ -241,7 +231,7 @@ button:focus {
 }
 
 .stars{
-    background-image: url("star.png");
+    background-image: url("../star.png");
     background-size: contain;
     background-repeat: repeat-x;
     z-index: 0;

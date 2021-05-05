@@ -5,8 +5,8 @@
   "scripts": {
     "test": "npm run game-build",
     "build": "npm run game-build",
-    "game-dev": "rimraf development && parcel public/game.html --global gameModule --out-dir development -p 8000",
-    "game-build": "npm run clean && parcel build public/game.html --global gameModule --no-content-hash --out-dir dist --public-url ./",
+    "game-dev": "rimraf development && parcel public/index.html --global gameModule --out-dir development -p 8000",
+    "game-build": "npm run clean && parcel build public/index.html --global gameModule --no-content-hash --out-dir dist --public-url ./",
     "clean": "npm run clean-extra && rimraf dist",
     "clean-dev": "npm run clean-extra && rimraf development",
     "clean-extra": "rimraf .cache && rimraf .firebase",
@@ -37,6 +37,8 @@
   "dependencies": {
     "assets": "^3.0.1",
     "eslint-config-prettier": "^8.3.0",
+    "fonts.css": "^2.0.0",
+    "materialize-css": "^1.0.0-rc.2",
     "prettier": "^2.2.1",
     "prettier-eslint": "^12.0.0",
     "prettier-eslint-cli": "^5.0.1"

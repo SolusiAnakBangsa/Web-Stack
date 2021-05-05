@@ -1,0 +1,10 @@
+@import url('https://fonts.googleapis.com/css?family=Raleway');
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap');
+@font-face {
+    font-family: 'Thoughts';
+    src: url("../Thoughts.ttf");
+    font-weight: normal;
+    font-style: normal;
+}
