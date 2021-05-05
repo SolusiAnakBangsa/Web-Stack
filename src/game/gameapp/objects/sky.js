@@ -2,8 +2,8 @@ import { GameObject } from "./gameobject";
 import { randomRange, randomProperty } from "./../../../script/util";
 
 export class Sky extends GameObject {
-    constructor(pixiRef, drawTo) {
-        super(pixiRef, drawTo);
+    constructor(pixiRef) {
+        super(pixiRef);
 
         /*
             Setting the sprite2d projection to blank really messes up
@@ -28,11 +28,10 @@ export class Sky extends GameObject {
 
         this.initialClouds = 14;
 
-        this.setup(pixiRef);
+        this.setup();
     }
 
-    setup(pixiRef) {
-        super.setup(pixiRef);
+    setup() {
 
         // Skybox container
         this.skyContainer = new PIXI.projection.Container2d();

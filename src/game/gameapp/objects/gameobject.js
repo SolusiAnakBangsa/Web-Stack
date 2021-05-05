@@ -1,13 +1,12 @@
 export class GameObject {
-    constructor(pixiRef, drawTo) {
-        this.drawTo = drawTo;
+    constructor(pixiRef) {
         this.app = pixiRef.app;
         this.pixiRef = pixiRef;
         this.mainContainer = new PIXI.Container(); // This is the main container to store all the objects. Insert this to the stage to draw it.
     }
 
+    // Setups the game object
     setup() {
-        // Add to the resizer events
     }
 
     loop() {}

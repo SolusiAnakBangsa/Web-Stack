@@ -43,14 +43,14 @@ export class Floor extends GameObject {
 
         this.paused = false;
 
-        this.setup(pixiRef);
+        this.setup();
     }
 
-    setup(pixiRef) {
-        super.setup(pixiRef);
-
+    setup() {
         // Container for floor and background
         this.wholeContainer = new PIXI.Container();
+
+        const pixiRef = this.pixiRef;
 
         // Floor container
         this.floorContainer = new PIXI.projection.Container2d();

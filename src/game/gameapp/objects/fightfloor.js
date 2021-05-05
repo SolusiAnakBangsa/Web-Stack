@@ -4,9 +4,9 @@ import { randomRange, randomProperty } from "./../../../script/util";
 const XPROJECTIONOFFSET = -200;
 
 export class FightFloor extends GameObject {
-    constructor(pixiRef, drawTo) {
+    constructor(pixiRef) {
         // Object to render the floor in the game.
-        super(pixiRef, drawTo);
+        super(pixiRef);
 
         this.atmosphericAlpha = 0.2;
         this.initialDecor = 40; // Number of initial decor objects
@@ -29,12 +29,10 @@ export class FightFloor extends GameObject {
             this.yOffset -
             this.horizonY() * this.yScale;
 
-        this.setup(pixiRef);
+        this.setup();
     }
 
-    setup(pixiRef) {
-        super.setup(pixiRef);
-
+    setup() {
         // Container for floor and background
         this.wholeContainer = new PIXI.Container();
 
@@ -44,6 +42,8 @@ export class FightFloor extends GameObject {
 
         // Pixel scale.
         const scale = 4;
+
+        const pixiRef = this.pixiRef;
 
         // Loads the floor texture and positions it in the bottom center of the screen.
         // Rotate texture 180 degrees

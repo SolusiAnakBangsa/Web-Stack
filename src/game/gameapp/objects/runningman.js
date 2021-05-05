@@ -17,11 +17,11 @@ export class RunMan extends GameObject {
 
         this.paused = false;
 
-        this.setup(pixiRef);
+        this.setup();
     }
 
-    setup(pixiRef) {
-        super.setup(pixiRef);
+    setup() {
+        const pixiRef = this.pixiRef;
 
         // Load all of the textures from the json file
         // The rule is, the first and second index in the spritesheet is the idle animation.

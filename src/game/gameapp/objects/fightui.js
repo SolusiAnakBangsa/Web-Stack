@@ -55,13 +55,13 @@ export class FightUI extends GameObject {
         const ANIMATIONLENGTH = 1000; // ms
         this.lerpPeriod = 1000 / ANIMATIONLENGTH / 60;
 
-        this.setup(pixiRef);
+        this.setup();
     }
 
-    setup(pixiRef) {
-        super.setup(pixiRef);
-
+    setup() {
         this.enemyCont = new PIXI.Container();
+
+        const pixiRef = this.pixiRef;
 
         // Enemy sprite
         this.enemy = new PIXI.spine.Spine(pixiRef.resources.legolus.spineData);

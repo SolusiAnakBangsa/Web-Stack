@@ -31,7 +31,7 @@ export class Countdown extends GameObject {
         this.xPos = (scr) => scr.width / 2;
         this.yPos = (scr) => scr.height / 2;
 
-        this.setup(pixiRef);
+        this.setup();
     }
 
     start() {

@@ -19,6 +19,8 @@ export class Scene {
 
         this.active = true;
         this.isPaused = false;
+        this.app = pixiRef.app;
+        // FIX THIS IS WEIRD FIX THIS
         this.setup(pixiRef);
     }
 

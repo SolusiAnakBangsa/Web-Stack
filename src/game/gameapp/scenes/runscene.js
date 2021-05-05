@@ -58,8 +58,6 @@ export class RunScene extends Scene {
     }
 
     setup(pixiRef) {
-        this.app = pixiRef.app;
-
         // Animation attributes
         this.initYOffset = this.app.screen.height; // Offset to place the objects in.
         this.floatDuration = 5; // The amount of duration for floatDown.

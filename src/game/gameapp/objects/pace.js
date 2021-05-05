@@ -57,11 +57,11 @@ export class Pace extends GameObject {
         this.setup(pixiRef);
     }
 
-    setup(pixiRef) {
-        super.setup(pixiRef);
-
+    setup() {
         // Make the container
         this.mainContainer = new PIXI.Container();
+
+        const pixiRef = this.pixiRef;
 
         // **************
         // Pace sprite loading
@@ -274,7 +274,7 @@ export class Pace extends GameObject {
 
     _redrawCircleMask() {
         // Center coordinates
-        const cx = this.pixiRef.app.screen.width - 100;
+        const cx = this.app.screen.width - 100;
         const cy = 100;
         const r = this.outerPace.width / 2; // Radius of the circle.
 
@@ -373,7 +373,7 @@ export class Pace extends GameObject {
     }
 
     onResize() {
-        const width = this.pixiRef.app.screen.width;
+        const width = this.app.screen.width;
 
         this.paceSprite.position.set(width - 100, 100);
         this.outerPace.position.set(width - 100, 100);

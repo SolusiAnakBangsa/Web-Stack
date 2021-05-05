@@ -39,10 +39,8 @@ export class Button extends GameObject {
         this.iconText = new PIXI.Text(icon, this.iconStyle);
         this.iconText.anchor.set(0.5, 0.5);
 
-        this.setup(pixiRef);
+        this.setup();
     }
-
-    start() {}
 
     setup() {
         // Makes the button interactive

@@ -66,13 +66,13 @@ export class FightMan extends GameObject {
         this.currentPose;
         this.currentSprite;
 
-        this.setup(pixiRef);
+        this.setup();
     }
 
     start() {}
 
-    setup(pixiRef) {
-        this.fightMan = new CharacterSpine(pixiRef);
+    setup() {
+        this.fightMan = new CharacterSpine(this.pixiRef);
 
         this.infoCont = new PIXI.Container();
 
