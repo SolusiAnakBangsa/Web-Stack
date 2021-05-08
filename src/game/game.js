@@ -63,11 +63,7 @@ peer.connection.addEvents("open", () => {
 
     // Remove the attribution screen.
     window.attributionToggle(false);
-
-    // Remove the below part of the HTML.
-    const below = document.getElementById("below");
-    below.style.display = "none";
-
+    
     // Scroll the website to topmost
     window.scrollTo(0, 0);
 

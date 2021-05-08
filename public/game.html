@@ -81,10 +81,10 @@
             </ul>
         </div>
         </div>
-        <a href="#below" id="pointdown" class="ns">expand_more</a>
     </div>
 </div>
 </div>
+
 <div id="summary" class="blackoverlay">
     <div id="summarybox" class="cleanbox">
         <div class="bf">
@@ -116,6 +116,7 @@
         </button>
     </div>
 </div>
+
 <div id="pause" class="blackoverlay">
     <div class="flcol pausetext">Paused</div>
     <div class="cleanbox flcol">
@@ -131,6 +132,7 @@
         <div>Volume</div>
     </div>
 </div>
+
 <div id="attrib" class="blackoverlay">
     <div class="cleanbox flcol">
         <iframe src="attribution.html" title="Attribution" frameBorder="0"></iframe>
@@ -139,40 +141,9 @@
         </button>
     </div>
 </div>
-<div id="below">
-<div class="xlvertsep"></div>
-<h1 class="tc">
-    Gallery
-</h1>
-<div class="flcol spcl">
-<div class="splide">
-    <div class="splide__track">
-        <ul class="splide__list">
-            <li class="splide__slide"><img src="gallery/1.png"></li>
-            <li class="splide__slide"><img src="gallery/2.png"></li>
-            <li class="splide__slide"><img src="gallery/3.png"></li>
-            <li class="splide__slide"><img src="gallery/4.png"></li>
-        </ul>
-    </div>
-</div>
-</div>
-</div>
+
 <script src="../src/game/game.js"></script>
 <script>
-    // Loads all the image from gallery folder.
-    document.addEventListener( 'DOMContentLoaded', function () {
-        new Splide( '.splide', {
-            type: 'loop',
-            height: "56.25%",
-            width: "100%",
-            focus: 'center',
-            trimSpace: false,
-            gap: "5vw",
-            autoplay: true,
-            cover: true,
-        } ).mount();
-    });
-
     // Attribution toggle
     window.attributionToggle = function attributionToggle(isShown) {
         const attrib = document.getElementById("attrib");
