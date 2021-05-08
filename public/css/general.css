@@ -6,6 +6,10 @@
     min-height: 90vh !important;
 }
 
+.height80v {
+    min-height: 80vh !important;
+}
+
 .ns {
     -webkit-user-select: none; /* Safari */        
     -moz-user-select: none; /* Firefox */

@@ -11,21 +11,21 @@
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
     <link rel="manifest" href="/site.webmanifest">
 
-    <link rel="stylesheet" href="../node_modules/materialize-css/dist/css/materialize.min.css">
+    <link rel="stylesheet" href="../node_modules/@materializecss/materialize/dist/css/materialize.min.css">
 
     <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@2.4.21/dist/js/splide.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@2.4.21/dist/css/themes/splide-default.min.css">
     <link rel="stylesheet" href="./css/index.css">
     <link rel="stylesheet" href="./css/fonts.css">
 </head>
-<body>
+<body id="top">
 
-<nav class="white">
+<nav class="orange lighten-1">
 <div class="nav-wrapper">
     <ul id="nav-mobile" class="right hide-on-med-and-down">
-    <li><a href="">Sass</a></li>
-    <li><a href="">Components</a></li>
-    <li><a href="">JavaScript</a></li>
+    <li><a href="#screenshots">Previews</a></li>
+    <li><a href="#download">Download</a></li>
+    <li><a href="#footer">About</a></li>
     </ul>
 </div>
 </nav>
@@ -39,18 +39,134 @@
         </div>
     </div>
     <div class="col s4 m6 height90v">
-        
+        Interactive funny man
     </div>
 </div>
 <span class="ctrflex">
     <a href="#desc" id="pointdown" class="ns">expand_more</a>
 </span>
 
-<div id="desc" class="height90v center-align">
-    <h1>Play how you want!</h1>
-    <h5>fjdkasfjklsad;sfjkld;as</h5>
+<div id="desc" class="center-align">
+<div class="row container">
+    <div class="col s12 m5 carousel carousel-slider height80v">
+        <img class="carousel-item" src="./gallery/onboard_torso.png">
+        <img class="carousel-item" src="./gallery/onboard_hand.png">
+        <img class="carousel-item" src="./gallery/onboard_squat.png">
+    </div>
+    <div class="col s12 m7 height80v valign-wrapper">
+        <div class="col s12">
+        <h3>Control the game with your moves.</h3>
+        <p class="flow-text">
+            Play a game while working out. How? You play
+            the game by controlling it with your movements! In each level,
+            there will be a set of workouts that you have to do in order
+            to progress. Each reps you do will be automatically counted 
+            with the help of the movement sensors in your smartphone. 
+            Get experience after finishing a workout, and compete with
+            your friends!
+        </p>
+        </div>
+    </div>
+</div>
 </div>
 
-<script src="../node_modules/materialize-css/dist/js/materialize.min.js"></script>
+<div id="requirement" class="orange lighten-1 right-align">
+<div class="container row">
+    <div class="col s12 m5 hei material-icons valign-wrapper">web add phone_android</div>
+    <div class="col s12 m7 hei valign-wrapper" style="justify-content: end;" >
+        <div class="right">
+            <h3>Requirements:</h3>
+            <h5>
+                <ul>
+                <li>Android Phone</li>
+                <li>Any device with modern browser</li>
+                <li>Armband</li>
+                </ul>
+            </h5>
+            <div>*Internet connection required.</div>
+        </div>
+    </div>
+</div>
+</div>
+
+<div id="screenshots" class="ctrflex">
+    <h1 class="center-align">Previews</h1>
+    <div id="resize-s">
+    <div class="splide">
+        <div class="splide__track">
+            <ul class="splide__list">
+                <li class="splide__slide">
+                    <iframe src="https://www.youtube.com/embed/bqvZ0dWnX5E" frameborder="0" allowfullscreen></iframe>
+                </li>
+                <li class="splide__slide"><img src="gallery/1.png"></li>
+                <li class="splide__slide"><img src="gallery/2.png"></li>
+                <li class="splide__slide"><img src="gallery/3.png"></li>
+                <li class="splide__slide"><img src="gallery/4.png"></li>
+            </ul>
+        </div>
+    </div>
+    </div>
+</div>
+
+<div id="download" class="amber lighten-2">
+<div class="container">
+<h3 class="center-align">Download</h3>
+<div class="row">
+    <div class="col s6 offset-s3">
+        <div class="card deep-orange darken-1">
+        <div class="card-content white-text">
+            <span class="card-title material-icons center-align">android favorite file_download</span>
+            <p>
+                Download is only available in Google Drive for now.
+                The .apk can be downloaded to an Android device and
+                then installed with trusting it in the installation.
+            </p>
+        </div>
+        <div class="card-action center-align">
+            <a class="yellow-text text-lighten-1" href="https://drive.google.com/file/d/1ys1rLWm3kYJthSzgLa9ELQ2BQ4zEV3fY/view?usp=sharing">
+                Download
+            </a>
+        </div>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+
+<div id="support" class="container">
+    <h3 class="center-align">Support</h3>
+    <div class="container row valign-wrapper">
+        <img class="col s4" src="./gallery/tfi.png">
+        <img class="col s4" src="./gallery/binus.png">
+        <img class="col s4" src="./gallery/dscbinus.png">
+    </div>
+</div>
+
+<footer id="footer" class="page-footer grey lighten-3">
+    <div class="container">
+      <div class="row">
+        <div class="col l6 s12">
+          <h5 class="grey-text text-darken-3">Game Your Fit</h5>
+          <p class="grey-text text-darken-4">This project is started as a Google Solution Challenge 2021 submission, and continued out of our volition.</p>
+        </div>
+        <div class="col l4 offset-l2 s12">
+          <h5 class="grey-text text-darken-4">Links</h5>
+          <ul>
+            <li><a class="" href="#top">Back to top!</a></li>
+            <li><a class="" href="https://www.instagram.com/gameyourfit/">Instagram</a></li>
+            <li><a class="" href="https://developers.google.com/community/dsc-solution-challenge">Solution Challenge</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-copyright grey-text text-darken-4">
+      <div class="container">
+      © 2021 Copyright
+      </div>
+    </div>
+</footer>
+
+<script src="../node_modules/@materializecss/materialize/dist/js/materialize.min.js"></script>
+<script src="./js/index.js"></script>
 </body>
 </html>

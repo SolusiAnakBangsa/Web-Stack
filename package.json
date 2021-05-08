@@ -35,6 +35,7 @@
     "rimraf": "^3.0.2"
   },
   "dependencies": {
+    "@materializecss/materialize": "*",
     "assets": "^3.0.1",
     "eslint-config-prettier": "^8.3.0",
     "fonts.css": "^2.0.0",

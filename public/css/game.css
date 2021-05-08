@@ -102,6 +102,7 @@ a:hover {
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#8febda",endColorstr="#2b1833",GradientType=1); 
 }
 .logo {
+    position: relative;
     z-index: 5;
     background-image: url("../logo.png");
     background-color: rgba(109, 56, 110, 0.6);
@@ -113,6 +114,10 @@ a:hover {
     background-size: contain;
     color: white;
     margin-top: 10vh;
+    transition: transform cubic-bezier(0.22, 1, 0.36, 1) 0.2s;
+}
+.logo:hover {
+    transform: scale(1.05);
 }
 .gyf {
     height: 100%;
@@ -231,7 +236,7 @@ button:focus {
 }
 
 .stars{
-    background-image: url("../star.png");
+    background-image: url("../graphics/star.png");
     background-size: contain;
     background-repeat: repeat-x;
     z-index: 0;
