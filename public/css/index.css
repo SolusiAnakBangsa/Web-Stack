@@ -98,7 +98,7 @@ h5 {
     font-size: 64pt;
 }
 
-#screenshots h1 {
+#screenshots #resize-s {
     margin: 96px 0px 32px 0px;
 }
 
@@ -125,7 +125,7 @@ h5 {
     margin-top: 64px;
 }
 
-#download .material-icons {
+#download .card-title {
     font-size: 32pt;
 }
 
