@@ -1,5 +1,7 @@
 import { GameApp } from "./gameapp/app";
 import { peer } from "./../script/webrtc";
+import { GlobalController } from "./gameapp/globalcontroller";
+import { assets } from "./gameapp/assets";
 
 import { levelData } from "./gameapp/globalcontroller";
 
@@ -97,7 +99,7 @@ const ExModule = {
         var peerText = document.getElementById("top");
         peerText.style.display = "none";
 
-        game.start();
+        game.start(document.body, GlobalController, assets, true);
     },
     initMobileConnection() {
         // Get the game code

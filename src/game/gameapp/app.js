@@ -1,6 +1,4 @@
-import { assets } from "./assets";
 import { Resizer } from "./resizer";
-import { GlobalController } from "./globalcontroller";
 
 /*
     Main controller for the application
@@ -47,28 +45,39 @@ export class GameApp {
         }
 
         // Delete loading bar.
-        this.app.stage.removeChild(this.loadBar);
+        if (this.showLoading)
+            this.app.stage.removeChild(this.loadBar);
     }
 
-    start() {
+    /**
+     * 
+     * @param {HTMLElement} element HTML element that the game will be drawn to.
+     * @param {*} controller        Main game controller for this instance.
+     * @param {*} assetPack         Asset pack to load.
+     * @param {boolean} load        Whether to spawn a loading bar.
+     */
+    start(element, controller, assetPack, load=false) {
         // Everything in this function will be run, once the game is started.
 
         // Initializes the PIXI game instance with options.
         this.app = new PIXI.Application(this.options);
         this.loader = new PIXI.Loader(); // PIXI loader.
         this.resizer = new Resizer();
-        this.controller = new GlobalController(this);
+        this.controller = new controller(this);
+        this.showLoading = load;
+        this.assets = assetPack;
 
         // Change the HTML DOM display to be block.
         this.app.renderer.view.style.display = "block";
 
         // Add the renderer to the browser.
-        document.body.appendChild(this.app.view);
+        element.appendChild(this.app.view);
 
-        // Create a new pixi graphics, to show loading bar.
-        this.loadBar = new PIXI.Graphics();
-
-        this.app.stage.addChild(this.loadBar);
+        if (load) {
+            // Create a new pixi graphics, to show loading bar.
+            this.loadBar = new PIXI.Graphics();
+            this.app.stage.addChild(this.loadBar);
+        }
 
         // Loads all the game data. When done, start the game.
         this._load();
@@ -125,10 +134,13 @@ export class GameApp {
     _load() {
         const loader = this.loader;
 
-        for (let ast in assets) {
-            loader.add(ast, assets[ast]);
+        for (let ast in this.assets) {
+            loader.add(ast, this.assets[ast]);
         }
         loader.load(this.setup.bind(this));
-        loader.onLoad.add(this._updateLoading.bind(this));
+
+        // Whether to show the loading bar.
+        if (this.showLoading)
+            loader.onLoad.add(this._updateLoading.bind(this));
     }
 }

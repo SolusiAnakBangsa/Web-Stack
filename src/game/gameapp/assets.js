@@ -27,3 +27,8 @@ export const assets = {
     gymmusic: "audio/ouroboros-by-kevin-macleod-from-filmmusic-io.mp3",
     runmusic: "audio/your-call-by-kevin-macleod-from-filmmusic-io.mp3",
 };
+
+export const indexAssets = {
+    fightman: "graphics/fightman.json",
+    fightman2: "graphics/fightman2.json",
+}

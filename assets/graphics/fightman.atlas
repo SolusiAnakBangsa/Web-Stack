@@ -13,7 +13,7 @@ fightman/LeftLegDown
   index: -1
 fightman/LeftFoot
   rotate: false
-  xy: 19, 58
+  xy: 89, 41
   size: 10, 5
   orig: 10, 5
   offset: 0, 0
@@ -34,7 +34,7 @@ fightman/RightLegDown
   index: -1
 fightman/RightFeet
   rotate: false
-  xy: 89, 41
+  xy: 19, 58
   size: 10, 5
   orig: 10, 5
   offset: 0, 0

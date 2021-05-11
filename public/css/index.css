@@ -57,6 +57,11 @@ h5 {
     }
 }
 
+#indexman {
+    padding: 0;
+    transform: translateX(-1px);
+}
+
 #desc {
     background-image: url("../graphics/tile.png");
     background-repeat: repeat;

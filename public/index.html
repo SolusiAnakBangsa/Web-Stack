@@ -27,11 +27,14 @@
     <link rel="manifest" href="/site.webmanifest">
 
     <link rel="stylesheet" href="../node_modules/@materializecss/materialize/dist/css/materialize.min.css">
-
-    <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@2.4.21/dist/js/splide.min.js"></script>
+    
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@2.4.21/dist/css/themes/splide-default.min.css">
     <link rel="stylesheet" href="./css/index.css">
     <link rel="stylesheet" href="./css/fonts.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/pixi.js-legacy@5.4.0-rc.3/dist/browser/pixi-legacy.min.js"></script>
+    <script src="pixi-spine.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@2.4.21/dist/js/splide.min.js"></script>
 </head>
 <body id="top">
 
@@ -53,8 +56,7 @@
             <a href="game.html" class="waves-effect waves-light btn-small orange darken-2">Enter the game!</a>
         </div>
     </div>
-    <div class="col s4 m6 height90v">
-        Interactive funny man
+    <div id="indexman" class="col s4 m6 height90v">
     </div>
 </div>
 <span class="ctrflex">
@@ -109,9 +111,9 @@
     <div class="splide">
         <div class="splide__track">
             <ul class="splide__list">
-                <li class="splide__slide">
+                <!-- <li class="splide__slide">
                     <iframe src="https://www.youtube.com/embed/bqvZ0dWnX5E" frameborder="0" allowfullscreen></iframe>
-                </li>
+                </li> -->
                 <li class="splide__slide"><img src="gallery/1.png"></li>
                 <li class="splide__slide"><img src="gallery/2.png"></li>
                 <li class="splide__slide"><img src="gallery/3.png"></li>
@@ -182,5 +184,6 @@
 
 <script src="../node_modules/@materializecss/materialize/dist/js/materialize.min.js"></script>
 <script src="./js/index.js"></script>
+<script src="../src/game/indexman.js"></script>
 </body>
 </html>
