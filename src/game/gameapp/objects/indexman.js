@@ -1,7 +1,8 @@
 import { GameObject } from "./gameobject";
 import { ShadowShader } from "./../shadowshader";
+import { clamp } from "./../../../script/util";
 
-const SCALE = 4;
+var SCALE = 4;
 
 // Length of the leg to droop from the ceiling
 // const LEGLENGTH = 30;
@@ -9,6 +10,9 @@ const LEGLENGTH = 58;
 
 // Floor height the guy will fall to
 const FLOORHEIGHT = 64;
+
+// Man height for scaling.
+const MANHEIGHT = 150;
 
 export class IndexMan extends GameObject {
     constructor(pixiRef) {
@@ -81,8 +85,6 @@ export class IndexMan extends GameObject {
         this.manShadow = new ShadowShader([-0.6, -0.6], 0, 0.15);
         this.manShadow.padding = this.app.screen.height;
         this.manContainer.filters = [this.manShadow];
-        this.manContainer.scale.set(SCALE);
-        this.manContainer.scale.x = -SCALE;
 
         // Container
         this.mainContainer.addChild(this.manContainer);
@@ -128,17 +130,24 @@ export class IndexMan extends GameObject {
     onResize() {
         const s = this.app.screen;
 
+        // Set scales
+        SCALE = clamp(Math.floor(s.height / MANHEIGHT), 1, 4);
+
+        this.manContainer.scale.set(SCALE);
+        this.manContainer.scale.x = -SCALE;
+
+        var y;
+
         if (this.land) {
-            this.manContainer.position.set(
-                s.width/2,
-                s.height - FLOORHEIGHT
-            );
+            y = s.height - FLOORHEIGHT;
         } else {
-            this.manContainer.position.set(
-                s.width/2,
-                LEGLENGTH * SCALE + this.yPos
-            );
+            y = LEGLENGTH * SCALE + this.yPos;
         }
+
+        this.manContainer.position.set(
+            s.width/2 - 32,
+            y
+        );
 
         this.manShadow.uniforms.floorY = s.height - FLOORHEIGHT;
     }
