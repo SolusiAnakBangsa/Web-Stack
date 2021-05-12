@@ -1,6 +1,6 @@
 {
   "name": "gyf-web-stack",
-  "version": "0.1.0",
+  "version": "1.1.0",
   "description": "Full web stack for gameyourfit",
   "scripts": {
     "test": "npm run game-build",

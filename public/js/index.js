@@ -6,7 +6,7 @@ document.addEventListener( 'DOMContentLoaded', function () {
         focus: 'center',
         trimSpace: false,
         gap: "5vw",
-        autoplay: true,
+        autoplay: false,
         cover: true,
     } ).mount();
 
