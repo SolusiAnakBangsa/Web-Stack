@@ -102,6 +102,9 @@ function displayLevel(i) {
 }
 
 function addNewWorkout() {
+	// Move index
+	currentIndex = workData.levels.length
+	
 	// Add new workout
 	workData.levels.push({
 		title: "New Workout",
