@@ -27,6 +27,8 @@
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
     <link rel="manifest" href="/site.webmanifest">
 
+    <link rel="preload" href="https://fonts.googleapis.com/icon?family=Material+Icons" as="font" crossorigin>
+
     <link rel="stylesheet" href="../node_modules/@materializecss/materialize/dist/css/materialize.min.css">
     
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@2.4.21/dist/css/themes/splide-default.min.css">
@@ -41,13 +43,20 @@
 
 <nav class="orange lighten-1">
 <div class="nav-wrapper">
+    <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
     <ul id="nav-mobile" class="right hide-on-med-and-down">
-    <li><a href="#screenshots">Previews</a></li>
-    <li><a href="#download">Download</a></li>
-    <li><a href="#footer">About</a></li>
+        <li><a href="#screenshots">Previews</a></li>
+        <li><a href="#download">Download</a></li>
+        <li><a href="#footer">About</a></li>
     </ul>
 </div>
 </nav>
+
+<ul class="sidenav" id="mobile-demo">
+    <li><a href="#screenshots">Previews</a></li>
+    <li><a href="#download">Download</a></li>
+    <li><a href="#footer">About</a></li>
+</ul>
 
 <div id="tophtml" class="row">
     <div class="col s8 m6 valign-wrapper right-align height90v">
@@ -58,6 +67,7 @@
         </div>
     </div>
     <div id="indexman" class="col s4 m6 height90v">
+        <div id="indexmancover"></div>
     </div>
 </div>
 <span class="ctrflex">
@@ -66,12 +76,12 @@
 
 <div id="desc" class="center-align">
 <div class="row container">
-    <div class="col s12 m5 carousel carousel-slider height80v">
+    <div class="col s12 m4 carousel carousel-slider height80v">
         <img class="carousel-item" src="./gallery/onboard_torso.png">
         <img class="carousel-item" src="./gallery/onboard_hand.png">
         <img class="carousel-item" src="./gallery/onboard_squat.png">
     </div>
-    <div class="col s12 m7 height80v valign-wrapper">
+    <div class="col s12 m7 offset-m1 height80v valign-wrapper">
         <div class="col s12">
         <h3>Control the game with your moves.</h3>
         <p class="flow-text">
@@ -90,7 +100,7 @@
 
 <div id="requirement" class="orange lighten-1 right-align">
 <div class="container row">
-    <div class="col s12 m5 hei material-icons valign-wrapper">web add phone_android</div>
+    <div class="col s12 m5 hei material-icons valign-wrapper">laptop add_box phone_android</div>
     <div class="col s12 m7 hei valign-wrapper" style="justify-content: end;" >
         <div class="right">
             <h3>Requirements:</h3>
@@ -153,9 +163,9 @@
 <div id="support" class="container">
     <h3 class="center-align">Support</h3>
     <div class="container row valign-wrapper">
-        <img class="col s4" src="./gallery/tfi.png">
-        <img class="col s4" src="./gallery/binus.png">
-        <img class="col s4" src="./gallery/dscbinus.png">
+        <a class="col s4" href="http://www.teachforindonesia.org/"><img src="./gallery/tfi.png"></a>
+        <a class="col s4" href="https://binus.ac.id/"><img src="./gallery/binus.png"></a>
+        <a class="col s4" href="https://www.instagram.com/dscbinusinter"><img src="./gallery/dscbinus.png"></a>
     </div>
 </div>
 
@@ -188,8 +198,8 @@
     </div>
 </footer>
 
-<script src="../node_modules/@materializecss/materialize/dist/js/materialize.min.js"></script>
 <script src="./js/index.js"></script>
+<script src="../node_modules/@materializecss/materialize/dist/js/materialize.min.js"></script>
 <script src="../src/game/indexman.js"></script>
 </body>
 </html>

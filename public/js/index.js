@@ -1,4 +1,7 @@
 document.addEventListener( 'DOMContentLoaded', function () {
+    const side = document.querySelectorAll('.sidenav');
+    M.Sidenav.init(side, {});
+
     new Splide( '.splide', {
         type: 'loop',
         height: "56.25%",

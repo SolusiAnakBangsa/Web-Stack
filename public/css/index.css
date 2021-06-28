@@ -15,7 +15,7 @@ canvas {
 
 nav {
     padding: 0px 15px 0px 15px;
-    font-family: 'Raleway', Helvetica, sans-serif;
+    font-family: 'Roboto', Helvetica, sans-serif;
     -webkit-box-shadow: 0 2px 2px 0 rgba(0,0,0,0.06),0 3px 1px -2px rgba(0,0,0,0.07),0 1px 5px 0 rgba(0,0,0,0.11);
     box-shadow: 0 2px 2px 0 rgba(0,0,0,0.06),0 3px 1px -2px rgba(0,0,0,0.07),0 1px 5px 0 rgba(0,0,0,0.11);
 }
@@ -68,7 +68,15 @@ h5 {
 
 #indexman {
     padding: 0;
+    position: relative;
     transform: translateX(-1px);
+}
+
+#indexmancover {
+    position: absolute;
+    z-index: 5;
+    width: 100%;
+    height: 100%;
 }
 
 #desc {
@@ -96,6 +104,7 @@ h5 {
 
 #requirement .material-icons {
     display: flex;
+    user-select: none;
 }
 
 #requirement .hei {
@@ -150,6 +159,7 @@ h5 {
 #support img {
     filter: grayscale(100%);
     transition: filter ease 0.1s;
+    width: 100%;
 }
 
 #support img:hover {
