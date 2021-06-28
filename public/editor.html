@@ -1,0 +1,59 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Workout Editor</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta property="og:title" content="">
+  <meta property="og:type" content="">
+  <meta property="og:url" content="">
+  <meta property="og:image" content="">
+
+  <meta name="theme-color" content="#fafafa">
+
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+    rel="stylesheet">
+  <link href="css/general.css" rel="stylesheet">
+  <link href="css/editor.css" rel="stylesheet">
+    
+</head>
+
+<body>
+
+    <div id="main">
+    <div id="sidebar">
+        <h1>Game_Your_Fit Workout Editor</h1>
+        <a href="/" class="material-icons md-48 white">home</a>
+    </div>
+
+    <div id="workouts">
+        <h2>Workouts</h2>
+        <div id="workout-list"></div>
+        <h3 id="add-workout">+ Add workout</h3>
+    </div>
+
+    <div id="editor">Waiting</div>
+    </div>
+
+    <div id="save-btn" class="material-icons md-48">
+        save
+    </div>
+
+    <div id="uploader">
+    <div>
+        <div>Upload</div>
+        <input type="text" id="password" placeholder="Password">
+    </div>
+    <div id="upload-btn" class="material-icons md-48">
+        file_upload
+    </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/gh/ajaxorg/ace-builds@master/src-min/ace.js"></script>
+    <script src="js/workout_editor.js"></script>
+</body>
+
+</html>

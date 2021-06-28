@@ -1,0 +1,121 @@
+html, body{padding: 0; margin: 0}
+
+#main {
+    display: flex;
+    flex-direction: row;
+}
+
+#sidebar {
+    display: flex;
+    flex-direction: column;
+    background-color: rgb(33, 33, 34);
+    height: 100vh;
+    /* padding-bottom: 16px;
+    padding-top: 16px; */
+    max-width: 64px;
+}
+
+#sidebar h1 {
+    color: rgb(230, 230, 230);
+    text-align: center;
+    font-size: 8px;
+    font-family: sans-serif;
+    overflow-wrap: break-word;
+}
+
+#sidebar .material-icons {
+    cursor: pointer;
+    user-select: none;
+    padding: 8px;
+    text-decoration: none;
+}
+
+#workouts {
+    display: flex;
+    flex-direction: column;
+    font-family: sans-serif;
+    background-color: rgb(53, 53, 53);
+    color: rgb(230, 230, 230);
+    font-size: 12px;
+    height: 100vh;
+    max-width: 256px;
+}
+
+#workouts h2 {
+    background-color: rgb(22, 22, 22);
+    margin: 0;
+    padding: 4px;
+    font-weight: normal;
+    margin-bottom: 12px;
+    text-align: center;
+}
+
+#workouts h3 {
+    background-color: rgb(73, 73, 73);
+    margin: 0;
+    padding: 4px;
+    font-weight: normal;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 12pt;
+    cursor: pointer;
+}
+
+#workouts h3:nth-child(even) {
+    background-color: rgb(83, 83, 83);
+}
+
+#workouts h3:hover {
+    text-decoration: underline solid #fff 1px;
+}
+
+#editor { 
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    flex-grow: 1;
+}
+
+#save-btn {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    z-index: 3;
+    background-color: greenyellow;
+    border-radius: 64px;
+    padding: 8px;
+    color: black;
+    cursor: pointer;
+    user-select: none;
+    display: none;
+}
+
+#save-btn:hover {
+    background-color: rgb(110, 235, 28);
+}
+
+#uploader {
+    font-family: sans-serif;
+    display: flex;
+    position: absolute;
+    bottom: 16px;
+    right: 16px;
+    z-index: 3;
+    padding-left: 16px;
+    background-color: rgb(255, 255, 255);
+    border-radius: 0px 64px 64px 0px;
+}
+
+#upload-btn {
+    margin-left: 16px;
+    background-color: rgb(255, 206, 47);
+    border-radius: 64px;
+    padding: 8px;
+    color: black;
+    cursor: pointer;
+    user-select: none;
+}
+
+#upload-btn:hover {
+    background-color: rgb(231, 161, 31);
+}
