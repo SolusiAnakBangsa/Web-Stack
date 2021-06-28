@@ -2,6 +2,7 @@
 Full web stack for Game Your Fit website, made for DSC's Solution Challenge 2021!
 
 ![CI Badge](https://github.com/SolusiAnakBangsa/Web-Stack/workflows/NPM%20CI/badge.svg)
+![Deploy Badge](https://github.com/SolusiAnakBangsa/Web-Stack/workflows/Deploy%20to%20Firebase/badge.svg)
 
 <p align="center">
   <img width="300" height="300" src="./public/logo.png">
