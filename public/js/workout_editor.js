@@ -119,6 +119,11 @@ function addNewWorkout() {
 }
 
 function submitWorkouts() {
+	// Detect unsaved changes
+	if (displaySave) {
+		return alert("Workout has not been saved yet!");
+	}
+
 	fetch(link, {
 		method: "POST",
 		headers: {
