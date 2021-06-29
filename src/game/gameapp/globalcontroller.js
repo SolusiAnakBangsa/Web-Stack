@@ -30,10 +30,10 @@ export class GlobalController {
 
         // The workouts for this level.
         this.workouts = [
-            {
-                freq: 100,
-                task: "Jog",
-            },
+            // {
+            //     freq: 100,
+            //     task: "Jog",
+            // },
             {
                 freq: 3,
                 task: "Push Up",

@@ -1,7 +1,7 @@
 import { GameObject } from "./gameobject";
 import { ShadowShader } from "./../shadowshader";
-import { CharacterSpine } from "./fightman";
 import { FITINSTR } from "../workoutdictionary";
+import { assets } from "../assets";
 
 const HEALTHBARLENGTH = 174 * 3;
 const HEALTHBARHEIGHT = 9 * 3;
@@ -26,6 +26,19 @@ const WORKOUTFONTSIZE = 80;
 
 const INSTRUCTIONWIDTH = 700;
 const INSTRUCTIONHEIGHT = 450;
+
+const GIFDICT = {
+    "Rhomboid Pull": assets.rhombg,
+    "Sit Up": assets.situpg,
+    "Reclined Rhomboid Squeeze": assets.rhombsg,
+    "Squat": assets.squatg,
+    "Jumping Squat": assets.jsquatg,
+    "Jumping Jack": assets.jackg,
+    "Push Up": assets.pushupg,
+    "Knee Push Up": assets.pushkneg,
+    "Forward Lunge": assets.flungeg,
+    // "High Knee": assets.kn,
+}
 
 export class FightUI extends GameObject {
     constructor(pixiRef) {
@@ -138,18 +151,20 @@ export class FightUI extends GameObject {
 
         this.instructionGraphics = new PIXI.Graphics();
 
-        this.fightManAnim = new CharacterSpine(pixiRef);
-        this.fightManAnim.fightMan.scale.set(2.15);
-        this.fightManAnim.fightMan2.scale.set(2.15);
+        // this.fightManAnim = new CharacterSpine(pixiRef);
+        // this.fightManAnim.fightMan.scale.set(2.15);
+        // this.fightManAnim.fightMan2.scale.set(2.15);
 
-        this.fightManAnim.fightMan.position.set(
-            -180,
-            INSTRUCTIONHEIGHT / 2 - 24
-        );
-        this.fightManAnim.fightMan2.position.set(
-            -180,
-            INSTRUCTIONHEIGHT / 2 - 24
-        );
+        this.gifContainer = new PIXI.Container();
+
+        // this.fightManAnim.fightMan.position.set(
+        //     -180,
+        //     INSTRUCTIONHEIGHT / 2 - 24
+        // );
+        // this.fightManAnim.fightMan2.position.set(
+        //     -180,
+        //     INSTRUCTIONHEIGHT / 2 - 24
+        // );
 
         this.instructionContainer = new PIXI.Container();
         this.instructionGraphics.clear();
@@ -178,8 +193,9 @@ export class FightUI extends GameObject {
         this.instructionText.position.set(16, -INSTRUCTIONHEIGHT / 2 + 16);
 
         this.instructionContainer.addChild(this.instructionGraphics);
-        this.instructionContainer.addChild(this.fightManAnim.container);
+        // this.instructionContainer.addChild(this.fightManAnim.container);
         this.instructionContainer.addChild(this.instructionText);
+        this.instructionContainer.addChild(this.gifContainer);
         // ==================
 
         this.enemyCont.addChild(this.enemy);
@@ -367,8 +383,21 @@ export class FightUI extends GameObject {
     }
 
     updateInstruction(workout) {
-        this.fightManAnim.changePose(workout, true);
-        this.instructionText.text = FITINSTR[this.fightManAnim.currentPose];
+        if (this.gifw !== undefined)
+            this.gifW.stop();
+
+        // Change the workout.
+        const gifW = new PixiApngAndGif(GIFDICT[workout], this.pixiRef.resources);
+        gifW.sprite.anchor.set(0.5, 0.5);
+        gifW.sprite.position.set(-160, 0);
+        gifW.sprite.scale.set(0.6);
+
+        this.gifContainer.removeChildren();
+        this.gifContainer.addChild(gifW.sprite);
+
+        this.gifW = gifW;
+
+        this.instructionText.text = FITINSTR[workout];
     }
 
     _redrawInstruction() {

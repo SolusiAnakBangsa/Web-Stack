@@ -135,7 +135,18 @@ export class GameApp {
         const loader = this.loader;
 
         for (let ast in this.assets) {
-            loader.add(ast, this.assets[ast]);
+            const url = this.assets[ast];
+
+            // Have to do EXACTLY this so that the gif works.
+            if (url.endsWith(".gif")) {
+                loader.add(url, {
+                    loadType: PIXI.LoaderResource.LOAD_TYPE.XHR,
+                    xhrType: PIXI.LoaderResource.XHR_RESPONSE_TYPE.BUFFER,
+                    crossOrigin:''
+                });
+            } else {
+                loader.add(ast, this.assets[ast]);
+            }
         }
         loader.load(this.setup.bind(this));
 

@@ -19,6 +19,17 @@ export const assets = {
     enemypack: "graphics/enemypack.png",
     factguy: "graphics/factguy.png",
 
+    // Gifs
+    pushupg: "graphics/gifs/pushup.gif",
+    flungeg: "graphics/gifs/flunge.gif",
+    jackg: "graphics/gifs/jack.gif",
+    jsquatg: "graphics/gifs/jumpsquat.gif",
+    pushkneg: "graphics/gifs/pushknee.gif",
+    rhombg: "graphics/gifs/rhomb.gif",
+    rhombsg: "graphics/gifs/rhombsit.gif",
+    situpg: "graphics/gifs/situp.gif",
+    squatg: "graphics/gifs/squat.gif",
+
     repsound: "audio/rep.wav",
     nextsound: "audio/dingbell.mp3",
     startsound: "audio/start.mp3",
