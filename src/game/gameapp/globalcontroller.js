@@ -96,7 +96,7 @@ export class GlobalController {
             // Set the countdown callback and start it.
             this.count.callback = () => {
                 // Set text to go, then set a timer for 1 second to delete it.
-                this.count.mainContainer.text = "GO!";
+                this.count.mainContainer.text = "RUN!";
                 this.count.textStyle.fontSize = 200;
                 // Timer to delete the count object.
                 setTimeout(() => {

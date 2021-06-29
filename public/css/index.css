@@ -169,3 +169,65 @@ h5 {
 footer {
     margin-top: 128px;
 }
+
+#camshow {
+    margin-top: 64px;
+    position: relative;
+}
+
+#phonecontainer img {
+    z-index: 5;
+    width: 100%;
+}
+
+#camshow video {
+    margin: auto;
+    position: absolute;
+    width: 87.5%;
+    left: 0;
+    right: 0;
+    margin-top: 2.55%;
+}
+
+#phonecontainer {
+    margin: auto;
+    position: relative;
+    max-width: 1000px;
+}
+
+#gameicons {
+    padding-right: 24px;
+}
+
+#gameicons div {
+    background-color: white;
+    border-radius: 24px;
+    box-shadow: 7px 7px 3px rgba(0, 0, 0, 0.1);
+    border-radius: 24px;
+    position: relative;
+    width: 100%;
+    padding-top: 100%;
+    margin-top: 16px;
+    margin-bottom: 16px;
+    padding-bottom: 4px;
+    text-align: center;
+    font-size: 8pt;
+    user-select: none;
+    cursor: pointer;
+    transition: transform cubic-bezier(0.445, 0.05, 0.55, 0.95) 0.1s;
+}
+
+#gameicons div:hover {
+    transform: scale(1.1);
+}
+
+#gameicons img {
+    position: absolute;
+    width: 100%;
+    top: 0;
+    left: 0;
+}
+
+.zoomed {
+    transform: scale(1.1);
+}
