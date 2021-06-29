@@ -2,8 +2,12 @@
  * {HTMLElements}
  */
 let gameBtns = [];
+let gameDisps = [];
 
 function handleGameBtn(el) {
+    for (dis of gameDisps) {
+        dis.classList.add("hide");
+    }
     for (btn of gameBtns) {
         btn.classList.remove("zoomed");
         btn.classList.remove("blue-grey");
@@ -19,14 +23,23 @@ document.addEventListener( 'DOMContentLoaded', function () {
     const campBtn = document.getElementById("campaign-button");
     const cardBtn = document.getElementById("cardiocam-button");
     gameBtns = [campBtn, cardBtn];
+
+    // Game displays
+    const campDis = document.getElementById("cam-dis");
+    const cardDis = document.getElementById("car-dis");
+    gameDisps = [campDis, cardDis];
+
     handleGameBtn(cardBtn);
+    cardDis.classList.remove("hide");
 
     campBtn.addEventListener("click", function() {
         handleGameBtn(this);
+        campDis.classList.remove("hide");
     });
 
     cardBtn.addEventListener("click", function() {
         handleGameBtn(this);
+        cardDis.classList.remove("hide");
     });
 
     // Enable mobile sidenav
