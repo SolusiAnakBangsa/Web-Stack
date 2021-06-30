@@ -1,0 +1,50 @@
+nav {
+    padding: 0px 15px 0px 15px;
+    font-family: 'Roboto', Helvetica, sans-serif;
+    -webkit-box-shadow: 0 2px 2px 0 rgba(0,0,0,0.06),0 3px 1px -2px rgba(0,0,0,0.07),0 1px 5px 0 rgba(0,0,0,0.11);
+    box-shadow: 0 2px 2px 0 rgba(0,0,0,0.06),0 3px 1px -2px rgba(0,0,0,0.07),0 1px 5px 0 rgba(0,0,0,0.11);
+}
+
+nav a {
+    color: rgb(30, 30, 32) !important;
+}
+
+
+.large-icon{
+    font-size: 48px !important;
+}
+
+.bg-grid {
+    background-size: 40px 40px;
+    background-image:
+        linear-gradient(to right, grey 1px, transparent 1px),
+        linear-gradient(to bottom, grey 1px, transparent 1px);
+}
+
+h3{
+    font-family: 'Raleway';
+    margin-top: 0.7em;
+    margin-bottom: 0.7em;
+}
+
+.bg-grey{
+    background-color: #eeeeee;
+}
+
+p{
+    font-family: 'Roboto';
+    text-align: justify;
+}
+
+blockquote{
+    border-color: #eeeeee;
+}
+img{
+    padding-bottom: 30px !important;
+}
+
+.gamemode-title{
+    font-family: 'Raleway';
+    font-style: bold;
+    padding-left: 1.5em !important;
+}
