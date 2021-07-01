@@ -200,7 +200,7 @@ footer {
 }
 
 #gameicons {
-    padding-right: 24px;
+    max-width: 128px;
 }
 
 #gameicons .disbtn {
