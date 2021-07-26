@@ -144,6 +144,18 @@
     </div>
 </div>
 
+<script src="/__/firebase/8.8.0/firebase-app.js"></script>
+<script src="/__/firebase/8.8.0/firebase-analytics.js"></script>
+<script src="/__/firebase/init.js"></script>
+<script>
+const atics = firebase.analytics();
+
+atics.logEvent("page_view", {
+    page_location: "https://gameyourfit.com/game",
+    page_path: "/game",
+    page_title: "Campaign Game"
+});
+</script>
 <script src="../src/game/game.js"></script>
 <script>
     // Attribution toggle

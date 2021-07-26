@@ -71,6 +71,13 @@ export class GlobalController {
 
         // Do dataListener of current scene.
         this.appObj.scene.dataListener(payload);
+
+        if (payload.status == "start") {
+            atics.logEvent("workout_mid", {
+                time: (new Date()).getTime(),
+                payload: payload
+            });
+        }
     }
 
     _initializeWorkout() {

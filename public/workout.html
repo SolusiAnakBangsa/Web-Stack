@@ -124,6 +124,18 @@
             </div>
         </div>
     </footer>
+    <script src="/__/firebase/8.8.0/firebase-app.js"></script>
+    <script src="/__/firebase/8.8.0/firebase-analytics.js"></script>
+    <script src="/__/firebase/init.js"></script>
+    <script>
+    const logEvent = firebase.analytics().logEvent;
+
+    logEvent("page_view", {
+        page_location: "https://gameyourfit.com/workout",
+        page_path: "/workout",
+        page_title: "Workout Instructions"
+    });
+    </script>
     <script src="../node_modules/@materializecss/materialize/dist/js/materialize.min.js"></script>
     <script src="./js/workout.js"></script>
 </body>

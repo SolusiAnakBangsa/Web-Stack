@@ -1,3 +1,11 @@
+const logEvent = firebase.analytics().logEvent;
+
+logEvent("page_view", {
+    page_location: "https://gameyourfit.com",
+    page_path: "/",
+    page_title: "Home"
+});
+
 /**
  * {HTMLElements}
  */

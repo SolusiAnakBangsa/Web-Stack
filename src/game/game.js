@@ -20,7 +20,8 @@ const game = new GameApp({
 PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST; // Epic pixel look man!
 
 // Here, lets initialize the webrtc object with a custom peerID
-peer.init(Math.random().toString(36).slice(2).substr(0, 8));
+const peerId = Math.random().toString(36).slice(2).substr(0, 8);
+peer.init(peerId);
 peer.connection.addReceiveHandler((payload) => {
     // FIX: This should receive only once, then removes itself from the listener list.
     // Adds a listener to listen for the workout data from phone.
@@ -44,9 +45,23 @@ peer.connection.addReceiveHandler((payload) => {
 
         calories.innerText = payload.meta.calories;
         time.innerText = new Date(mili).toISOString().substr(11, 8);
+
+        // Log the workout to google analytics
+        atics.logEvent("workout_end", {
+            time: mili,
+            calories: payload.meta.calories
+        });
     }
 });
 peer.connection.addEvents("open", () => {
+    // Log analytics
+    const uId = peerId + "-" + document.getElementById("gamecode").value;
+    atics.setUserId(uId);
+    atics.logEvent("workout_start", {
+        uId: uId,
+        time: (new Date()).getTime()
+    });
+    
     // This callback will be run when connection has been established
     // Successfully with the phone.
     const textbox = document.getElementById("gamecode");
