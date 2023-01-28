@@ -4,6 +4,7 @@ import { GlobalController } from "./gameapp/globalcontroller";
 import { assets } from "./gameapp/assets";
 
 import { levelData } from "./gameapp/globalcontroller";
+import { atics } from '../firebase/firebase';
 
 // Audio when connected.
 const audioObj = new Audio("audio/atmospheric.mp3");

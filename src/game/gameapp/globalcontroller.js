@@ -5,6 +5,7 @@ import { Transitioner } from "./transitioner";
 import { Countdown } from "./objects/countdown";
 import { Button } from "./objects/button";
 import { MusicPlayer } from "./musicplayer";
+import { atics } from '../../firebase/firebase';
 
 // Static enum to store all the workouts.
 let Workouts = Object.freeze({
